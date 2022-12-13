@@ -150,3 +150,34 @@ export type Area ={
 export type SunRiseAndSet ={
   sunRise :number ,
   sunSet :number
+};
+
+export type WeatherState ={
+  nx:number |null,
+  ny:number |null,
+  nowWeather:NowWeather |null,
+  hourly:HourWeather[]|null,
+  weekly:Day[]|null,
+  nation:Area[]|null,
+  sunRiseAndSet :SunRiseAndSet |null
+};
+
+//action 
+export const GET_POSITION ="GET_POSITION";
+export const GET_WHEATHER ="GET_WHEATHER";
+export const CHANGE_DAY_NATION ="CHANGE_DAY_NATION";
+export const getPosition =()=>({
+  type:GET_POSITION,
+});
+export const getWeather =()=>({
+  type:GET_WHEATHER,
+});
+
+export const changeDayNation=(dayLater:number)=>({
+  type:CHANGE_DAY_NATION,
+  dayLater:dayLater //0-5
+});
+
+export type WeatherAction = ReturnType<typeof getPosition> |
+ReturnType<typeof getWeather>|
+ReturnType<typeof changeDayNation>;
