@@ -1,5 +1,3 @@
-import React from 'react';
-
 const sunny ="맑음"; // sky code =1
 const cloudy ="구름많음" // sky code =3
 const veryCloudy ="흐림" // sky code =4
