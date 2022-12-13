@@ -99,3 +99,38 @@ const apInformApi:Api ={
   url:"http://apis.data.go.kr/B552584/ArpltnInforInqireSvc",
   key:"hBppoh3ha8A2hvqzRU5kOqCd8uVct6%2BPmsjMaTQ1FOpqDAA7BfsIeAk%2BlyHk0VMFaIFkQK1ElUP4nHjyfs1hDg%3D%3D",
   inqury:inqury_air_ctprvnRltmMesureDnsty
+};
+
+/** 
+ * Api for sunset and sunrise
+*/
+export const sunApi:Api ={
+  url :"http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService",
+  key :"hBppoh3ha8A2hvqzRU5kOqCd8uVct6%2BPmsjMaTQ1FOpqDAA7BfsIeAk%2BlyHk0VMFaIFkQK1ElUP4nHjyfs1hDg%3D%3D" ,
+  inqury :"getLCRiseSetInfo"
+};
+
+/**
+ * 
+ * @param longitude 경도
+ * @param latitude  위도
+ * @param dnYn  10진수 여부 (실수이면 y, ~도 ~분이면 n)
+ */
+export const getSunInform =async(longitude:number, latitude:number ,baseDate:number,dnYn:Dnyn)=>{
+  const url =`${sunApi.url}/${sunApi.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${baseDate}&dnYn=${dnYn}&ServiceKey=${sunApi.key}`;
+  const data = await fetch(url)
+                .then(response => response.text())
+                .then((data)=>{
+                  const xml = new DOMParser().parseFromString(data, "text/xml");
+                  const sunrise = xml.querySelector("sunrise")?.textContent
+                  const sunset =xml.querySelector("sunset")?.textContent;
+                  const location =xml.querySelector("location")?.textContent;
+                  return {
+                    sunrise :sunrise,
+                    sunset:sunset,
+                    location:location
+                  }
+                })
+                .catch(e=>console.log("error",e));
+  return data
+};
