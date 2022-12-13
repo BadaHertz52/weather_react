@@ -1,3 +1,5 @@
+import { Dnyn } from "./types";
+
 const returnApiUrl =(sort:string):string=>{
   const base =`https://apis.data.go.kr/1360000/${sort}`;
   return base
@@ -108,6 +110,27 @@ export const sunApi:Api ={
   url :"http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService",
   key :"hBppoh3ha8A2hvqzRU5kOqCd8uVct6%2BPmsjMaTQ1FOpqDAA7BfsIeAk%2BlyHk0VMFaIFkQK1ElUP4nHjyfs1hDg%3D%3D" ,
   inqury :"getLCRiseSetInfo"
+};
+
+const getApiData =async(url:string)=>{
+  const data = await fetch(url )
+  .then((response)=> response.json())
+  .then(data =>data)
+  .catch(e=>console.log("error",e));
+  return data
+}
+export const getShortFcast =async(nx:number, ny:number, baseDate:number, baseTime:number, inqury:ShortInqury)=>{
+  const url =`${shortFcstApi.url}/${inqury}?serviceKey=${shortFcstApi.key}&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
+  const data =await getApiData(url);
+};
+export const getMidFcast =(nx:number, ny:number, baseDate:number, baseTime:number, inqury:MidInqury)=>{
+
+};
+export const getLifeIndex =(nx:number, ny:number, baseDate:number, baseTime:number, inqury:LifeInqury)=>{
+
+};
+export const getApInform =(nx:number, ny:number, baseDate:number, baseTime:number, inqury:ApInqury)=>{
+
 };
 
 /**
