@@ -59,7 +59,7 @@ type uvType = typeof danger |
 type freezeAndAirDiffusionType =  typeof veryHigh |typeof high | typeof common|typeof low ;
 
 
-export type nowWeather ={
+export type NowWeather ={
   //temperature
   tmp :number,
   sky:skyType,
@@ -73,7 +73,7 @@ export type nowWeather ={
   pm25:pmType,
 };
 
-export type hourWeather ={
+export type HourWeather ={
   hour:number, //24시간제
   temp:number,
   //강수확률(%)
@@ -84,30 +84,26 @@ export type hourWeather ={
   reh:number
 };
 
-export type hourly = hourWeather[];
-
-type amPmType ={
+type AmPmType ={
   pop:number,
   sky:skyType
 };
 
-export type day ={
+export type Day ={
   sky:skyType,
   dayslater:number, //0-5 (today=0)
-  am:amPmType,
-  pm:amPmType,
+  am:AmPmType,
+  pm:AmPmType,
   tmn:number,
   tmx:number
 };
 
-export type weekly =day[];
-
-export type lifeIndex ={
+export type LifeIndex ={
   uv :uvType,
   freeze:freezeAndAirDiffusionType,
   airDiffusion:freezeAndAirDiffusionType
 };
-type presentType ={
+type PresentType ={
   sky:skyType,
   temp:number
 };
@@ -129,7 +125,7 @@ const 여수 ="여수";
 const 부산 ="부산";
 const 제주 ="제주";
 
-type areaNameType = typeof 서울 |
+type AreaNameType = typeof 서울 |
                 typeof 춘천|
                 typeof 강릉 |
                 typeof 청주 |
@@ -146,16 +142,13 @@ type areaNameType = typeof 서울 |
                 typeof 여수 |
                 typeof 부산 |
                 typeof 제주 ;
-export type area ={
-  areaName: areaNameType,
-  present :presentType|null,
-  am:amPmType,
-  pm:amPmType
+export type Area ={
+  areaName: AreaNameType,
+  present :PresentType|null,
+  am:AmPmType,
+  pm:AmPmType
 };
 
-export type nation = area[];
-
-export type sunRiseAndSet ={
+export type SunRiseAndSet ={
   sunRise :number ,
   sunSet :number
-};
