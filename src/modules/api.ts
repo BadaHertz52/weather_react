@@ -6,58 +6,58 @@ const returnApiUrl =(sort:string):string=>{
 /**
  * 초단기실황조회 :현재
  */
-export const inqury_short_ultraSrtNcst ="getUltraSrtNcst";
+const inqury_short_ultraSrtNcst ="getUltraSrtNcst";
 /**
  * 초단기예보조회 : 현재부터 6시간 이내
  */
-export const inqury_short_ultraSrtFcst ="getUltraSrtFcst" ;
+const inqury_short_ultraSrtFcst ="getUltraSrtFcst" ;
 /**
  * 단기예보조회 :현재부터 3일 이내
  */
-export const inqury_short_vilageFcst ="getVilageFcst";
+const inqury_short_vilageFcst ="getVilageFcst";
 /**
  * 중기예보 조회
  */
-export const inqury_mid_midFcst="getMidFcst";
+const inqury_mid_midFcst="getMidFcst";
 /**
  * 중기 육상예보:강수확률,날씨
  */
-export const inqury_mid_midLandFcst ="getMidLandFcst";
+const inqury_mid_midLandFcst ="getMidLandFcst";
 /**
  * 중기기온조회
  */
-export const inqury_mid_midTa ="getMidTa";
+const inqury_mid_midTa ="getMidTa";
 /**
  * 동파 지수조회
  */
-export const inqury_life_freezeIdxV3 ="getFreezeIdxV3";
+const inqury_life_freezeIdxV3 ="getFreezeIdxV3";
 /**
  * 자외선지수조회
  */
-export const inqury_life_uVIdxV3 ="getUVIdxV3";
+const inqury_life_uVIdxV3 ="getUVIdxV3";
 /**
  * 체감온도 조회 
  */
-export const inqury_life_airDiffusionIdxV3 ="getAirDiffusionIdxV3";
+const inqury_life_airDiffusionIdxV3 ="getAirDiffusionIdxV3";
 /**
  * 시도별 실시간 대기오염 측정 정보 조회 
  */
-export const inqury_air_ctprvnRltmMesureDnsty  ="getCtprvnRltmMesureDnsty ";
+const inqury_air_ctprvnRltmMesureDnsty  ="getCtprvnRltmMesureDnsty ";
 
-export type shortInqury =typeof inqury_short_ultraSrtFcst|
+type ShortInqury =typeof inqury_short_ultraSrtFcst|
 typeof inqury_short_ultraSrtNcst |
 typeof inqury_short_vilageFcst ;
 
-export type midInqury = typeof inqury_mid_midFcst|
+type MidInqury = typeof inqury_mid_midFcst|
 typeof inqury_mid_midLandFcst |
 typeof inqury_mid_midTa;
 
-export type lifeInqury =typeof inqury_life_airDiffusionIdxV3 |typeof inqury_life_freezeIdxV3 |
+type LifeInqury =typeof inqury_life_airDiffusionIdxV3 |typeof inqury_life_freezeIdxV3 |
 typeof inqury_life_uVIdxV3 ;
 
-export type apInqury = typeof inqury_air_ctprvnRltmMesureDnsty;
+type ApInqury = typeof inqury_air_ctprvnRltmMesureDnsty;
 
-export type Api ={
+type Api ={
   url:string,
   key:string,
   inqury:string
@@ -67,7 +67,7 @@ export type Api ={
  * Api for short-term forecast
  */
 
-export const shortFcstApi:Api ={
+const shortFcstApi:Api ={
   url:returnApiUrl("VilageFcstInfoService_2.0") ,
   key:"hBppoh3ha8A2hvqzRU5kOqCd8uVct6%2BPmsjMaTQ1FOpqDAA7BfsIeAk%2BlyHk0VMFaIFkQK1ElUP4nHjyfs1hDg%3D%3D",
   inqury:inqury_short_ultraSrtFcst ||       inqury_short_ultraSrtNcst||
@@ -76,7 +76,7 @@ export const shortFcstApi:Api ={
 /**
  * Api for medium term forecas
  */
-export const midFcastApi :Api ={
+const midFcastApi :Api ={
   url:returnApiUrl("MidFcstInfoService"),
   key:"hBppoh3ha8A2hvqzRU5kOqCd8uVct6%2BPmsjMaTQ1FOpqDAA7BfsIeAk%2BlyHk0VMFaIFkQK1ElUP4nHjyfs1hDg%3D%3D",
   inqury:inqury_mid_midFcst|| 
@@ -86,7 +86,7 @@ export const midFcastApi :Api ={
 /**
  * Api for living weather index
  */
-export const livingWeatherApi :Api ={
+const lifeIndexApi :Api ={
   url:returnApiUrl("LivingWthrIdxServiceV3"),
   key:"hBppoh3ha8A2hvqzRU5kOqCd8uVct6%2BPmsjMaTQ1FOpqDAA7BfsIeAk%2BlyHk0VMFaIFkQK1ElUP4nHjyfs1hDg%3D%3D",
   inqury:inqury_life_airDiffusionIdxV3|| inqury_life_freezeIdxV3||
@@ -95,8 +95,7 @@ export const livingWeatherApi :Api ={
 /**
  * Api for air pollution
  */
-export const apInformApi:Api ={
+const apInformApi:Api ={
   url:"http://apis.data.go.kr/B552584/ArpltnInforInqireSvc",
   key:"hBppoh3ha8A2hvqzRU5kOqCd8uVct6%2BPmsjMaTQ1FOpqDAA7BfsIeAk%2BlyHk0VMFaIFkQK1ElUP4nHjyfs1hDg%3D%3D",
   inqury:inqury_air_ctprvnRltmMesureDnsty
-}
