@@ -1,4 +1,6 @@
-import { Dnyn } from "./types";
+import { MidLandAreaCode, MidTaAreaCode } from "./areCodeTyoe";
+import { Dnyn } from "./statetypes";
+import {USNcstItem, SVFcst, USFcst, USNcst, SFcstItem, MidLandFcst, MidLandFcstItem, MidLandFcstDay}from "./apiType";
 
 const returnApiUrl =(sort:string):string=>{
   const base =`https://apis.data.go.kr/1360000/${sort}`;
@@ -17,10 +19,7 @@ const inqury_short_ultraSrtFcst ="getUltraSrtFcst" ;
  * 단기예보조회 :현재부터 3일 이내
  */
 const inqury_short_vilageFcst ="getVilageFcst";
-/**
- * 중기예보 조회
- */
-const inqury_mid_midFcst="getMidFcst";
+
 /**
  * 중기 육상예보:강수확률,날씨
  */
@@ -50,8 +49,7 @@ type ShortInqury =typeof inqury_short_ultraSrtFcst|
 typeof inqury_short_ultraSrtNcst |
 typeof inqury_short_vilageFcst ;
 
-type MidInqury = typeof inqury_mid_midFcst|
-typeof inqury_mid_midLandFcst |
+type MidInqury =typeof inqury_mid_midLandFcst |
 typeof inqury_mid_midTa;
 
 type LifeInqury =typeof inqury_life_airDiffusionIdxV3 |typeof inqury_life_freezeIdxV3 |
@@ -78,11 +76,10 @@ const shortFcstApi:Api ={
 /**
  * Api for medium term forecas
  */
-const midFcastApi :Api ={
+const midFcstApi :Api ={
   url:returnApiUrl("MidFcstInfoService"),
   key:"hBppoh3ha8A2hvqzRU5kOqCd8uVct6%2BPmsjMaTQ1FOpqDAA7BfsIeAk%2BlyHk0VMFaIFkQK1ElUP4nHjyfs1hDg%3D%3D",
-  inqury:inqury_mid_midFcst|| 
-  inqury_mid_midLandFcst || 
+  inqury:inqury_mid_midLandFcst || 
   inqury_mid_midTa
 };
 /**
@@ -112,19 +109,92 @@ export const sunApi:Api ={
   inqury :"getLCRiseSetInfo"
 };
 
-const getApiData =async(url:string)=>{
+const getApiItems =async(url:string)=>{
   const data = await fetch(url )
   .then((response)=> response.json())
-  .then(data =>data)
+  .then(data =>data.body.items)
   .catch(e=>console.log("error",e));
   return data
-}
-export const getShortFcast =async(nx:number, ny:number, baseDate:number, baseTime:number, inqury:ShortInqury)=>{
-  const url =`${shortFcstApi.url}/${inqury}?serviceKey=${shortFcstApi.key}&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
-  const data =await getApiData(url);
 };
-export const getMidFcast =(nx:number, ny:number, baseDate:number, baseTime:number, inqury:MidInqury)=>{
 
+export const getShortFcast =async(nx:number, ny:number, baseDate:number, baseTime:number, inqury:ShortInqury): Promise<USNcst | USFcst | SVFcst | undefined>=>{
+  const url =`${shortFcstApi.url}/${inqury}?serviceKey=${shortFcstApi.key}&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
+  const items = await getApiItems(url);
+  switch (inqury) {
+    //초단기 실황
+    case 'getUltraSrtNcst':
+      const uNcst:USNcst ={
+        pty: items.filter((i:USNcstItem)=> i.category === "PTY").obsrValue,
+        reh: items.filter((i:USNcstItem)=> i.category === "REH").obsrValue,
+        rn1: items.filter((i:USNcstItem)=> i.category === "RN1").obsrValue,
+        t1h: Number(items.filter((i:USNcstItem)=> i.category === "T1H").obsrValue) ,
+        vec: Number(items.filter((i:USNcstItem)=> i.category === "VEC").obsrValue) ,
+        wsd: items.filter((i:USNcstItem)=> i.category === "WSD").obsrValue
+      };
+      return uNcst;
+    //초단기 예보
+    case "getUltraSrtNcst":
+      const uSFcst :USFcst ={
+        pty: items.filter((i:SFcstItem)=> i.category === "PTY").obsrValue,
+        reh: items.filter((i:SFcstItem)=> i.category === "REH").obsrValue,
+        rn1: items.filter((i:SFcstItem)=> i.category === "RN1").obsrValue,
+        t1h: Number(items.filter((i:SFcstItem)=> i.category === "T1H").obsrValue),
+        vec: Number(items.filter((i:SFcstItem)=> i.category === "VEC").obsrValue),
+        wsd: items.filter((i:SFcstItem)=> i.category === "WSD").obsrValue,
+        sky: items.filter((i:SFcstItem)=> i.category === "SKY").obsrValue,
+      };
+      return uSFcst;
+    // 단기 예보
+    case "getVilageFcst":
+      const sVFcst :SVFcst ={
+        pop: items.filter((i:SFcstItem)=> i.category === "POP").obsrValue,
+        pty: items.filter((i:SFcstItem)=> i.category === "PTY").obsrValue, 
+        pcp: items.filter((i:SFcstItem)=> i.category === "PCP").obsrValue,
+        reh: items.filter((i:SFcstItem)=> i.category === "REH").obsrValue ,
+        sno: items.filter((i:SFcstItem)=> i.category === "SNO").obsrValue,
+        sky: items.filter((i:SFcstItem)=> i.category === "SKY").obsrValue,
+        tmp:Number(items.filter((i:SFcstItem)=> i.category === "TMP").obsrValue) ,
+        vec: Number(items.filter((i:SFcstItem)=> i.category === "VEC").obsrValue) ,
+        wsd: items.filter((i:SFcstItem)=> i.category === "WED").obsrValue
+      };
+      return sVFcst ;
+    default:
+      break;
+  }
+};
+
+export const getMidFcast =async(regld:MidLandAreaCode|MidTaAreaCode, tmFc:number, inqury:MidInqury)=>{
+  const url =`${midFcstApi.url}/${inqury}?serviceKey=${midFcstApi.key}&dataType=JSON&regld=${regld}&tmFc=${tmFc}`;
+  const items = await getApiItems(url);
+  switch (inqury) {
+    case "getMidLandFcst":
+    const midLandFcst:MidLandFcst = items.itme((i:MidLandFcstItem)=>
+                                                  [
+                                                    {
+                                                      dyalater:"4",
+                                                      wfAm:i.wf4Am,
+                                                      wfPm:i.wf4Pm
+                                                    },{
+                                                      dyalater:"5",
+                                                      wfAm:i.wf5Am,
+                                                      wfPm:i.wf5Pm
+                                                    }
+                                                    ,{
+                                                      dyalater:"6",
+                                                      wfAm:i.wf6Am,
+                                                      wfPm:i.wf6Pm
+                                                    },
+                                                    {
+                                                      dyalater:"7",
+                                                      wfAm:i.wf7Am,
+                                                      wfPm:i.wf7Pm
+                                                    }
+                                                  ]
+                                                );
+    return midLandFcst;
+    default:
+      break;
+  }
 };
 export const getLifeIndex =(nx:number, ny:number, baseDate:number, baseTime:number, inqury:LifeInqury)=>{
 
@@ -139,9 +209,9 @@ export const getApInform =(nx:number, ny:number, baseDate:number, baseTime:numbe
  * @param latitude  위도
  * @param dnYn  10진수 여부 (실수이면 y, ~도 ~분이면 n)
  */
-export const getSunInform =async(longitude:number, latitude:number ,baseDate:number,dnYn:Dnyn)=>{
+export const getSunInform =(longitude:number, latitude:number ,baseDate:number,dnYn:Dnyn)=>{
   const url =`${sunApi.url}/${sunApi.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${baseDate}&dnYn=${dnYn}&ServiceKey=${sunApi.key}`;
-  const data = await fetch(url)
+  return fetch(url)
                 .then(response => response.text())
                 .then((data)=>{
                   const xml = new DOMParser().parseFromString(data, "text/xml");
@@ -155,5 +225,4 @@ export const getSunInform =async(longitude:number, latitude:number ,baseDate:num
                   }
                 })
                 .catch(e=>console.log("error",e));
-  return data
 };
