@@ -1,14 +1,47 @@
+
+
 const sunny ="맑음"; // sky code =1
 const cloudy ="구름많음" // sky code =3
 const veryCloudy ="흐림" // sky code =4
-const onceRain ="흐리고 한때 비";
+const spellRain ="한때 비";
 const rainy ="비"; // pty code =1 or 5
 const snowRain ="비 또는 눈" //pty =2 or 6 
 const snow ="눈" // pty code =3 or 7
+const shower ="소나기" //pty code=5
+const cldRain ="구름많고 비";
+const cldSnow ="구름많고 눈";
+const cldRainSnow ="구름많고 비/눈";
+const cldShower ="구름많고 소나기";
+const vyCldRain ="흐리고 비";
+const vrCldSnow ="흐리고 눈";
+const vrCldRainSnow ="흐리고 비/눈";
+const vrCldShower ="흐리고 소나기";
 
-export type skyType = typeof sunny | typeof cloudy | typeof veryCloudy | typeof onceRain | typeof rainy | typeof snow | typeof snowRain; 
+export type SkyCodeType = typeof sunny | 
+                          typeof cloudy | 
+                          typeof veryCloudy;
 
-export type ptyType = typeof sunny | typeof rainy |typeof snowRain;
+export type PtyCodeType = typeof sunny | 
+                          typeof rainy |
+                          typeof snowRain | 
+                          typeof snow|
+                          typeof shower;
+export type SkyType = typeof sunny |
+                      typeof cloudy| 
+                      typeof veryCloudy |
+                      typeof spellRain|
+                      typeof rainy |
+                      typeof snowRain |
+                      typeof snow |
+                      typeof shower |
+                      typeof cldRain |
+                      typeof cldSnow |
+                      typeof cldRainSnow|
+                      typeof cldShower|
+                      typeof vyCldRain|
+                      typeof vrCldSnow |
+                      typeof vrCldRainSnow |
+                      typeof vrCldShower ;
 
 const north = "북향";  //vec = 360/0 (345-360 . 0-15)
 const northAndEast ="북동향";  //vec : 15-74
@@ -19,7 +52,7 @@ const southAndWeast ="남서향" // vec  196-254
 const east ="동향"; //vec =90 (75-90, 90-105)
 const weast ="서향"; //vec =270 (255-270  ,270-295)
 
-export type diectionType = typeof north|
+export type DiectionType = typeof north|
                           typeof northAndEast |
                           typeof northAndWeast |
                           typeof south |
@@ -28,9 +61,9 @@ export type diectionType = typeof north|
                           typeof east |
                           typeof weast ;
 
-type windType ={
+type WindType ={
     //풍향
-    wsd:diectionType,
+    wsd:DiectionType,
     vec:number
 };
 
@@ -43,32 +76,32 @@ const good ="좋음";
 const bad ="나쁨";
 const veryBad ="매우 나쁨";
 
-type pmType = typeof good| 
+type PmType = typeof good| 
               typeof common|
               typeof bad | 
               typeof veryBad;
 
-type uvType = typeof danger | 
+type UvType = typeof danger | 
               typeof veryHigh |
               typeof high | 
               typeof common|
               typeof low ;
 
-type freezeAndAirDiffusionType =  typeof veryHigh |typeof high | typeof common|typeof low ;
+type FreezeAndAirDiffusionType =  typeof veryHigh |typeof high | typeof common|typeof low ;
 
 
 export type NowWeather ={
   //temperature
   tmp :number,
-  sky:skyType,
+  sky:SkyType,
   //습도
   reh:number,
   sensoryTmp :number,
-  wind:windType
+  wind:WindType
   //미세먼지
-  pm10:pmType,
+  pm10:PmType,
   //초미세먼지
-  pm25:pmType,
+  pm25:PmType,
 };
 
 export type HourWeather ={
@@ -78,17 +111,17 @@ export type HourWeather ={
   pop:number,
   //강수량(mm)
   pcp:number,
-  wind:windType,
+  wind:WindType,
   reh:number
 };
 
 type AmPmType ={
   pop:number,
-  sky:skyType
+  sky:SkyType
 };
 
 export type Day ={
-  sky:skyType,
+  sky:SkyType,
   dayslater:number, //0-5 (today=0)
   am:AmPmType,
   pm:AmPmType,
@@ -97,12 +130,12 @@ export type Day ={
 };
 
 export type LifeIndex ={
-  uv :uvType,
-  freeze:freezeAndAirDiffusionType,
-  airDiffusion:freezeAndAirDiffusionType
+  uv :UvType,
+  freeze:FreezeAndAirDiffusionType,
+  airDiffusion:FreezeAndAirDiffusionType
 };
 type PresentType ={
-  sky:skyType,
+  sky:SkyType,
   temp:number
 };
 const 서울 ="서울";

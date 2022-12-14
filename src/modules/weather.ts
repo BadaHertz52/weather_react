@@ -1,5 +1,5 @@
 import React from "react";
-import { GET_POSITION, GET_WHEATHER, WeatherAction, WeatherState } from "./types";
+import { GET_POSITION, GET_WHEATHER, WeatherAction, WeatherState } from "./statetypes";
 
 //initialState
 const initialState :WeatherState ={
