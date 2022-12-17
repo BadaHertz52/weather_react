@@ -1,31 +1,40 @@
+
 /**
- * 초단기 실황 api data 속 item의 type
+ * 초단기 실황,초단기 예보 ,단기 예보 api data 속 item 의 공통 properties
  */
-export type USNcstItem ={
-  baseDate:string,
-  baseTitme:string,
-  category:string,
-  nx:string,
-  ny:string,
-  obsrValue:string
+export type SFcstItemBase ={
+  numOfRows :string,
+  pageNo :string,
+  totalCount:string, 
+  resultCode:string, 
+  resultMsg :string,
+  dataType :string,
+  baseDate :string,
+  baseTime :string,
+  category :string,
+  nx :string,
+  ny :string
 };
+export type USNcstItem = SFcstItemBase & {
+  obsrValue : string
+}
 /**
- * 초단기 실황 api data 속 item의 type
+ * 초단기 예보, 단기 예보 api item의 properties type
  */
-export type SFcstItem ={
-  baseDate:string,
-  baseTitme:string,
-  fcstDate:string,
-  fcstTime:string,
-  category:string,
-  nx:string,
-  ny:string,
-  fstValue:string
+export type SFcstItem = SFcstItemBase & {
+  // 예보 값
+  fcstValue :string,
+  // 예보 날짜
+  fcstDate :string,
+  //예보 시각
+  fcstTime :string,
 };
 /**
  * 초단기 실황 data
 */
 export type USNcst ={
+  baseDate:string,
+  baseTime:string,
   //강수형태
   pty:string,
   //습도(%)
@@ -40,15 +49,13 @@ export type USNcst ={
   wsd:string
 };
 /**
- * 초단기 예보 data
- */
-export type USFcst = USNcst & {
-  sky:string
-};
-/**
  * 단기 예보 data
  */
-export type SVFcst ={
+export type SVFTime ={
+  //예보 날짜
+  fcstDate:string,
+  //예보 시각
+  fcstTime:string,
   //강수확률
   pop: string,
   pty:string,
@@ -60,30 +67,41 @@ export type SVFcst ={
   sky:string,
   //1시간 기온
   tmp:number,
+  //일 최저 기온
+  tmn:number,
+  //일 최고 기온
+  tmx:number,
   vec:number,
   wsd:string
 };
-
+export type SVFDay = SVFTime[];
+export type SVFcst =SVFDay[];
 //중기 예보
-export type MidLandFcstItem ={
-  wf3Am:string ,
-  wf3Pm:string ,
-  wf4Am:string ,
-  wf4Pm:string ,
-  wf5Am:string ,
-  wf5Pm:string ,
-  wf6Am:string ,
-  wf6Pm:string ,
-  wf7Am:string ,
-  wf7Pm:string 
-};
-export type MidLandFcstDay ={
-  dyalater:string,
-  wfAm:string,
-  wfPm:string
-};
-export type MidLandFcst =MidLandFcstDay[];
 
+export type MidLandFcst ={
+  dyalater:number,
+  /**
+   * 오전 날씨
+   */
+  wfAm:string,
+  /**
+   * 오후 날씨
+   */
+  wfPm:string,
+  /**
+   * 오전 강수 확률
+   */
+  rnStAm:string,
+  /**
+   * 오후 강수 확률
+   */
+  rnStPm:string,
+}[];
+export type MidTaFcst ={
+  daylater:number,
+  taMin:number,
+  taMax:number
+}[];
 export type MidFcst ={
   daylater:number
   wf:string,
