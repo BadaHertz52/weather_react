@@ -1,8 +1,8 @@
 
 
-const sunny ="맑음"; // sky code =1
-const cloudy ="구름많음" // sky code =3
-const veryCloudy ="흐림" // sky code =4
+export const sunny ="맑음"; // sky code =1
+export const cloudy ="구름많음" // sky code =3
+export const veryCloudy ="흐림" // sky code =4
 const spellRain ="한때 비";
 const rainy ="비"; // pty code =1 or 5
 const snowRain ="비 또는 눈" //pty =2 or 6 
