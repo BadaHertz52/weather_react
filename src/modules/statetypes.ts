@@ -3,6 +3,7 @@
 export const sunny ="맑음"; // sky code =1
 export const cloudy ="구름많음" // sky code =3
 export const veryCloudy ="흐림" // sky code =4
+
 const spellRain ="한때 비";
 const rainy ="비"; // pty code =1 or 5
 const snowRain ="비 또는 눈" //pty =2 or 6 
@@ -67,27 +68,16 @@ type WindType ={
     vec:number
 };
 
-const danger ="위험";
-const veryHigh ="매우 높음";
-const high ="높음";
+
 const common ="보통";
-const low ="낮음";
 const good ="좋음";
 const bad ="나쁨";
 const veryBad ="매우 나쁨";
 
-type PmType = typeof good| 
+export type PmType = typeof good| 
               typeof common|
               typeof bad | 
               typeof veryBad;
-
-type UvType = typeof danger | 
-              typeof veryHigh |
-              typeof high | 
-              typeof common|
-              typeof low ;
-
-type FreezeAndAirDiffusionType =  typeof veryHigh |typeof high | typeof common|typeof low ;
 
 
 export type NowWeather ={
@@ -99,9 +89,9 @@ export type NowWeather ={
   sensoryTmp :number,
   wind:WindType
   //미세먼지
-  pm10:PmType,
+  pm10Grade:PmType,
   //초미세먼지
-  pm25:PmType,
+  pm25Grande:PmType,
 };
 
 export type HourWeather ={
@@ -129,11 +119,7 @@ export type Day ={
   tmx:number
 };
 
-export type LifeIndex ={
-  uv :UvType,
-  freeze:FreezeAndAirDiffusionType,
-  airDiffusion:FreezeAndAirDiffusionType
-};
+
 type PresentType ={
   sky:SkyType,
   temp:number
@@ -173,6 +159,7 @@ type AreaNameType = typeof 서울 |
                 typeof 여수 |
                 typeof 부산 |
                 typeof 제주 ;
+
 export type Area ={
   areaName: AreaNameType,
   present :PresentType|null,
