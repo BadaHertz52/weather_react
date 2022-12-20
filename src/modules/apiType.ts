@@ -1,3 +1,4 @@
+import { PmType } from "./statetypes";
 
 /**
  * 초단기 실황,초단기 예보 ,단기 예보 api data 속 item 의 공통 properties
@@ -51,6 +52,25 @@ export type USNcst ={
 /**
  * 단기 예보 data
  */
+const am2 ="0200";
+const am5 ="0500"; 
+const am8 ="0800"; 
+const am11 ="1100"; 
+const pm2 ="1400"; 
+const pm5 ="1700"; 
+const pm8 ="2000"; 
+const pm11 ="2300";
+
+export type SVFBaseTime = 
+typeof am2 |
+typeof am5|
+typeof am8|
+typeof am11|
+typeof pm2 |
+typeof pm5|
+typeof pm8|
+typeof pm11; 
+
 export type SVFTime ={
   //예보 날짜
   fcstDate:string,
@@ -68,16 +88,19 @@ export type SVFTime ={
   //1시간 기온
   tmp:number,
   //일 최저 기온
-  tmn:number,
+  tmn:string,
   //일 최고 기온
-  tmx:number,
+  tmx:string,
   vec:number,
   wsd:string
 };
 export type SVFDay = SVFTime[];
 export type SVFcst =SVFDay[];
-//중기 예보
 
+//중기 예보 
+/**
+ * 중기 육상 예보 data
+ */
 export type MidLandFcst ={
   dyalater:number,
   /**
@@ -97,12 +120,78 @@ export type MidLandFcst ={
    */
   rnStPm:string,
 }[];
+/**
+ * 중기 기온 예보 data
+ */
 export type MidTaFcst ={
   daylater:number,
   taMin:number,
   taMax:number
 }[];
+/**
+ * 중기 예보 data
+ */
 export type MidFcst ={
-  daylater:number
-  wf:string,
+  dyalater:number,
+  /**
+   * 오전 날씨
+   */
+  wfAm:string,
+  /**
+   * 오후 날씨
+   */
+  wfPm:string,
+  /**
+   * 오전 강수 확률
+   */
+  rnStAm:string,
+  /**
+   * 오후 강수 확률
+   */
+  rnStPm:string,
+  /**
+   * 최저기온
+   */
+  taMin:number,
+  /**
+   * 최고 기온
+   */
+  taMax:number
 }[];
+
+//api;
+export type ApItem ={
+              stationName : string
+              mangName : string
+              sidoName : string
+              dataTime : string
+              so2Value : string
+              coValue : string
+              o3Value : string
+              no2Value : string
+              pm10Value : string
+              pm10Value24 : string
+              pm25Value : string
+              pm25Value24 : string
+              khaiValue : string
+              khaiGrade : string
+              so2Grade : string
+              coGrade : string
+              o3Grade : string
+              no2Grade : string
+              pm10Grade : string
+              pm25Grade : string
+              pm10Grade1h : string
+              pm25Grade1h : string
+              so2Flag : string
+              coFlag : string
+              o3Flag : string
+              no2Flag : string
+              pm10Flag : string
+              pm25Flag : string
+};
+
+export type PmGrade ={
+  pm10Grade:PmType,
+  pm25Grade:PmType
+};
