@@ -32,7 +32,7 @@ const inqury_mid_midTa ="getMidTa";
 /**
  * 시도별 실시간 대기오염 측정 정보 조회 
  */
-const inqury_air_ctprvnRltmMesureDnsty  ="getCtprvnRltmMesureDnsty ";
+const inqury_air_ctprvnRltmMesureDnsty  ="getCtprvnRltmMesureDnsty";
 
 type SFInqury =typeof inqury_short_ultraSrtFcst|
 typeof inqury_short_ultraSrtNcst|
