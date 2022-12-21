@@ -311,9 +311,9 @@ export const getApInform =async(sidoName:ApiAreaCode, stationName:string[])=>{
 
 /**
  * 
- * @param longitude 경도 (실수:nnnnn)
- * @param latitude  위도 (실수:nnnn)
- * @param dnYn  10진수 여부 (실수이면 Y, ~도 ~분이면 N)
+ * @param longitude 경도 (도분: 서울-12658 / 실수(초/100): 서울-126.98000833333333 )
+ * @param latitude  위도 (도분: 서울 - 3733 / 실수 (초/100): 서울 -37.56356944444444)
+ * @param dnYn  실수이면 Y, ~도 ~분이면 N
  */
 export const getSunInform =(longitude:string, latitude:string ,baseDate:string,dnYn:Dnyn)=>{
   const url =`${sunApi.url}/${sunApi.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${baseDate}&dnYn=${dnYn}&ServiceKey=${sunApi.key}`;
