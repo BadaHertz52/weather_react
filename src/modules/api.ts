@@ -303,8 +303,8 @@ export const getApInform =async(sidoName:ApiAreaCode, stationName:string[])=>{
   const targetItem:ApItem = items.filter((i:ApItem)=> stationName.includes(i.stationName))[0];
   const gradeArry : PmType[]=["좋음","보통","나쁨","매우 나쁨"];
   const pm :PmGrade = {
-    pm10Grade:gradeArry[Number(targetItem.pm10Grade) +1],
-    pm25Grade:gradeArry[Number(targetItem.pm25Grade)+1]
+    pm10Grade1h:gradeArry[Number(targetItem.pm10Grade1h) -1],
+    pm25Grade1h:gradeArry[Number(targetItem.pm25Grade1h)-1]
   };
   return pm
 };
