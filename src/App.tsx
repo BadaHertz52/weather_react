@@ -8,13 +8,11 @@ function App() {
     const nx ="61";
     const ny ="128";
     const today = new Date();
-    console.log("today", today);
     const year = today.getFullYear();
     const hours =today.getHours();
     const minutes =today.getMinutes();
     const date =today.getDate();
     const preHours = hours -1 ;
-   
     const changeBaseDate =(day:Date)=>{
       const month =day.getMonth()+1;
       const date = day.getDate();
@@ -22,17 +20,17 @@ function App() {
       return baseDate
     };
     const getYesterDay =()=>{
-      const yesterDay = new Date( new Date().setDate(date -1));
+      const yesterday = new Date( new Date().setDate(date -1));
       // new Date() 말고 today를 쓰면 today 가 이전 날로 변경되는 오류 발생
-      return changeBaseDate(yesterDay);
+      return changeBaseDate(yesterday);
     };
     const baseDate_today =changeBaseDate(today);
-    const baseDate_yesterDay =getYesterDay();
+    const baseDate_yesterday =getYesterDay();
     const baseDate_skyCode = minutes < 30 && hours === 0 ? 
-                            baseDate_yesterDay
+                            baseDate_yesterday
                             :
                             baseDate_today ;
-    const baseDate_svf = hours < 2 ? baseDate_yesterDay :baseDate_today;
+    const baseDate_svf = hours < 2 ? baseDate_yesterday :baseDate_today;
     const baseTime_svf:SVFBaseTime=(()=>{
       let time :SVFBaseTime ="0200";
       const svfBaseTime =[2,5,8,11,14 ,17,20,23];
@@ -69,17 +67,14 @@ function App() {
     const landRegId:MidLandAreaCode = midLand_서울인천경기도 ;
     const taIndex =midTaArea.indexOf("서울")
     const taRegId  = midTaAreaCode[taIndex] as MidTaAreaCode;
-    //🤗const skyCode = await getUSSkyCode(nx, ny, baseDate_skyCode,baseTime_skyCode,fcstTime);
-    //🤗const uSNcst = await getUSNcast(nx, ny, baseDate_today, fcstTime);
-    const sVFcst =await getSVFcast(nx,ny,baseDate_svf,baseTime_svf);
-    // const midFcst =await getMidFcast(landRegId, taRegId,"202212200600");
+    // const skyCode = await getUSSkyCode(nx, ny, baseDate_skyCode,baseTime_skyCode,fcstTime);
+    // const uSNcst = await getUSNcast(nx, ny, baseDate_today, fcstTime);
+    // const sVFcst =await getSVFcast(nx,ny,baseDate_svf,baseTime_svf);
+    // const midFcst =await getMidFcast(landRegId, taRegId,baseDate_today,baseDate_yesterday, hours );
     // const apGrade = await getApInform("서울",["서울특별시", "강북구","수유2동"]);
-    // const sunInform =await getSunInform("12700","3700","20221220","Y")
-
-    console.log("svfcst",sVFcst)
-    // console.log("midFcst",midFcst)
-    // console.log("apgrade",apGrade)
-    // console.log("sun", sunInform);
+    // const longitude ="126.9706519"; 
+    // const latitude ="37.5841367";
+    // const sunInform =await getSunInform(longitude,latitude,baseDate_today,"Y");
   };
   getData();
   return (
