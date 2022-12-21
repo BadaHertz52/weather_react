@@ -192,6 +192,6 @@ export type ApItem ={
 };
 
 export type PmGrade ={
-  pm10Grade:PmType,
-  pm25Grade:PmType
+  pm10Grade1h:PmType,
+  pm25Grade1h:PmType
 };
