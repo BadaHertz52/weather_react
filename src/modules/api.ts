@@ -249,44 +249,44 @@ export const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode
   const taItems = await getApiItems(taUrl);
   const midFcst:MidFcst = [{
                             dyalater:3,
-                            wfAm:landItems.item.wf3Am,
-                            wfPm:landItems.item.wf3Pm,
-                            rnStAm:landItems.item.rnSt3Am,
-                            rnStPm:landItems.item.rnSt3Pm,
-                            taMax:taItems.item.taMax3,
-                            taMin:taItems.item.taMin3
+                            wfAm:landItems.item[0].wf3Am,
+                            wfPm:landItems.item[0].wf3Pm,
+                            rnStAm:landItems.item[0].rnSt3Am,
+                            rnStPm:landItems.item[0].rnSt3Pm,
+                            taMax:taItems.item[0].taMax3,
+                            taMin:taItems.item[0].taMin3
                           },{
                               dyalater:4,
-                              wfAm:landItems.item.wf4Am,
-                              wfPm:landItems.item.wf4Pm,
-                              rnStAm:landItems.item.rnSt4Am,
-                              rnStPm:landItems.item.rnSt4Pm,
-                              taMax:taItems.item.taMax4,
-                              taMin:taItems.item.taMin4
+                              wfAm:landItems.item[0].wf4Am,
+                              wfPm:landItems.item[0].wf4Pm,
+                              rnStAm:landItems.item[0].rnSt4Am,
+                              rnStPm:landItems.item[0].rnSt4Pm,
+                              taMax:taItems.item[0].taMax4,
+                              taMin:taItems.item[0].taMin4
                           },{
                               dyalater:5,
-                              wfAm:landItems.item.wf5Am,
-                              wfPm:landItems.item.wf5Pm,
-                              rnStAm:landItems.item.rnSt5Am,
-                              rnStPm:landItems.item.rnSt5Pm,
-                              taMax:taItems.item.taMax5,
-                              taMin:taItems.item.taMin5
+                              wfAm:landItems.item[0].wf5Am,
+                              wfPm:landItems.item[0].wf5Pm,
+                              rnStAm:landItems.item[0].rnSt5Am,
+                              rnStPm:landItems.item[0].rnSt5Pm,
+                              taMax:taItems.item[0].taMax5,
+                              taMin:taItems.item[0].taMin5
                           },{
                               dyalater:6,
-                              wfAm:landItems.item.wf6Am,
-                              wfPm:landItems.item.wf6Pm,
-                              rnStAm:landItems.item.rnSt6Am,
-                              rnStPm:landItems.item.rnSt6Pm,
-                              taMax:taItems.item.taMax6,
-                              taMin:taItems.item.taMin6
+                              wfAm:landItems.item[0].wf6Am,
+                              wfPm:landItems.item[0].wf6Pm,
+                              rnStAm:landItems.item[0].rnSt6Am,
+                              rnStPm:landItems.item[0].rnSt6Pm,
+                              taMax:taItems.item[0].taMax6,
+                              taMin:taItems.item[0].taMin6
                             },{
                               dyalater:7,
-                              wfAm:landItems.item.wf7Am,
-                              wfPm:landItems.item.wf7Pm,
-                              rnStAm:landItems.item.rnSt7Am,
-                              rnStPm:landItems.item.rnSt7Pm,
-                              taMax:taItems.item.taMax7,
-                              taMin:taItems.item.taMin7
+                              wfAm:landItems.item[0].wf7Am,
+                              wfPm:landItems.item[0].wf7Pm,
+                              rnStAm:landItems.item[0].rnSt7Am,
+                              rnStPm:landItems.item[0].rnSt7Pm,
+                              taMax:taItems.item[0].taMax7,
+                              taMin:taItems.item[0].taMin7
                             }
                           ];
   return midFcst
