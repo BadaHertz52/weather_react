@@ -298,7 +298,7 @@ export const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode
  * @returns Promise<PmGrade>
  */
 export const getApInform =async(sidoName:ApiAreaCode, stationName:string[])=>{
-  const url = `${apInformApi.url}/${apInformApi.inqury}?sidoName=${sidoName}&returnType=json&serviceKey=${apInformApi.key}`;
+  const url = `${apInformApi.url}/${apInformApi.inqury}?sidoName=${sidoName}&returnType=JSON&serviceKey=${apInformApi.key}&numOfRows=100000&ver=1.3`;
   const items =await getApiItems(url);
   const targetItem:ApItem = items.filter((i:ApItem)=> stationName.includes(i.stationName))[0];
   const gradeArry : PmType[]=["좋음","보통","나쁨","매우 나쁨"];
