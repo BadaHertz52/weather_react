@@ -230,12 +230,19 @@ export const getSVFcast =async(nx:string, ny:string, baseDate:string, baseTime:S
  * 
  * @param landRegId 중기 육상 예보 요청 메세지에 필요한 지역코드
  * @param taRegId  중기 기온 예보 요청 메세지에 필요한 지역코드
- * @param tmFc 중기 육상/기온 예보 요청 메세지를 보낼 때 필요한 예보 발표시각 ( 형태: YYMMDDTTMM) (일 2회(06:00,18:00)회 생성)
+ * @param today 오늘 (형태:YYYDD)
+ * @param yesterday 어제 (형태:YYYDD)
+ * @param hours 현재 시각
  * @returns Promise<MidFcst>
  */
-export const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode, tmFc:string):Promise<MidFcst>=>{
-  const common =`serviceKey=${midFcstApi.key}&dataType=JSON&tmFc=${tmFc}
-  &tmFc=${tmFc}`
+export const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode, today:string,yesterday:string, hours:number ):Promise<MidFcst>=>{
+  const tmFcTime :string = hours < 6 || hours> 18? "1800" :  "0600" ;
+  const tmFcDate = hours < 6? yesterday : today ;
+  /**
+   * 중기 육상/기온 예보 요청 메세지를 보낼 때 필요한 예보 발표시각 ( 형태: YYMMDDTTMM) (일 2회(06:00,18:00)회 생성)
+   */
+  const tmFc =`${tmFcDate}${tmFcTime}`;
+  const common =`serviceKey=${midFcstApi.key}&dataType=JSON&tmFc=${tmFc}`
   const landUrl =`${midFcstApi.url}/${inqury_mid_midLandFcst}?regId=${landRegId}&${common}`;
   const taUrl =`${midFcstApi.url}/${inqury_mid_midTa}?regId=${taRegId}&${common}`;
   const landItems = await getApiItems(landUrl);
