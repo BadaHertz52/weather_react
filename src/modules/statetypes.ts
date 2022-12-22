@@ -201,8 +201,3 @@ export const changeDayNation=(dayLater:number)=>({
 export type WeatherAction = ReturnType<typeof getPosition> |
 ReturnType<typeof getWeather>|
 ReturnType<typeof changeDayNation>;
-
-
-const y ="Y";
-const n ="N"
-export type Dnyn = typeof y| typeof n;

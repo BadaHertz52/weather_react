@@ -1,5 +1,5 @@
 import { ApiAreaCode, MidLandAreaCode, MidTaAreaCode } from "./areCodeTyoe";
-import { cloudy, Dnyn, PmType, SkyType, sunny, veryCloudy } from "./statetypes";
+import { cloudy, PmType, SkyType, sunny, veryCloudy } from "./statetypes";
 import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApItem, SVFBaseTime, SFcstItemBase}from "./apiType";
 
 const returnApiUrl =(sort:string):string=>{
@@ -311,13 +311,12 @@ export const getApInform =async(sidoName:ApiAreaCode, stationName:string[])=>{
 
 /**
  * 
- * @param longitude 경도 (도분: 서울-12658 / 실수(초/100): 서울-126.98000833333333 )
- * @param latitude  위도 (도분: 서울 - 3733 / 실수 (초/100): 서울 -37.56356944444444)
- * @param dnYn  실수이면 Y, ~도 ~분이면 N
+ * @param longitude longitude ( 실수(초/100): 서울-126.98000833333333 )
+ * @param latitude  latitude ( 실수 (초/100): 서울 -37.56356944444444)
  */
-export const getSunInform =(longitude:string, latitude:string ,baseDate:string,dnYn:Dnyn)=>{
-  const url =`${sunApi.url}/${sunApi.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${baseDate}&dnYn=${dnYn}&ServiceKey=${sunApi.key}`;
-  return fetch(url)
+export const getSunInform =async(longitude:string, latitude:string ,baseDate:string)=>{
+  const url =`${sunApi.url}/${sunApi.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${baseDate}&dnYn=Y&ServiceKey=${sunApi.key}`;
+  return await fetch(url)
                 .then(response => response.text())
                 .then((data)=>{
                   const xml = new DOMParser().parseFromString(data, "text/xml");
