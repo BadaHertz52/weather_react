@@ -329,8 +329,10 @@ export const getSunInform =async(longitude:string, latitude:string ,baseDate:str
                     location:location
                   }
                 })
-                .catch(e=>console.log("error",e));
+                .catch(e=>{console.log("error",e); return null});
 };
+
+
 const findAreaGrid =(doc:KakaoDoumentType)=>{
   const arry1 = sfGrid.filter((i)=> i.arePt1 === doc.region_1depth_name);
 
@@ -381,7 +383,13 @@ export const  getAreaData =async(latitude:string, longitude:string)=>{
     }
 
   })
-  .catch(e => console.log("kakao error",e))
+  .catch(e => {
+    console.log("error",e);
+    return null
+});
+};
+
+
 export function getMidLandAreaCode (sfGrid:SFGridItem){
   const mid1 =["서울특별시", "인천광역시", "경기도"];
   const mid2_3 =["강원도"];
