@@ -1,11 +1,10 @@
-import { ApiAreaCode, MidLandAreaCode, MidTaAreaCode } from "./areCodeType";
-import { cloudy, PmType, SkyType, sunny, veryCloudy } from "./statetypes";
-import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApItem, SVFBaseTime, SFcstItemBase, KakaoDoumentType}from "./apiType";
+import { ApiAreaCode, MidLandAreaCode, midLandAreaCodeZip, midTaArea, midTaAreaCode, MidTaAreaCode } from "./areaCodeType";
+import { cloudy, getSkyCode, PmType, SkyCodeType, SkyType, sunny, veryCloudy } from "./weatherTypeAndFn";
+import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApItem, SVFBaseTime,  KakaoDoumentType}from "./apiType";
 import { sfGrid ,SFGridItem} from './sfGrid'; 
 
 const publicApiKey = process.env.REACT_APP_PUBLIC_KEY ;
 const kakaoKey = process.env.REACT_APP_KAKAO_KEY;
-
 
 const returnApiUrl =(sort:string):string=>{
   const base =`https://apis.data.go.kr/1360000/${sort}`;
@@ -86,13 +85,19 @@ export const sunApi:Api ={
  * @param url 
  * @returns Promise<any>
  */
-const getApiItems =async(url:string)=>{
+const getApiItems =async(url:string, what:string)=>{
   const data = await fetch(url )
-  .then((response)=> { console.log("response", response); return response.json()})
   .then((response)=> { 
-      console.log("getapiitmes", response)
-      const items =response.response.body.items
+    console.log( what,"-","[get api items]", "response:", response) ; 
+    return response.json()})
+  .then((response)=> { 
+    if(response.response.body !==undefined){
+      const items =response.response.body.items;
       return items
+    }else{
+      console.log("[get api items]: response.body is undefined","response:" ,response, "url", url)
+    }
+
     })
   .catch(e=>console.log("error",e));
   return data
@@ -115,44 +120,33 @@ export const getSFApiUrl =(inqury:SFInqury,nx:string, ny:string, baseDate:string
  * @param nx 예보지점 x 좌표
  * @param ny 예보지점 y좌표
  * @param baseDate  발표일자(yyyymmdd)
- * @param baseTime : 현재 시점이 30분 이전면 이전 시로, 30분 이후이면 현재 시로 (ex "tt00")
  * @param fcstTime 현재 시
  * @return baseTime 기전으로 6시간 이내의 결과값
  */
-export const getUSSkyCode =async(nx:string, ny:string, baseDate:string, baseTime:string, fcstTime:string ):Promise<SkyType | undefined>=>{
+export const getUSSkyCode =async(nx:string, ny:string, baseDate:string, baseTime:string, fcstTime:string ):Promise<SkyCodeType>=>{
   const numOfRows = JSON.stringify(10000);
   const url =getSFApiUrl(inqury_short_ultraSrtFcst, nx,ny,baseDate,baseTime , numOfRows);
-  const items = await getApiItems(url);
+  const items = await getApiItems(url, "usskycode");
   const skyItems= items.item.filter((i:SFcstItem)=>
   i.category ==="SKY");
   const targetItem= skyItems.filter((i:SFcstItem)=> i.fcstTime =fcstTime)[0];
-  const skyCode =targetItem.fcstValue ;
-  switch (skyCode) {
-    case "1":
-      return sunny;
-    case "3": 
-      return cloudy;
-    case "4":
-      return veryCloudy;
-    default:
-    break;
-  }
-
+  const skyCode = getSkyCode(targetItem.fcstValue);
+  return skyCode
 };
 /**
  * 현재 시점에 대한 초단기 실황 api 데이터를 반환하는 함수
  * @param nx 예보지점 x 좌표
  * @param ny 예보지점 y좌표
  * @param baseDate  발표일자(yyyymmdd)
- * @param baseTime  발표시간(tt00): 현재 시각
+ * @param fcstTime   현재 시각
  * @return Promise<USNcst> baseTime 기준으로 6시간 이내의 예보
  */
-export const getUSNcast =async(nx:string, ny:string, baseDate:string, baseTime:string)=>{
-  const url =getSFApiUrl("getUltraSrtNcst",nx,ny,baseDate,baseTime,"16");
-  const items = await getApiItems(url);
+export const getUSNcast =async(nx:string, ny:string, baseDate:string ,fcstTime:string)=>{
+  const url =getSFApiUrl("getUltraSrtNcst",nx,ny,baseDate,fcstTime,"16");
+  const items = await getApiItems(url, "usncast");
   const uNcst:USNcst ={
     baseDate:baseDate,
-    baseTime:baseTime,
+    baseTime:fcstTime,
     pty: items.item.filter((i:USNcstItem)=> i.category === "PTY")[0].obsrValue,
     reh: items.item.filter((i:USNcstItem)=> i.category === "REH")[0].obsrValue,
     rn1: items.item.filter((i:USNcstItem)=> i.category === "RN1")[0].obsrValue,
@@ -169,23 +163,12 @@ export const getUSNcast =async(nx:string, ny:string, baseDate:string, baseTime:s
  * @param baseDate  예보 발표 일자
  * @param baseTime  예보 발표 시각
  * @returns  Promise<SVFcst>
- */
-export const getSVFcast =async(nx:string, ny:string, baseDate:string, baseTime:SVFBaseTime)=>{
+ */ 
+export const getSVFcast =async(nx:string, ny:string, baseDate:string, baseTime:SVFBaseTime ,timeArry:string[])=>{
   const url =getSFApiUrl(inqury_short_vilageFcst, nx,ny, baseDate ,baseTime, "1000")
-  const items  = await getApiItems(url);
+  const items  = await getApiItems(url, "svfcast");
 
-  let timeArry :string[] =[];
-  for (let t = 0; t < 24; t++) {
-    let time ;
-    if(t < 10){
-      time = `0${t}00` ;
-    }else{
-      time = `${t}00`;
-    };
-    timeArry.push(time);  
-  };
-  const baseTimeIndex= timeArry.indexOf(baseTime);
-  const todayTimeArry = timeArry.slice(baseTimeIndex+1);
+
   const dayLater =[0,1,2,3];
   const sVFcst: SVFcst= dayLater.map((d:number)=>{
     const fcstData =JSON.stringify( Number(baseDate) + d)
@@ -221,7 +204,7 @@ export const getSVFcast =async(nx:string, ny:string, baseDate:string, baseTime:S
         return fcast;
       });
     };
-    const daySVFcst :SVFDay =  d === 0? getDaySvf(todayTimeArry) :getDaySvf(timeArry)
+    const daySVFcst :SVFDay = getDaySvf(timeArry)
     return daySVFcst;
   });
   return sVFcst
@@ -245,8 +228,8 @@ export const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode
   const common =`serviceKey=${publicApiKey}&dataType=JSON&tmFc=${tmFc}`
   const landUrl =`${midFcstApi.url}/${inqury_mid_midLandFcst}?regId=${landRegId}&${common}`;
   const taUrl =`${midFcstApi.url}/${inqury_mid_midTa}?regId=${taRegId}&${common}`;
-  const landItems = await getApiItems(landUrl);
-  const taItems = await getApiItems(taUrl);
+  const landItems = await getApiItems(landUrl, "midFcast-land");
+  const taItems = await getApiItems(taUrl, "midFcast-ta");
   const midFcst:MidFcst = [{
                             dyalater:3,
                             wfAm:landItems.item[0].wf3Am,
@@ -299,7 +282,7 @@ export const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode
  */
 export const getApInform =async(sidoName:ApiAreaCode, stationName:string[])=>{
   const url = `${apInformApi.url}/${apInformApi.inqury}?sidoName=${sidoName}&returnType=JSON&serviceKey=${publicApiKey}&numOfRows=100000&ver=1.3`;
-  const items =await getApiItems(url);
+  const items =await getApiItems(url ,"apInform");
   const targetItem:ApItem = items.filter((i:ApItem)=> stationName.includes(i.stationName))[0];
   const gradeArry : PmType[]=["좋음","보통","나쁨","매우 나쁨"];
   const pm :PmGrade = {
@@ -314,10 +297,12 @@ export const getApInform =async(sidoName:ApiAreaCode, stationName:string[])=>{
  * @param longitude longitude ( 실수(초/100): 서울-126.98000833333333 )
  * @param latitude  latitude ( 실수 (초/100): 서울 -37.56356944444444)
  */
-export const getSunInform =async(longitude:string, latitude:string ,baseDate:string)=>{
+export const getSunInform =async(longitude:string, latitude:string,baseDate:string)=>{
   const url =`${sunApi.url}/${sunApi.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${baseDate}&dnYn=Y&ServiceKey=${publicApiKey}`;
   return await fetch(url)
-                .then(response => response.text())
+                .then(response => {
+                  return response.text()
+                })
                 .then((data)=>{
                   const xml = new DOMParser().parseFromString(data, "text/xml");
                   const sunrise = xml.querySelector("sunrise")?.textContent
