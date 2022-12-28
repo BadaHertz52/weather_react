@@ -3,8 +3,8 @@ import { GET_POSITION, GET_WHEATHER, WeatherAction, WeatherState } from "./weath
 
 //initialState
 const initialState :WeatherState ={
-  nx:null,
-  ny:null,
+  nX:null,
+  nY:null,
   nowWeather:null,
   hourly:null,
   weekly: null,
@@ -15,12 +15,12 @@ const initialState :WeatherState ={
 const weather =(state:WeatherState=initialState, action:WeatherAction):WeatherState=>{
   switch (action.type) {
     case GET_POSITION:
-      const nx =60;
-      const ny= 128;
+      const nX =60;
+      const nY= 128;
     return {
       ...state,
-      nx:nx,
-      ny:ny
+      nX:nX,
+      nY:nY
       };
     default:
       return state;
