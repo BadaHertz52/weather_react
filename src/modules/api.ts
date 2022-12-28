@@ -382,4 +382,102 @@ export const  getAreaData =async(latitude:string, longitude:string)=>{
 
   })
   .catch(e => console.log("kakao error",e))
+export function getMidLandAreaCode (sfGrid:SFGridItem){
+  const mid1 =["서울특별시", "인천광역시", "경기도"];
+  const mid2_3 =["강원도"];
+  const mid4 =["대전광역시", "세종특별자치시", "충청남도"];
+  const mid5 =["충청북도"];
+  const mid6 =["광주광역시", "전라남도"];
+  const mid7 =["전라남도"];
+  const mid8 =["대구광역시", "경상북도"];
+  const mid9 =["부산광역시", "울산광역시" ,"경상북도"];
+  const mid10 =["제주특별자치도"];
+  const mid =[mid1, mid2_3, mid4 ,mid5 , mid6 ,mid7 ,mid8 ,mid9 ,mid10];
+
+  const west =["철원군", "화천군" ,"양구군", "인제군", "춘천시", "홍천군", "횡성군","원주시","평창군","영월군", "정선군"];
+
+  const east =["강릉시", "삼척시", "태백시", "동해시", "양양군", "속초시", "고성군"]
+
+  const pt1 =sfGrid.arePt1;
+
+  for (let i = 0; i < mid.length; i++) {
+    const element = mid[i];
+    if(pt1 === "강원도"){
+      const pt2 = sfGrid.arePt2;
+      if(pt2 ==null || !west.includes(pt2)){
+        // 강원도영동
+        return midLandAreaCodeZip[2]
+      }else{
+        //강원도영서
+        return midLandAreaCodeZip[1]
+      }
+    }else{
+      if(element.includes(pt1)){
+        const midLandAreaCode = midLandAreaCodeZip[i];
+        return midLandAreaCode
+      }
+    }
+  }
+};
+
+export function getMidTaAreaCode(sfGrid:SFGridItem){
+  const pt1 =sfGrid.arePt1;
+  const pt2 =sfGrid.arePt2;
+  const megalopolis =["부산광역시", "인천광역시", "대구광역시", "대전광역시", "광주광역시", "울산광역시"];
+  const pt1Arry =[...megalopolis, "서울특별시","세종특별시","제주특별자치도" ,"이어도"];
+  const getCodeFromArry =(area:string)=>{
+    const index = midTaArea.indexOf(area);
+    return midTaAreaCode[index];
+  };
+  //use pt1
+  if(pt1Arry.includes(pt1)){
+    if(pt1 ==="서울특별시"){
+      return getCodeFromArry("서울")
+    }else if(megalopolis.includes(pt1)){
+      const area =pt1.slice(0,2);
+      return getCodeFromArry(area);
+    }else if(pt1==="세종특별자치시"){
+      return getCodeFromArry("세종")
+    }else if(pt1==="제주특별자치도"){
+      return getCodeFromArry("제주")
+    }else if(pt1 ==="이어도"){
+      return getCodeFromArry("이어도")
+    }
+  }else{
+      //use pt2 
+    if(pt2 !==null){
+      const pt2Area =pt2.slice(0,2);
+      if(pt1==="경기도" && pt2Area==="광주"){
+        return getCodeFromArry("광주(경기도")
+      }else if(pt2Area==="고성"){
+        switch (pt1) {
+          case "강원도":
+            return getCodeFromArry("고성(강원도)");
+          case "경상남도":
+            return  getCodeFromArry("고성(경남)");
+          default:
+            break;
+        }
+      }else{
+        return getCodeFromArry(pt2Area)
+      }
+    }
+  }
+};
+
+export function getApAreaCode(sfGrid:SFGridItem):ApiAreaCode{
+  const pt1 =sfGrid.arePt1;
+  const arry =["충청븍도", "층청남도","전라북도",
+"전라남도","경상북도","경상남도"];
+  if(arry.includes(pt1)){
+    const first =pt1.slice(0,1);
+    const second =pt1.slice(2,3);
+    const area = first.concat(second) as ApiAreaCode
+    console.log("[getApAreaCode]","are", area)
+    return area
+  }else{
+    const area = pt1.slice(0,2);
+    console.log("[getApAreaCode]","are", area)
+    return area as ApiAreaCode
+  }
 };
