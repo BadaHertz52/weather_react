@@ -75,6 +75,18 @@ function App() {
     // const longitude ="126.9706519"; 
     // const latitude ="37.5841367";
     // const sunInform =await getSunInform(longitude,latitude,baseDate_today,"Y");
+  const sucess =async(pos: GeolocationPosition)=>{
+    const latitude =JSON.stringify(pos.coords.latitude) ;
+    const longitude =JSON.stringify(pos.coords.longitude);
+    const sfGridItem = await getAreaData(latitude,longitude);
+    console.log("sfGridItem", sfGridItem);
+    return sfGridItem
+  };
+  const getPosition =()=>{
+    navigator.geolocation.getCurrentPosition((pos)=>sucess(pos),(err)=>{
+      console.warn("error",err);
+    });
+    
   };
   getData();
   return (

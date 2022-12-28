@@ -331,3 +331,55 @@ export const getSunInform =async(longitude:string, latitude:string ,baseDate:str
                 })
                 .catch(e=>console.log("error",e));
 };
+const findAreaGrid =(doc:KakaoDoumentType)=>{
+  const arry1 = sfGrid.filter((i)=> i.arePt1 === doc.region_1depth_name);
+
+  if(arry1[0]=== undefined){
+    return undefined
+  }else{
+    const arry2 = arry1.filter((i)=> i.arePt2 === doc.region_2depth_name);
+
+    if(arry2[0]!==undefined){
+      const arry3= arry2.filter((i)=>i.arePt3 === doc.region_3depth_name);
+  
+      if(arry3[0]!==undefined){
+        return arry3[0]
+      }else{
+        return arry2.filter((i)=> i.arePt3 === null)[0]
+      }
+    }else{
+      return arry1.filter((i)=>i.arePt2 === null)[0]
+    }
+  }
+
+  
+};
+
+export const  getAreaData =async(latitude:string, longitude:string)=>{
+  const url =`https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${longitude}&y=${latitude}`;
+  return await fetch(url,{
+    method:'GET',
+    headers: {
+      'Authorization': `KakaoAK ${kakaoKey}`,
+    }
+  })
+  .then(re => re.json())
+  .then(data =>{
+    const gridDataArry :SFGridItem[] =data.documents.map((doc:KakaoDoumentType)=>findAreaGrid(doc)).filter((i:SFGridItem|undefined)=> i !==undefined)
+    ;
+    const arePt3IsNotNull = gridDataArry.filter((i:SFGridItem)=> i.arePt3 !==null);
+
+    if(arePt3IsNotNull[0]!==undefined){
+      return arePt3IsNotNull[0]
+    }else{
+      const arePt2IsNotNull = gridDataArry.filter((i:SFGridItem)=> i.arePt2 !==null);
+      if(arePt2IsNotNull[0]!==undefined){
+        return arePt2IsNotNull[0]
+      }else{
+        return gridDataArry[0]
+      }
+    }
+
+  })
+  .catch(e => console.log("kakao error",e))
+};
