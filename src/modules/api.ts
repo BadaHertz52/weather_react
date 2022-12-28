@@ -1,6 +1,11 @@
-import { ApiAreaCode, MidLandAreaCode, MidTaAreaCode } from "./areCodeTyoe";
+import { ApiAreaCode, MidLandAreaCode, MidTaAreaCode } from "./areCodeType";
 import { cloudy, PmType, SkyType, sunny, veryCloudy } from "./statetypes";
-import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApItem, SVFBaseTime, SFcstItemBase}from "./apiType";
+import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApItem, SVFBaseTime, SFcstItemBase, KakaoDoumentType}from "./apiType";
+import { sfGrid ,SFGridItem} from './sfGrid'; 
+
+const publicApiKey = process.env.REACT_APP_PUBLIC_KEY ;
+const kakaoKey = process.env.REACT_APP_KAKAO_KEY;
+
 
 const returnApiUrl =(sort:string):string=>{
   const base =`https://apis.data.go.kr/1360000/${sort}`;
@@ -40,7 +45,6 @@ typeof inqury_short_vilageFcst ;
 
 type Api ={
   url:string,
-  key:string,
   inqury:string
 };
 
@@ -50,7 +54,6 @@ type Api ={
 
 const shortFcstApi:Api ={
   url:returnApiUrl("VilageFcstInfoService_2.0") ,
-  key:"hBppoh3ha8A2hvqzRU5kOqCd8uVct6%2BPmsjMaTQ1FOpqDAA7BfsIeAk%2BlyHk0VMFaIFkQK1ElUP4nHjyfs1hDg%3D%3D",
   inqury:inqury_short_ultraSrtFcst ||  inqury_short_ultraSrtNcst||
   inqury_short_vilageFcst
 };
@@ -59,7 +62,6 @@ const shortFcstApi:Api ={
  */
 const midFcstApi :Api ={
   url:returnApiUrl("MidFcstInfoService"),
-  key:"hBppoh3ha8A2hvqzRU5kOqCd8uVct6%2BPmsjMaTQ1FOpqDAA7BfsIeAk%2BlyHk0VMFaIFkQK1ElUP4nHjyfs1hDg%3D%3D",
   inqury:inqury_mid_midLandFcst || 
   inqury_mid_midTa
 };
@@ -69,7 +71,6 @@ const midFcstApi :Api ={
  */
 const apInformApi:Api ={
   url:"http://apis.data.go.kr/B552584/ArpltnInforInqireSvc",
-  key:"hBppoh3ha8A2hvqzRU5kOqCd8uVct6%2BPmsjMaTQ1FOpqDAA7BfsIeAk%2BlyHk0VMFaIFkQK1ElUP4nHjyfs1hDg%3D%3D",
   inqury:inqury_air_ctprvnRltmMesureDnsty
 };
 
@@ -78,7 +79,6 @@ const apInformApi:Api ={
 */
 export const sunApi:Api ={
   url :"http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService",
-  key :"hBppoh3ha8A2hvqzRU5kOqCd8uVct6%2BPmsjMaTQ1FOpqDAA7BfsIeAk%2BlyHk0VMFaIFkQK1ElUP4nHjyfs1hDg%3D%3D" ,
   inqury :"getLCRiseSetInfo"
 };
 /**
@@ -88,7 +88,7 @@ export const sunApi:Api ={
  */
 const getApiItems =async(url:string)=>{
   const data = await fetch(url )
-  .then((response)=> response.json())
+  .then((response)=> { console.log("response", response); return response.json()})
   .then((response)=> { 
       console.log("getapiitmes", response)
       const items =response.response.body.items
@@ -107,7 +107,7 @@ const getApiItems =async(url:string)=>{
  * @returns url (type string)
  */
 export const getSFApiUrl =(inqury:SFInqury,nx:string, ny:string, baseDate:string, baseTime:string  ,numOfRows:string)=> {
-  const url =`${shortFcstApi.url}/${inqury}?serviceKey=${shortFcstApi.key}&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}&numOfRows=${numOfRows}`;
+  const url =`${shortFcstApi.url}/${inqury}?serviceKey=${publicApiKey}&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}&numOfRows=${numOfRows}`;
   return url
 };
 /**
@@ -242,7 +242,7 @@ export const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode
    * 중기 육상/기온 예보 요청 메세지를 보낼 때 필요한 예보 발표시각 ( 형태: YYMMDDTTMM) (일 2회(06:00,18:00)회 생성)
    */
   const tmFc =`${tmFcDate}${tmFcTime}`;
-  const common =`serviceKey=${midFcstApi.key}&dataType=JSON&tmFc=${tmFc}`
+  const common =`serviceKey=${publicApiKey}&dataType=JSON&tmFc=${tmFc}`
   const landUrl =`${midFcstApi.url}/${inqury_mid_midLandFcst}?regId=${landRegId}&${common}`;
   const taUrl =`${midFcstApi.url}/${inqury_mid_midTa}?regId=${taRegId}&${common}`;
   const landItems = await getApiItems(landUrl);
@@ -298,7 +298,7 @@ export const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode
  * @returns Promise<PmGrade>
  */
 export const getApInform =async(sidoName:ApiAreaCode, stationName:string[])=>{
-  const url = `${apInformApi.url}/${apInformApi.inqury}?sidoName=${sidoName}&returnType=JSON&serviceKey=${apInformApi.key}&numOfRows=100000&ver=1.3`;
+  const url = `${apInformApi.url}/${apInformApi.inqury}?sidoName=${sidoName}&returnType=JSON&serviceKey=${publicApiKey}&numOfRows=100000&ver=1.3`;
   const items =await getApiItems(url);
   const targetItem:ApItem = items.filter((i:ApItem)=> stationName.includes(i.stationName))[0];
   const gradeArry : PmType[]=["좋음","보통","나쁨","매우 나쁨"];
@@ -315,7 +315,7 @@ export const getApInform =async(sidoName:ApiAreaCode, stationName:string[])=>{
  * @param latitude  latitude ( 실수 (초/100): 서울 -37.56356944444444)
  */
 export const getSunInform =async(longitude:string, latitude:string ,baseDate:string)=>{
-  const url =`${sunApi.url}/${sunApi.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${baseDate}&dnYn=Y&ServiceKey=${sunApi.key}`;
+  const url =`${sunApi.url}/${sunApi.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${baseDate}&dnYn=Y&ServiceKey=${publicApiKey}`;
   return await fetch(url)
                 .then(response => response.text())
                 .then((data)=>{
