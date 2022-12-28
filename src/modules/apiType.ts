@@ -131,7 +131,7 @@ export type MidTaFcst ={
 /**
  * 중기 예보 data
  */
-export type MidFcst ={
+export type MidFcstDay ={
   dyalater:number,
   /**
    * 오전 날씨
@@ -157,7 +157,8 @@ export type MidFcst ={
    * 최고 기온
    */
   taMax:number
-}[];
+}
+export type MidFcst =MidFcstDay[];
 
 //api;
 export type ApItem ={
@@ -227,4 +228,5 @@ export type KakaoDoumentType ={
   x: number,
   /**latitude */
   y: number
-}
+};
+
