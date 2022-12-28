@@ -1,22 +1,19 @@
-
-
 export const sunny ="맑음"; // sky code =1
 export const cloudy ="구름많음" // sky code =3
 export const veryCloudy ="흐림" // sky code =4
-
-const spellRain ="한때 비";
-const rainy ="비"; // pty code =1 or 5
-const snowRain ="비 또는 눈" //pty =2 or 6 
-const snow ="눈" // pty code =3 or 7
-const shower ="소나기" //pty code=5
-const cldRain ="구름많고 비";
-const cldSnow ="구름많고 눈";
-const cldRainSnow ="구름많고 비/눈";
-const cldShower ="구름많고 소나기";
-const vyCldRain ="흐리고 비";
-const vrCldSnow ="흐리고 눈";
-const vrCldRainSnow ="흐리고 비/눈";
-const vrCldShower ="흐리고 소나기";
+export const spellRain ="한때 비";
+export const rainy ="비"; // pty code =1 or 5
+export const snowRain ="비 또는 눈" //pty =2 or 6 
+export const snow ="눈" // pty code =3 or 7
+export const shower ="소나기" //pty code=4
+export const cldRain ="구름많고 비";
+export const cldSnow ="구름많고 눈";
+export const cldRainSnow ="구름많고 비/눈";
+export const cldShower ="구름많고 소나기";
+export const vrCldRain ="흐리고 비";
+export const vrCldSnow ="흐리고 눈";
+export const vrCldRainSnow ="흐리고 비/눈";
+export const vrCldShower ="흐리고 소나기";
 
 export type SkyCodeType = typeof sunny | 
                           typeof cloudy | 
@@ -39,11 +36,10 @@ export type SkyType = typeof sunny |
                       typeof cldSnow |
                       typeof cldRainSnow|
                       typeof cldShower|
-                      typeof vyCldRain|
+                      typeof vrCldRain|
                       typeof vrCldSnow |
                       typeof vrCldRainSnow |
                       typeof vrCldShower ;
-
 const north = "북향";  //vec = 360/0 (345-360 . 0-15)
 const northAndEast ="북동향";  //vec : 15-74
 const northAndWeast = "북서향" // vec : 296-344
@@ -53,7 +49,7 @@ const southAndWeast ="남서향" // vec  196-254
 const east ="동향"; //vec =90 (75-90, 90-105)
 const weast ="서향"; //vec =270 (255-270  ,270-295)
 
-export type DiectionType = typeof north|
+export type DirectionType = typeof north|
                           typeof northAndEast |
                           typeof northAndWeast |
                           typeof south |
@@ -61,11 +57,12 @@ export type DiectionType = typeof north|
                           typeof southAndWeast |
                           typeof east |
                           typeof weast ;
+export const directionArry: DirectionType[] =[north, northAndEast, northAndWeast,south, southAndEast,southAndWeast,east,weast];
 
 type WindType ={
     //풍향
-    wsd:DiectionType,
-    vec:number
+    vec:DirectionType |undefined,
+    wsd:string
 };
 
 
@@ -81,41 +78,43 @@ export type PmType = typeof good|
 
 
 export type NowWeather ={
-  //temperature
+  //온도
   tmp :number,
   sky:SkyType,
   //습도
-  reh:number,
-  sensoryTmp :number,
+  reh:string,
   wind:WindType
   //미세먼지
   pm10Grade:PmType,
   //초미세먼지
-  pm25Grande:PmType,
+  pm25Grade:PmType,
 };
 
 export type HourWeather ={
-  hour:number, //24시간제
+  date:string,
+  hour:string, //24시간제
   temp:number,
   //강수확률(%)
-  pop:number,
+  pop:string,
   //강수량(mm)
-  pcp:number,
+  pcp:string,
   wind:WindType,
-  reh:number
+  //습도
+  reh:string
 };
 
 type AmPmType ={
   pop:number,
-  sky:SkyType
+  sky:SkyType|string
 };
 
 export type Day ={
-  sky:SkyType,
   dayslater:number, //0-5 (today=0)
   am:AmPmType,
   pm:AmPmType,
+  //최저 기온
   tmn:number,
+  //최고 기온
   tmx:number
 };
 
@@ -168,13 +167,13 @@ export type Area ={
 };
 
 export type SunRiseAndSet ={
-  sunRise :number ,
-  sunSet :number
+  sunRise :string|null|undefined ,
+  sunSet :string|null|undefined
 };
 
 export type WeatherState ={
-  nx:number |null,
-  ny:number |null,
+  nX:string |null,
+  nY:string |null,
   nowWeather:NowWeather |null,
   hourly:HourWeather[]|null,
   weekly:Day[]|null,
@@ -201,3 +200,103 @@ export const changeDayNation=(dayLater:number)=>({
 export type WeatherAction = ReturnType<typeof getPosition> |
 ReturnType<typeof getWeather>|
 ReturnType<typeof changeDayNation>;
+
+
+// state로 변경 시 필요한 함수 
+export const getSkyCode =(code:number):SkyCodeType=>{
+  switch (code) {
+    case 1:
+      return sunny
+    case 3 :
+      return cloudy;
+    case 4:
+      return veryCloudy;
+  
+    default: 
+      return sunny
+  }};
+
+export const getPtyCode=(code:number)=>{
+  if(code === 0){
+    return sunny
+  }
+  if(code ===1 || code === 5){
+    return rainy
+  };
+  if(code ===2 || code === 6){
+    return snowRain
+  };
+  if(code ===3 || code === 7){
+    return snow
+  };
+  if(code ===4){
+    return shower
+  }
+};
+export const getSkyType =(skyAvg:number,ptyAvg:number):SkyType=>{
+  const skyCode =getSkyCode(skyAvg);
+
+  const ptyCode =getPtyCode(ptyAvg);
+
+  if(skyCode ===sunny){
+    return sunny
+  }else if(skyCode === cloudy){
+    switch (ptyCode) {
+      case sunny :
+        return cloudy;
+      case rainy:
+        return cldRain ;
+      case snowRain:
+        return cldRainSnow ;
+      case snow:
+        return cldSnow;
+      case shower:
+        return cldShower ;
+      default:
+        return cloudy;
+    }
+  }else{
+    switch (ptyCode) {
+      case sunny :
+        return veryCloudy;
+      case rainy:
+        return vrCldRain ;
+      case snowRain:
+        return vrCldRainSnow ;
+      case snow:
+        return vrCldSnow;
+      case shower:
+        return vrCldShower ;
+      default:
+        return veryCloudy
+    }
+  }
+};
+export const getWsd =(vec:number)=>{
+  const nCondition =(vec >= 0 && vec <=15) || (vec >= 354 && vec <=360 );
+  
+  const nECondtion = ( vec >=15 && vec <= 74);
+
+  const nWCondition =( vec >=296 && vec<= 344);
+
+  const sCondition = (vec >=165 && vec <= 195);
+
+  const sECondition =(vec >=106 && vec <= 165);
+
+  const sWCondition =(vec >= 195 && vec <= 254);
+
+  const eCondition = (vec >= 75 && vec <= 105);
+
+  const wCondition =(vec >=255  && vec <= 295);
+
+  const conditionArry =[nCondition, nECondtion, nWCondition, sCondition,sECondition,sWCondition,eCondition,wCondition];
+  
+  for (let i = 0; i < conditionArry.length; i++) {
+    const element = conditionArry[i];
+    if(element){
+      const direction = directionArry[i];
+      return direction
+    }
+  }
+
+};

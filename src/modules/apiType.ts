@@ -1,4 +1,4 @@
-import { PmType } from "./statetypes";
+import { PmType } from "./weatherTypeAndFn";
 
 /**
  * 초단기 실황,초단기 예보 ,단기 예보 api data 속 item 의 공통 properties
