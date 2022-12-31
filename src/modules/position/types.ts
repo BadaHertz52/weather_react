@@ -15,6 +15,7 @@ export type SFGridItem ={
 
 export type PositionState ={
   state:DataState,
+  error:Error|null,
   longitude:string|null,
   latitude:string|null,
   sfGrid:SFGridItem |null,

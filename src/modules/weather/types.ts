@@ -185,6 +185,7 @@ export type DataState = typeof none| typeof loading| typeof success|typeof error
 
 export type WeatherState ={
   state:DataState,
+  error:Error|null,
   nowWeather:NowWeather |null,
   threeDay:DailyWeather[]|null,
   weekly:Day[]|null,

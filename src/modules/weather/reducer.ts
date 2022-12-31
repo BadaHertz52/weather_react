@@ -1,7 +1,10 @@
-import { WeatherState } from "./types";
+import { createReducer } from "typesafe-actions";
+import { GET_WEATHER_FAILURE, GET_WEATHER_REQUEST, GET_WEATHER_SUCCESS } from "./actions";
+import { WeatherAction, WeatherState } from "./types";
 
 const initialState :WeatherState ={
   state:"none",
+  error:null,
   nowWeather:null,
   threeDay:null,
   weekly:null,
@@ -9,25 +12,17 @@ const initialState :WeatherState ={
   sunRiseAndSet:null
 };
 
-const weather =(state:WeatherState=initialState, action:WeatherAction):WeatherState=>{
-  switch (action.type) {
-    case GET_POSITION:
-      return {
-        ...state,
-        latitude:action.latitude,
-        longitude:action.longitude,
-        sfGrid:action.sfGrid
-      };
-    case GET_WHEATHER :
-      return {
-        longitude:action.longitude,
-        latitude:action.latitude,
-        sfGrid:action.sfGrid,
-        ...action.weatherData
-      };
-    default:
-      return state;
-  }
-};
-
+const weather = createReducer<WeatherState, WeatherAction>(initialState)
+.handleType(GET_WEATHER_REQUEST, ()=>({
+  ...initialState,
+  state:"loading"
+}))
+.handleType(GET_WEATHER_SUCCESS, (state,action)=>({
+  ...action.payload
+}))
+.handleType(GET_WEATHER_FAILURE, (state, action)=>({
+  ...state,
+  state:"error",
+  error:action.payload
+}))
 export default weather;
