@@ -145,7 +145,7 @@ function App () {
   
       const midDay = midFcst?.map((d:MidFcstDay)=>{
         const day:Day ={
-          dayslater: midFcst.indexOf(d) + 4 ,
+          dayslater: midFcst.indexOf(d) + 3 ,
           am: {
             pop:Number(d.rnStAm),
             sky: d.wfAm

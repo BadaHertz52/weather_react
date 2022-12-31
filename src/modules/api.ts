@@ -88,10 +88,11 @@ export const sunApi:Api ={
 const getApiItems =async(url:string, what:string)=>{
   const data = await fetch(url )
   .then((response)=> { 
-    console.log( what,"-","[get api items]", "response:", response) ; 
     return response.json()})
   .then((response)=> { 
+    
     if(response.response.body !==undefined){
+      console.log( what,"-","[get api items]", "response success"); 
       const items =response.response.body.items;
       return items
     }else{
@@ -121,7 +122,7 @@ export const getSFApiUrl =(inqury:SFInqury,nx:string, ny:string, baseDate:string
  * @param ny 예보지점 y좌표
  * @param baseDate  발표일자(yyyymmdd)
  * @param fcstTime 현재 시
- * @return baseTime 기전으로 6시간 이내의 결과값
+ * @return baseTime 기준으로 6시간 이내의 결과값
  */
 export const getUSSkyCode =async(nx:string, ny:string, baseDate:string, baseTime:string, fcstTime:string ):Promise<SkyCodeType>=>{
   const numOfRows = JSON.stringify(10000);
@@ -139,7 +140,7 @@ export const getUSSkyCode =async(nx:string, ny:string, baseDate:string, baseTime
  * @param ny 예보지점 y좌표
  * @param baseDate  발표일자(yyyymmdd)
  * @param fcstTime   현재 시각
- * @return Promise<USNcst> baseTime 기준으로 6시간 이내의 예보
+ * @return Promise<USNcst> fcstTime 기준으로 6시간 이내의 예보
  */
 export const getUSNcast =async(nx:string, ny:string, baseDate:string ,fcstTime:string)=>{
   const url =getSFApiUrl("getUltraSrtNcst",nx,ny,baseDate,fcstTime,"16");
@@ -157,55 +158,72 @@ export const getUSNcast =async(nx:string, ny:string, baseDate:string ,fcstTime:s
   return uNcst
 };
 /**
+ * targetDaySVF를 SVFDay의 형식으로 변경한 객체
+ */
+const getDaySvf =(arry:string[], targetDaySVF :SFcstItem[], fcstData:string ,tmn:SFcstItem ,tmx:SFcstItem)=>{
+    return arry.map((t:string)=>{
+      const timeSVF = targetDaySVF.filter((i:SFcstItem)=> i.fcstTime=== t);
+      if(timeSVF.filter((i:SFcstItem)=> i.category === "POP")[0] ==undefined){
+        console.log("undefined","TARGET", targetDaySVF ,"timeSVF",timeSVF, fcstData, t );
+      };
+      
+      const fcast :SVFTime ={
+        fcstDate:fcstData,
+        fcstTime:t,
+        pop: timeSVF.filter((i:SFcstItem)=> i.category === "POP")[0].fcstValue,
+      pty: timeSVF.filter((i:SFcstItem)=> i.category === "PTY")[0].fcstValue, 
+      pcp: timeSVF.filter((i:SFcstItem)=> i.category === "PCP")[0].fcstValue,
+      reh: timeSVF.filter((i:SFcstItem)=> i.category === "REH")[0].fcstValue ,
+      sno: timeSVF.filter((i:SFcstItem)=> i.category === "SNO")[0].fcstValue,
+      sky: timeSVF.filter((i:SFcstItem)=> i.category === "SKY")[0].fcstValue,
+      tmp:Number(timeSVF.filter((i:SFcstItem)=> i.category === "TMP")[0].fcstValue) ,
+      tmn:(tmn.fcstValue) ,
+      tmx:(tmx.fcstValue) ,
+      vec: Number(timeSVF.filter((i:SFcstItem)=> i.category === "VEC")[0].fcstValue) ,
+      wsd: timeSVF.filter((i:SFcstItem)=> i.category === "WSD")[0].fcstValue
+    };
+    return fcast;
+  });
+};
+/**
  * 단기 예보 api를 받아와서 해당 데이터를 자정부터 23사까자 시간별로 예보가 담긴 객체를 날짜별로 나열한 SVFcst type으로 변경해 반환 하는 비동기 함수
  * @param nx 예보 지점 x 좌표
  * @param ny  예보 지점 y 좌표
- * @param baseDate  예보 발표 일자
- * @param baseTime  예보 발표 시각
+ * @param baseDate  예보 발표 일자 (오늘 일자)
+ * @param baseTime  예보 발표 시각 (예보 시각 중 현재 시각과 가장 가까운 시간)
+ * @param yesterday 어제 일자
+* @param timArry  00:00 23:00 까지 string type의 시간을 담은 배열
+* @param todayTimeArry  현재 시각으로 부터 남은 시간 배열 
+* @param threeDays  오늘 부터 2일 이후의 날짜들을 담은 배열 
  * @returns  Promise<SVFcst>
  */ 
-export const getSVFcast =async(nx:string, ny:string, baseDate:string, baseTime:SVFBaseTime ,timeArry:string[])=>{
-  const url =getSFApiUrl(inqury_short_vilageFcst, nx,ny, baseDate ,baseTime, "1000")
-  const items  = await getApiItems(url, "svfcast");
-
-
-  const dayLater =[0,1,2,3];
-  const sVFcst: SVFcst= dayLater.map((d:number)=>{
-    const fcstData =JSON.stringify( Number(baseDate) + d)
+export const getSVFcast =async(nx:string, ny:string, baseDate:string, baseTime:SVFBaseTime , yesterday:string,timeArry:string[], todayTimeArry:string[], threeDays:string[])=>{
+  const url1 = getSFApiUrl(inqury_short_vilageFcst, nx,ny, yesterday ,"2300", "10000");
+  const url2 =getSFApiUrl(inqury_short_vilageFcst, nx,ny, baseDate ,baseTime, "10000");
+  const item1 =await getApiItems(url1,'svfcast');
+  const items2  = await getApiItems(url2, "svfcast");
+  /**
+   * timeArry에서 todayTimeArry를 제한 것으로,예보 발표시각 이전의 예보를 선별하는데 사용함
+   */
+  const previousTime = timeArry.slice(0, 24 - todayTimeArry.length);
+  const tmn = items2.item.filter((i:SFcstItem)=>i.category === "TMN")[0];
+  const tmx = items2.item.filter((i:SFcstItem)=>i.category === "TMX")[0];
+  const fiteredItem1:SFcstItem[] =item1.item.filter((i:SFcstItem)=> i.fcstDate === baseDate &&  previousTime.includes(i.fcstTime));
+  const preSVDay :SVFDay = getDaySvf(previousTime,fiteredItem1,baseDate,tmn,tmx);
+  const sVFcst: SVFcst= threeDays.map((d:string)=>{
     /**
-     * items 중에 오늘, 1일 후,2일 후 ,3일 후 중 타켓이 되는 날에 대한 단기 예보
+     * items2 중에 오늘, 1일 후,2일 후 ,3일 후 중 타켓이 되는 날에 대한 단기 예보
      */
-    const targetDaySVF : SFcstItem[]= items.item
-    .filter((i:SFcstItem)=>i.fcstDate === fcstData);
+    const targetDaySVF : SFcstItem[]= items2.item
+    .filter((i:SFcstItem)=>i.fcstDate === d);
     
-    const tmn = items.item.filter((i:SFcstItem)=>i.category === "TMN")[0];
-    const tmx = items.item.filter((i:SFcstItem)=>i.category === "TMX")[0];
-    /**
-     * targetDaySVF를 SVFDay의 형식으로 변경한 객체
-     */
-    const getDaySvf =(arry:string[])=>{
-      return arry.map((t:string)=>{
-        const timeSVF = targetDaySVF.filter((i:SFcstItem)=> i.fcstTime=== t);
-        const fcast :SVFTime ={
-          fcstDate:fcstData,
-          fcstTime:t,
-          pop: timeSVF.filter((i:SFcstItem)=> i.category === "POP")[0].fcstValue,
-          pty: timeSVF.filter((i:SFcstItem)=> i.category === "PTY")[0].fcstValue, 
-          pcp: timeSVF.filter((i:SFcstItem)=> i.category === "PCP")[0].fcstValue,
-          reh: timeSVF.filter((i:SFcstItem)=> i.category === "REH")[0].fcstValue ,
-          sno: timeSVF.filter((i:SFcstItem)=> i.category === "SNO")[0].fcstValue,
-          sky: timeSVF.filter((i:SFcstItem)=> i.category === "SKY")[0].fcstValue,
-          tmp:Number(timeSVF.filter((i:SFcstItem)=> i.category === "TMP")[0].fcstValue) ,
-          tmn:(tmn.fcstValue) ,
-          tmx:(tmx.fcstValue) ,
-          vec: Number(timeSVF.filter((i:SFcstItem)=> i.category === "VEC")[0].fcstValue) ,
-          wsd: timeSVF.filter((i:SFcstItem)=> i.category === "WSD")[0].fcstValue
-        };
-        return fcast;
-      });
+    if(d === baseDate) {
+      const daySVFcst :SVFDay = getDaySvf(todayTimeArry,targetDaySVF,d,tmn,tmx);
+      return [...preSVDay, ...daySVFcst]
+    }else{
+      const daySVFcst :SVFDay = getDaySvf(timeArry,targetDaySVF,d,tmn,tmx);
+      return daySVFcst
     };
-    const daySVFcst :SVFDay = getDaySvf(timeArry)
-    return daySVFcst;
   });
   return sVFcst
 };

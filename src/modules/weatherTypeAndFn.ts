@@ -1,3 +1,5 @@
+import { SFGridItem } from "./sfGrid";
+
 export const sunny ="맑음"; // sky code =1
 export const cloudy ="구름많음" // sky code =3
 export const veryCloudy ="흐림" // sky code =4
@@ -102,7 +104,10 @@ export type HourWeather ={
   //습도
   reh:string
 };
-
+export type DailyWeather ={
+  date:string,
+  hourly :HourWeather[]
+};
 type AmPmType ={
   pop:number,
   sky:SkyType|string
@@ -172,10 +177,11 @@ export type SunRiseAndSet ={
 };
 
 export type WeatherState ={
-  nX:string |null,
-  nY:string |null,
+  longitude:string|null,
+  latitude:string|null,
+  sfGridItem:SFGridItem |null,
   nowWeather:NowWeather |null,
-  hourly:HourWeather[]|null,
+  threeDay:DailyWeather[]|null,
   weekly:Day[]|null,
   nation:Area[]|null,
   sunRiseAndSet :SunRiseAndSet |null
