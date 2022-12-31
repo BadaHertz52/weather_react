@@ -4,8 +4,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import rootReducer from './modules/index';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-const store =createStore(rootReducer
+import { applyMiddleware, createStore } from 'redux';
+import thunk from 'redux-thunk';
+const store =createStore(rootReducer ,applyMiddleware(thunk)
 )
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

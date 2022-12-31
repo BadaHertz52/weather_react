@@ -1,5 +1,5 @@
 import { ApiAreaCode, MidLandAreaCode, midLandAreaCodeZip, midTaArea, midTaAreaCode, MidTaAreaCode } from "./areaCodeType";
-import { cloudy, getSkyCode, PmType, SkyCodeType, SkyType, sunny, veryCloudy } from "./weatherTypeAndFn";
+import { cloudy, getSkyCode, PmType, SkyCodeType, SkyType, sunny, veryCloudy } from "./weather/types";
 import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApItem, SVFBaseTime,  KakaoDoumentType}from "./apiType";
 import { sfGrid ,SFGridItem} from './sfGrid'; 
 
@@ -76,7 +76,7 @@ const apInformApi:Api ={
 /** 
  * Api for sunset and sunrise
 */
-export const sunApi:Api ={
+const sunApi:Api ={
   url :"http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService",
   inqury :"getLCRiseSetInfo"
 };
@@ -112,7 +112,7 @@ const getApiItems =async(url:string, what:string)=>{
  * @param baseTime  발표시간(tt00)
  * @returns url (type string)
  */
-export const getSFApiUrl =(inqury:SFInqury,nx:string, ny:string, baseDate:string, baseTime:string  ,numOfRows:string)=> {
+const getSFApiUrl =(inqury:SFInqury,nx:string, ny:string, baseDate:string, baseTime:string  ,numOfRows:string)=> {
   const url =`${shortFcstApi.url}/${inqury}?serviceKey=${publicApiKey}&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}&numOfRows=${numOfRows}`;
   return url
 };
@@ -124,7 +124,7 @@ export const getSFApiUrl =(inqury:SFInqury,nx:string, ny:string, baseDate:string
  * @param fcstTime 현재 시
  * @return baseTime 기준으로 6시간 이내의 결과값
  */
-export const getUSSkyCode =async(nx:string, ny:string, baseDate:string, baseTime:string, fcstTime:string ):Promise<SkyCodeType>=>{
+const getUSSkyCode =async(nx:string, ny:string, baseDate:string, baseTime:string, fcstTime:string ):Promise<SkyCodeType>=>{
   const numOfRows = JSON.stringify(10000);
   const url =getSFApiUrl(inqury_short_ultraSrtFcst, nx,ny,baseDate,baseTime , numOfRows);
   const items = await getApiItems(url, "usskycode");
@@ -142,7 +142,7 @@ export const getUSSkyCode =async(nx:string, ny:string, baseDate:string, baseTime
  * @param fcstTime   현재 시각
  * @return Promise<USNcst> fcstTime 기준으로 6시간 이내의 예보
  */
-export const getUSNcast =async(nx:string, ny:string, baseDate:string ,fcstTime:string)=>{
+const getUSNcast =async(nx:string, ny:string, baseDate:string ,fcstTime:string)=>{
   const url =getSFApiUrl("getUltraSrtNcst",nx,ny,baseDate,fcstTime,"16");
   const items = await getApiItems(url, "usncast");
   const uNcst:USNcst ={
@@ -197,7 +197,7 @@ const getDaySvf =(arry:string[], targetDaySVF :SFcstItem[], fcstData:string ,tmn
 * @param threeDays  오늘 부터 2일 이후의 날짜들을 담은 배열 
  * @returns  Promise<SVFcst>
  */ 
-export const getSVFcast =async(nx:string, ny:string, baseDate:string, baseTime:SVFBaseTime , yesterday:string,timeArry:string[], todayTimeArry:string[], threeDays:string[])=>{
+const getSVFcast =async(nx:string, ny:string, baseDate:string, baseTime:SVFBaseTime , yesterday:string,timeArry:string[], todayTimeArry:string[], threeDays:string[])=>{
   const url1 = getSFApiUrl(inqury_short_vilageFcst, nx,ny, yesterday ,"2300", "10000");
   const url2 =getSFApiUrl(inqury_short_vilageFcst, nx,ny, baseDate ,baseTime, "10000");
   const item1 =await getApiItems(url1,'svfcast');
@@ -236,7 +236,7 @@ export const getSVFcast =async(nx:string, ny:string, baseDate:string, baseTime:S
  * @param hours 현재 시각
  * @returns Promise<MidFcst>
  */
-export const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode, today:string,yesterday:string, hours:number ):Promise<MidFcst>=>{
+const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode, today:string,yesterday:string, hours:number ):Promise<MidFcst>=>{
   const tmFcTime :string = hours < 6 || hours> 18? "1800" :  "0600" ;
   const tmFcDate = hours < 6? yesterday : today ;
   /**
@@ -298,7 +298,7 @@ export const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode
  * @param stationName (type: string[]) 측정 지역의 행정구역명을 시/도 ,구/군/시, 구/시, 읍/면/동, 리/동 으로 나누어 배열형태로 나타낸것 
  * @returns Promise<PmGrade>
  */
-export const getApInform =async(sidoName:ApiAreaCode, stationName:string[])=>{
+const getApInform =async(sidoName:ApiAreaCode, stationName:string[])=>{
   const url = `${apInformApi.url}/${apInformApi.inqury}?sidoName=${sidoName}&returnType=JSON&serviceKey=${publicApiKey}&numOfRows=100000&ver=1.3`;
   const items =await getApiItems(url ,"apInform");
   const targetItem:ApItem = items.filter((i:ApItem)=> stationName.includes(i.stationName))[0];
@@ -315,7 +315,7 @@ export const getApInform =async(sidoName:ApiAreaCode, stationName:string[])=>{
  * @param longitude longitude ( 실수(초/100): 서울-126.98000833333333 )
  * @param latitude  latitude ( 실수 (초/100): 서울 -37.56356944444444)
  */
-export const getSunInform =async(longitude:string, latitude:string,baseDate:string)=>{
+const getSunInform =async(longitude:string, latitude:string,baseDate:string)=>{
   const url =`${sunApi.url}/${sunApi.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${baseDate}&dnYn=Y&ServiceKey=${publicApiKey}`;
   return await fetch(url)
                 .then(response => {
@@ -393,7 +393,7 @@ export const  getAreaData =async(latitude:string, longitude:string)=>{
 };
 
 
-export function getMidLandAreaCode (sfGrid:SFGridItem){
+function getMidLandAreaCode (sfGrid:SFGridItem){
   const mid1 =["서울특별시", "인천광역시", "경기도"];
   const mid2_3 =["강원도"];
   const mid4 =["대전광역시", "세종특별자치시", "충청남도"];
@@ -431,7 +431,7 @@ export function getMidLandAreaCode (sfGrid:SFGridItem){
   }
 };
 
-export function getMidTaAreaCode(sfGrid:SFGridItem){
+function getMidTaAreaCode(sfGrid:SFGridItem){
   const pt1 =sfGrid.arePt1;
   const pt2 =sfGrid.arePt2;
   const megalopolis =["부산광역시", "인천광역시", "대구광역시", "대전광역시", "광주광역시", "울산광역시"];
@@ -476,7 +476,7 @@ export function getMidTaAreaCode(sfGrid:SFGridItem){
   }
 };
 
-export function getApAreaCode(sfGrid:SFGridItem):ApiAreaCode{
+function getApAreaCode(sfGrid:SFGridItem):ApiAreaCode{
   const pt1 =sfGrid.arePt1;
   const arry =["충청븍도", "층청남도","전라북도",
 "전라남도","경상북도","경상남도"];
@@ -490,5 +490,257 @@ export function getApAreaCode(sfGrid:SFGridItem):ApiAreaCode{
     const area = pt1.slice(0,2);
     console.log("[getApAreaCode]","are", area)
     return area as ApiAreaCode
+  }
+};
+
+
+const sucess =async(pos: GeolocationPosition)=>{
+  const latitude =JSON.stringify(pos.coords.latitude) ;
+  const longitude =JSON.stringify(pos.coords.longitude);
+  const sfGrid = await getAreaData(latitude,longitude);
+  if(sfGrid!==null){
+    getData(sfGrid, longitude,latitude);
+  }else{
+    console.log("[Error] Can't find sfGrid");
+  }
+    
+};
+export const getPositionData =async()=>{
+  navigator.geolocation.getCurrentPosition((pos)=>sucess(pos),(err)=>{
+    console.warn("error",err);
+  });
+  
+};
+//getPositionData();
+
+/**
+ * 한자리 숫자를 0${number}를 바꾸는 함수
+ * @param n  
+ * @returns type:string
+ */
+const changeTwoDigit =(n:number)=>{
+  if(n <10){
+    return `0${JSON.stringify(n)}`
+  }else{
+    return JSON.stringify(n)
+  }
+}
+const changeBaseDate =(day:Date)=>{
+  const month =day.getMonth()+1;
+  const date = day.getDate();
+  const year =day.getFullYear();
+  const baseDate = `${year}${changeTwoDigit(month)}${changeTwoDigit(date)}`;
+  return baseDate
+};
+const getYesterDay =(date:number)=>{
+  const yesterday = new Date( new Date().setDate(date -1));
+  // new Date() 말고 today를 쓰면 today 가 이전 날로 변경되는 오류 발생
+  return changeBaseDate(yesterday);
+};
+
+const changeHourToString =(h:number)=> {
+  const changedH =changeTwoDigit(h);
+  return `${changedH}00`;
+};
+
+export const getData =async(sfGrid:SFGridItem , longitude:string, latitude:string)=>{
+  const nX:string = typeof sfGrid.nX === "number"? 
+  JSON.stringify(sfGrid.nX)
+  : sfGrid.nX
+  ;
+  const nY: string = typeof sfGrid.nY === "number"? 
+  JSON.stringify(sfGrid.nY)
+  : sfGrid.nY
+  ;
+  const stationName: string[] =(sfGrid.arePt3 !==null && sfGrid.arePt2 !==null )?  [sfGrid.arePt1, sfGrid.arePt2, sfGrid.arePt3] : sfGrid.arePt2!==null? [sfGrid.arePt1, sfGrid.arePt2] :[sfGrid.arePt1];const landRegId: MidLandAreaCode |undefined =getMidLandAreaCode(sfGrid);
+
+  const taRegId:MidTaAreaCode|undefined  = getMidTaAreaCode(sfGrid);
+  const sidoName: ApiAreaCode = getApAreaCode(sfGrid);
+  const today = new Date();
+  const hours =today.getHours();
+  const minutes =today.getMinutes();
+  const date =today.getDate();
+  const preHours = hours -1 ;
+  const dayLater =[0,1,2];
+  const threeDays =dayLater.map( (d:number)=> { 
+    const later = new Date (new Date().setDate(date + d )); 
+    return changeBaseDate(later);
+  });
+
+  const baseDate_today =changeBaseDate(today);
+  const baseDate_yesterday =getYesterDay(date);
+  const baseDate_skyCode = minutes < 30 && hours === 0 ? 
+                          baseDate_yesterday
+                          :
+                          baseDate_today ;
+  const baseDate_svf = hours < 2 ? baseDate_yesterday :baseDate_today;
+  
+  const baseTime_svf:SVFBaseTime=(()=>{
+    let time :SVFBaseTime ="0200";
+    const svfBaseTime =[2,5,8,11,14 ,17,20,23];
+    for (let index = 0; index < svfBaseTime.length; index++) {
+      const element = svfBaseTime[index];
+      if(hours < 2){
+        time ="2300";
+      }else if(hours !==23){
+        if(hours >= element && hours < svfBaseTime[index+1]){
+          if(element <10){
+            time =`0${JSON.stringify(element)}00` as SVFBaseTime
+          }else{
+            time =`${JSON.stringify(element)}00` as SVFBaseTime
+          } 
+        }
+      }else{
+        time ="2300"
+      }
+      
+    };
+    return time
+  })();
+  const preFcstTime :string = changeHourToString( hours -1);
+  const fcstTime : string = changeHourToString(hours) ;
+  const baseTime_skyCode :string = baseDate_skyCode === baseDate_today ?  
+  (minutes > 30? fcstTime :changeHourToString(preHours))
+  :"2300";
+
+  const timeArry =(()=>{
+    let arry :string[] =[] ;
+    for (let t = 0; t < 24; t++) {
+      if(t < 10){
+        t === 0 ?
+        arry = ["0000"]:
+        arry.push(`0${t}00` )
+      }else{
+        arry.push(`${t}00`);
+      };
+    };
+    return arry
+  })();
+
+  const baseTimeIndex= timeArry.indexOf(fcstTime);
+  const todayTimeArry = timeArry.slice(baseTimeIndex+1);
+  //get api data
+  const skyCode = await getUSSkyCode(nX, nY, baseDate_skyCode,baseTime_skyCode,fcstTime);
+  const uSNcst = minutes < 40 ? 
+                (hours === 0 ?
+                  await getUSNcast(nX, nY, baseDate_yesterday, "2300")
+                  : 
+                await getUSNcast(nX, nY, baseDate_today, preFcstTime)
+                )
+                :await getUSNcast(nX, nY, baseDate_today, fcstTime);
+  const sVFcst =await getSVFcast(nX,nY,baseDate_svf,baseTime_svf ,baseDate_yesterday,timeArry,todayTimeArry, threeDays);
+  const midFcst =landRegId !==undefined && taRegId !==undefined? await getMidFcast(landRegId, taRegId,baseDate_today,baseDate_yesterday, hours ): undefined;
+  const apGrade = await getApInform(sidoName,stationName);
+  const sunInform =await getSunInform(longitude,latitude,baseDate_today);
+
+  // state로 변경 
+  const changeHourItem =(t:SVFTime)=>({
+    date:t.fcstDate,
+    hour:t.fcstTime,
+    temp:t.tmp,
+    //강수확률(%)
+    pop:t.pop,
+    //강수량(mm)
+    pcp:t.pcp,
+    wind:{
+      vec :getWsd(t.vec),
+      wsd:t.wsd
+    },
+    reh:t.reh
+  });
+
+  const targetSVFcst = sVFcst.map((i:SVFDay)=>{
+    if(sVFcst.indexOf(i)===0){
+      return sVFcst[0].filter((t:SVFTime)=> todayTimeArry.includes(t.fcstTime))
+    }else{
+      return i
+    }
+  });
+
+  if(midFcst !==undefined && sunInform !== null ){
+    const svfDay :Day[] = sVFcst.map((d:SVFDay)=>{
+      const am = d.slice(0,11);
+      const pm =d.slice(12);
+      const getAvg =(arry:number[])=>{
+        const length =arry.length;
+        const sum =arry.reduce((a,b)=>a+b);
+        const avg = sum / length; 
+        return avg 
+      };
+      const amData = {
+        sky : getAvg(am.map((t:SVFTime)=>Number(t.sky))),
+        pop:getAvg(am.map((t:SVFTime)=>Number(t.pop))),
+        pty : getAvg(am.map((t:SVFTime)=> Number(t.pty))),
+      };
+      const pmData = {
+        sky : getAvg(pm.map((t:SVFTime)=>Number(t.sky))),
+        pop:getAvg(pm.map((t:SVFTime)=>Number(t.pop))),
+        pty : getAvg(pm.map((t:SVFTime)=> Number(t.pty))),
+      };
+
+
+      const day:Day ={
+        dayslater:sVFcst.indexOf(d), //0-5 (today=0)
+        am:{
+          pop: amData.pop,
+          sky :getSkyType(amData.sky, amData.pty)
+        },
+        pm:{
+          pop: pmData.pop,
+          sky :getSkyType(pmData.sky, pmData.pty)
+        },
+        tmn:Number(d[0].tmn),
+        tmx:Number(d[0].tmx)
+      };
+      return day
+    });
+
+    const midDay = midFcst?.map((d:MidFcstDay)=>{
+      const day:Day ={
+        dayslater: midFcst.indexOf(d) + 3 ,
+        am: {
+          pop:Number(d.rnStAm),
+          sky: d.wfAm
+        },
+        pm:{
+          pop:Number(d.rnStPm),
+          sky: d.wfPm
+        },
+        tmn: d.taMin,
+        tmx: d.taMax
+      };
+      return day
+    });
+    
+    const weather :WeatherData ={
+      nowWeather : {
+        tmp:uSNcst.t1h,
+        sky:skyCode,
+        reh:uSNcst.reh,
+        wind: {
+          vec: getWsd(uSNcst.vec),
+          wsd: uSNcst.wsd
+        },
+        pm10Grade: apGrade.pm10Grade1h,
+        pm25Grade: apGrade.pm25Grade1h
+      },
+      threeDay : targetSVFcst.map((d:SVFDay)=> {
+        const daily :DailyWeather ={
+          date: threeDays[targetSVFcst.indexOf(d)],
+          hourly:d.map((t:SVFTime)=> changeHourItem(t))
+        };
+        return daily
+      }),
+      weekly:[...svfDay, ...midDay],
+      nation:null,
+      sunRiseAndSet : {
+        sunRise :sunInform.sunrise ,
+        sunSet : sunInform.sunset
+      }
+    };
+    console.log("Success get weather data");
+    return weather;
+  }else{
+    console.log("Can't get weather data");
   }
 };

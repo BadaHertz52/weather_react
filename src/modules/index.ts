@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import weather from './weather';
+import weather from './actions';
 
 export type RootState =ReturnType<typeof rootReducer>;
 

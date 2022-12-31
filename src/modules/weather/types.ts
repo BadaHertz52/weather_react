@@ -1,4 +1,5 @@
-import { SFGridItem } from "./sfGrid";
+import * as actions from './actions';
+import {ActionType} from 'typesafe-actions';
 
 export const sunny ="맑음"; // sky code =1
 export const cloudy ="구름많음" // sky code =3
@@ -175,11 +176,15 @@ export type SunRiseAndSet ={
   sunRise :string|null|undefined ,
   sunSet :string|null|undefined
 };
+const none ="none";
+const loading ="loading";
+const success ="sucess";
+const error ="error";
+
+export type DataState = typeof none| typeof loading| typeof success|typeof error;
 
 export type WeatherState ={
-  longitude:string|null,
-  latitude:string|null,
-  sfGridItem:SFGridItem |null,
+  state:DataState,
   nowWeather:NowWeather |null,
   threeDay:DailyWeather[]|null,
   weekly:Day[]|null,
@@ -187,26 +192,7 @@ export type WeatherState ={
   sunRiseAndSet :SunRiseAndSet |null
 };
 
-//action 
-export const GET_POSITION ="GET_POSITION";
-export const GET_WHEATHER ="GET_WHEATHER";
-export const CHANGE_DAY_NATION ="CHANGE_DAY_NATION";
-export const getPosition =()=>({
-  type:GET_POSITION,
-});
-export const getWeather =()=>({
-  type:GET_WHEATHER,
-});
-
-export const changeDayNation=(dayLater:number)=>({
-  type:CHANGE_DAY_NATION,
-  dayLater:dayLater //0-5
-});
-
-export type WeatherAction = ReturnType<typeof getPosition> |
-ReturnType<typeof getWeather>|
-ReturnType<typeof changeDayNation>;
-
+export type WeatherAction =ActionType<typeof actions>;
 
 // state로 변경 시 필요한 함수 
 export const getSkyCode =(code:number):SkyCodeType=>{
@@ -306,3 +292,4 @@ export const getWsd =(vec:number)=>{
   }
 
 };
+

@@ -1,13 +1,5 @@
-export type SFGridItem ={
-  areaCode: string|number,
-  arePt1: string,
-  arePt2: string |null,
-  arePt3: string |null,
-  nX: string|number,
-  nY: string|number,
-  longitude: string|number,
-  latitude: string|number
-}
+import {SFGridItem} from './position/types';
+
 export const sfGrid :SFGridItem[] =[
  {
   areaCode: "1100000000",
