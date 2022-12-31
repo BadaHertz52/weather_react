@@ -1,7 +1,8 @@
 import { ApiAreaCode, MidLandAreaCode, midLandAreaCodeZip, midTaArea, midTaAreaCode, MidTaAreaCode } from "./areaCodeType";
-import { cloudy, getSkyCode, PmType, SkyCodeType, SkyType, sunny, veryCloudy } from "./weather/types";
-import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApItem, SVFBaseTime,  KakaoDoumentType}from "./apiType";
-import { sfGrid ,SFGridItem} from './sfGrid'; 
+import {  DailyWeather, Day, getSkyCode, getSkyType, getWsd, PmType, SkyCodeType, WeatherState } from "./weather/types";
+import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApItem, SVFBaseTime,  KakaoDoumentType, MidFcstDay}from "./apiType";
+import { sfGrid} from './sfGrid'; 
+import { SFGridItem } from "./position/types";
 
 const publicApiKey = process.env.REACT_APP_PUBLIC_KEY ;
 const kakaoKey = process.env.REACT_APP_KAKAO_KEY;
@@ -85,22 +86,23 @@ const sunApi:Api ={
  * @param url 
  * @returns Promise<any>
  */
-const getApiItems =async(url:string, what:string)=>{
+const getApiItems =async(url:string)=>{
   const data = await fetch(url )
   .then((response)=> { 
     return response.json()})
   .then((response)=> { 
-    
     if(response.response.body !==undefined){
-      console.log( what,"-","[get api items]", "response success"); 
       const items =response.response.body.items;
       return items
     }else{
-      console.log("[get api items]: response.body is undefined","response:" ,response, "url", url)
+      const error = `[get api items]: response.body is undefined // response: ${response}`;
+      return error
     }
 
     })
-  .catch(e=>console.log("error",e));
+  .catch((e:Error)=> {
+    return JSON.stringify(e);
+  });
   return data
 };
 /**
@@ -122,17 +124,22 @@ const getSFApiUrl =(inqury:SFInqury,nx:string, ny:string, baseDate:string, baseT
  * @param ny 예보지점 y좌표
  * @param baseDate  발표일자(yyyymmdd)
  * @param fcstTime 현재 시
- * @return baseTime 기준으로 6시간 이내의 결과값
+ * @return Promise<SkyCodeType| string>
  */
-const getUSSkyCode =async(nx:string, ny:string, baseDate:string, baseTime:string, fcstTime:string ):Promise<SkyCodeType>=>{
+const getUSSkyCode =async(nx:string, ny:string, baseDate:string, baseTime:string, fcstTime:string ):Promise<SkyCodeType| string>=>{
   const numOfRows = JSON.stringify(10000);
   const url =getSFApiUrl(inqury_short_ultraSrtFcst, nx,ny,baseDate,baseTime , numOfRows);
-  const items = await getApiItems(url, "usskycode");
-  const skyItems= items.item.filter((i:SFcstItem)=>
-  i.category ==="SKY");
-  const targetItem= skyItems.filter((i:SFcstItem)=> i.fcstTime =fcstTime)[0];
-  const skyCode = getSkyCode(targetItem.fcstValue);
-  return skyCode
+  const items = await getApiItems(url);
+  if(typeof items === "string"){
+    return items ;
+  }else{
+    const skyItems= items.item.filter((i:SFcstItem)=>
+    i.category ==="SKY");
+    const targetItem= skyItems.filter((i:SFcstItem)=> i.fcstTime =fcstTime)[0];
+    const skyCode = getSkyCode(targetItem.fcstValue);
+    return skyCode
+  }
+
 };
 /**
  * 현재 시점에 대한 초단기 실황 api 데이터를 반환하는 함수
@@ -140,27 +147,31 @@ const getUSSkyCode =async(nx:string, ny:string, baseDate:string, baseTime:string
  * @param ny 예보지점 y좌표
  * @param baseDate  발표일자(yyyymmdd)
  * @param fcstTime   현재 시각
- * @return Promise<USNcst> fcstTime 기준으로 6시간 이내의 예보
+ * @return Promise<USNcst|string> fcstTime 기준으로 6시간 이내의 예보
  */
-const getUSNcast =async(nx:string, ny:string, baseDate:string ,fcstTime:string)=>{
+const getUSNcast =async(nx:string, ny:string, baseDate:string ,fcstTime:string):Promise<USNcst|string>=>{
   const url =getSFApiUrl("getUltraSrtNcst",nx,ny,baseDate,fcstTime,"16");
-  const items = await getApiItems(url, "usncast");
-  const uNcst:USNcst ={
-    baseDate:baseDate,
-    baseTime:fcstTime,
-    pty: items.item.filter((i:USNcstItem)=> i.category === "PTY")[0].obsrValue,
-    reh: items.item.filter((i:USNcstItem)=> i.category === "REH")[0].obsrValue,
-    rn1: items.item.filter((i:USNcstItem)=> i.category === "RN1")[0].obsrValue,
-    t1h: Number(items.item.filter((i:USNcstItem)=> i.category === "T1H")[0].obsrValue) ,
-    vec: Number(items.item.filter((i:USNcstItem)=> i.category === "VEC")[0].obsrValue) ,
-    wsd: items.item.filter((i:USNcstItem)=> i.category === "WSD")[0].obsrValue
-  };
-  return uNcst
+  const items = await getApiItems(url);
+  if(typeof items == "string"){
+    return items; 
+  }else{
+    const uNcst:USNcst ={
+      baseDate:baseDate,
+      baseTime:fcstTime,
+      pty: items.item.filter((i:USNcstItem)=> i.category === "PTY")[0].obsrValue,
+      reh: items.item.filter((i:USNcstItem)=> i.category === "REH")[0].obsrValue,
+      rn1: items.item.filter((i:USNcstItem)=> i.category === "RN1")[0].obsrValue,
+      t1h: Number(items.item.filter((i:USNcstItem)=> i.category === "T1H")[0].obsrValue) ,
+      vec: Number(items.item.filter((i:USNcstItem)=> i.category === "VEC")[0].obsrValue) ,
+      wsd: items.item.filter((i:USNcstItem)=> i.category === "WSD")[0].obsrValue
+    };
+    return uNcst
+  }
 };
 /**
  * targetDaySVF를 SVFDay의 형식으로 변경한 객체
  */
-const getDaySvf =(arry:string[], targetDaySVF :SFcstItem[], fcstData:string ,tmn:SFcstItem ,tmx:SFcstItem)=>{
+const getDaySvf =(arry:string[], targetDaySVF :SFcstItem[], fcstData:string ,tmn:SFcstItem ,tmx:SFcstItem):SVFTime[]=>{
     return arry.map((t:string)=>{
       const timeSVF = targetDaySVF.filter((i:SFcstItem)=> i.fcstTime=== t);
       if(timeSVF.filter((i:SFcstItem)=> i.category === "POP")[0] ==undefined){
@@ -195,37 +206,52 @@ const getDaySvf =(arry:string[], targetDaySVF :SFcstItem[], fcstData:string ,tmn
 * @param timArry  00:00 23:00 까지 string type의 시간을 담은 배열
 * @param todayTimeArry  현재 시각으로 부터 남은 시간 배열 
 * @param threeDays  오늘 부터 2일 이후의 날짜들을 담은 배열 
- * @returns  Promise<SVFcst>
+ * @returns  Promise<SVFcst|string>
  */ 
-const getSVFcast =async(nx:string, ny:string, baseDate:string, baseTime:SVFBaseTime , yesterday:string,timeArry:string[], todayTimeArry:string[], threeDays:string[])=>{
+const getSVFcast =async(nx:string, ny:string, baseDate:string, baseTime:SVFBaseTime , yesterday:string,timeArry:string[], todayTimeArry:string[], threeDays:string[]):Promise<string | SVFcst>=>{
   const url1 = getSFApiUrl(inqury_short_vilageFcst, nx,ny, yesterday ,"2300", "10000");
   const url2 =getSFApiUrl(inqury_short_vilageFcst, nx,ny, baseDate ,baseTime, "10000");
-  const item1 =await getApiItems(url1,'svfcast');
-  const items2  = await getApiItems(url2, "svfcast");
-  /**
+  const items1 =await getApiItems(url1);
+  const items2  = await getApiItems(url2);
+  if(typeof items1 !== "string" && typeof items2 !== "string"){
+    /**
    * timeArry에서 todayTimeArry를 제한 것으로,예보 발표시각 이전의 예보를 선별하는데 사용함
    */
-  const previousTime = timeArry.slice(0, 24 - todayTimeArry.length);
-  const tmn = items2.item.filter((i:SFcstItem)=>i.category === "TMN")[0];
-  const tmx = items2.item.filter((i:SFcstItem)=>i.category === "TMX")[0];
-  const fiteredItem1:SFcstItem[] =item1.item.filter((i:SFcstItem)=> i.fcstDate === baseDate &&  previousTime.includes(i.fcstTime));
-  const preSVDay :SVFDay = getDaySvf(previousTime,fiteredItem1,baseDate,tmn,tmx);
-  const sVFcst: SVFcst= threeDays.map((d:string)=>{
-    /**
-     * items2 중에 오늘, 1일 후,2일 후 ,3일 후 중 타켓이 되는 날에 대한 단기 예보
-     */
-    const targetDaySVF : SFcstItem[]= items2.item
-    .filter((i:SFcstItem)=>i.fcstDate === d);
-    
-    if(d === baseDate) {
-      const daySVFcst :SVFDay = getDaySvf(todayTimeArry,targetDaySVF,d,tmn,tmx);
-      return [...preSVDay, ...daySVFcst]
+    const previousTime = timeArry.slice(0, 24 - todayTimeArry.length);
+    const tmn = items2.item.filter((i:SFcstItem)=>i.category === "TMN")[0];
+    const tmx = items2.item.filter((i:SFcstItem)=>i.category === "TMX")[0];
+    const fiteredItem1:SFcstItem[] =items1.item.filter((i:SFcstItem)=> i.fcstDate === baseDate &&  previousTime.includes(i.fcstTime));
+    const preSVDay :SVFDay = getDaySvf(previousTime,fiteredItem1,baseDate,tmn,tmx);
+    const sVFcst: SVFcst= threeDays.map((d:string)=>{
+      /**
+       * items2 중에 오늘, 1일 후,2일 후 ,3일 후 중 타켓이 되는 날에 대한 단기 예보
+       */
+      const targetDaySVF : SFcstItem[]= items2.item
+      .filter((i:SFcstItem)=>i.fcstDate === d);
+
+      if(d === baseDate) {
+        const daySVFcst :SVFDay = getDaySvf(todayTimeArry,targetDaySVF,d,tmn,tmx);
+        return [...preSVDay, ...daySVFcst]
+      }else{
+        const daySVFcst :SVFDay = getDaySvf(timeArry,targetDaySVF,d,tmn,tmx);
+        return daySVFcst
+      };
+    });
+
+    return sVFcst
+  }else{
+    if(typeof items1 === "string"){
+      if(typeof items2 ==="string"){
+        return `[Error]${items1}  ///
+                [Error]${items2}`
+      }else{
+        return `[Error]${items1}`
+      }
     }else{
-      const daySVFcst :SVFDay = getDaySvf(timeArry,targetDaySVF,d,tmn,tmx);
-      return daySVFcst
-    };
-  });
-  return sVFcst
+      return `[Error]${items2}`
+    }
+  }
+  
 };
 /**
  * 
@@ -234,9 +260,9 @@ const getSVFcast =async(nx:string, ny:string, baseDate:string, baseTime:SVFBaseT
  * @param today 오늘 (형태:YYYDD)
  * @param yesterday 어제 (형태:YYYDD)
  * @param hours 현재 시각
- * @returns Promise<MidFcst>
+ * @returns Promise<MidFcst|string>
  */
-const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode, today:string,yesterday:string, hours:number ):Promise<MidFcst>=>{
+const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode, today:string,yesterday:string, hours:number ):Promise<MidFcst|string>=>{
   const tmFcTime :string = hours < 6 || hours> 18? "1800" :  "0600" ;
   const tmFcDate = hours < 6? yesterday : today ;
   /**
@@ -246,68 +272,86 @@ const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode, today
   const common =`serviceKey=${publicApiKey}&dataType=JSON&tmFc=${tmFc}`
   const landUrl =`${midFcstApi.url}/${inqury_mid_midLandFcst}?regId=${landRegId}&${common}`;
   const taUrl =`${midFcstApi.url}/${inqury_mid_midTa}?regId=${taRegId}&${common}`;
-  const landItems = await getApiItems(landUrl, "midFcast-land");
-  const taItems = await getApiItems(taUrl, "midFcast-ta");
-  const midFcst:MidFcst = [{
-                            dyalater:3,
-                            wfAm:landItems.item[0].wf3Am,
-                            wfPm:landItems.item[0].wf3Pm,
-                            rnStAm:landItems.item[0].rnSt3Am,
-                            rnStPm:landItems.item[0].rnSt3Pm,
-                            taMax:taItems.item[0].taMax3,
-                            taMin:taItems.item[0].taMin3
-                          },{
-                              dyalater:4,
-                              wfAm:landItems.item[0].wf4Am,
-                              wfPm:landItems.item[0].wf4Pm,
-                              rnStAm:landItems.item[0].rnSt4Am,
-                              rnStPm:landItems.item[0].rnSt4Pm,
-                              taMax:taItems.item[0].taMax4,
-                              taMin:taItems.item[0].taMin4
-                          },{
-                              dyalater:5,
-                              wfAm:landItems.item[0].wf5Am,
-                              wfPm:landItems.item[0].wf5Pm,
-                              rnStAm:landItems.item[0].rnSt5Am,
-                              rnStPm:landItems.item[0].rnSt5Pm,
-                              taMax:taItems.item[0].taMax5,
-                              taMin:taItems.item[0].taMin5
-                          },{
-                              dyalater:6,
-                              wfAm:landItems.item[0].wf6Am,
-                              wfPm:landItems.item[0].wf6Pm,
-                              rnStAm:landItems.item[0].rnSt6Am,
-                              rnStPm:landItems.item[0].rnSt6Pm,
-                              taMax:taItems.item[0].taMax6,
-                              taMin:taItems.item[0].taMin6
-                            },{
-                              dyalater:7,
-                              wfAm:landItems.item[0].wf7Am,
-                              wfPm:landItems.item[0].wf7Pm,
-                              rnStAm:landItems.item[0].rnSt7Am,
-                              rnStPm:landItems.item[0].rnSt7Pm,
-                              taMax:taItems.item[0].taMax7,
-                              taMin:taItems.item[0].taMin7
-                            }
-                          ];
-  return midFcst
+  const landItems = await getApiItems(landUrl);
+  const taItems = await getApiItems(taUrl);
+  if(typeof landItems !=="string" && typeof taItems !=="string"){
+    const midFcst:MidFcst = [{
+      dyalater:3,
+      wfAm:landItems.item[0].wf3Am,
+      wfPm:landItems.item[0].wf3Pm,
+      rnStAm:landItems.item[0].rnSt3Am,
+      rnStPm:landItems.item[0].rnSt3Pm,
+      taMax:taItems.item[0].taMax3,
+      taMin:taItems.item[0].taMin3
+    },{
+        dyalater:4,
+        wfAm:landItems.item[0].wf4Am,
+        wfPm:landItems.item[0].wf4Pm,
+        rnStAm:landItems.item[0].rnSt4Am,
+        rnStPm:landItems.item[0].rnSt4Pm,
+        taMax:taItems.item[0].taMax4,
+        taMin:taItems.item[0].taMin4
+    },{
+        dyalater:5,
+        wfAm:landItems.item[0].wf5Am,
+        wfPm:landItems.item[0].wf5Pm,
+        rnStAm:landItems.item[0].rnSt5Am,
+        rnStPm:landItems.item[0].rnSt5Pm,
+        taMax:taItems.item[0].taMax5,
+        taMin:taItems.item[0].taMin5
+    },{
+        dyalater:6,
+        wfAm:landItems.item[0].wf6Am,
+        wfPm:landItems.item[0].wf6Pm,
+        rnStAm:landItems.item[0].rnSt6Am,
+        rnStPm:landItems.item[0].rnSt6Pm,
+        taMax:taItems.item[0].taMax6,
+        taMin:taItems.item[0].taMin6
+      },{
+        dyalater:7,
+        wfAm:landItems.item[0].wf7Am,
+        wfPm:landItems.item[0].wf7Pm,
+        rnStAm:landItems.item[0].rnSt7Am,
+        rnStPm:landItems.item[0].rnSt7Pm,
+        taMax:taItems.item[0].taMax7,
+        taMin:taItems.item[0].taMin7
+      }
+    ];
+    return midFcst
+  }else{
+    if(typeof landItems === "string"){
+      if(typeof taItems ==="string"){
+        return `[Error]${landItems}  /// [Error]${taItems}`; 
+      }else{
+        return `[Error]${landItems}`
+      }
+    }else{
+      return `[Error]${taItems}`
+    }
+  }
+
 };
 /**
  * 미세먼지, 초미세먼지 등급을 반환하는 함수
  * @param sidoName 
  * @param stationName (type: string[]) 측정 지역의 행정구역명을 시/도 ,구/군/시, 구/시, 읍/면/동, 리/동 으로 나누어 배열형태로 나타낸것 
- * @returns Promise<PmGrade>
+ * @returns Promise<PmGrade|string>
  */
-const getApInform =async(sidoName:ApiAreaCode, stationName:string[])=>{
+const getApInform =async(sidoName:ApiAreaCode, stationName:string[]):Promise<PmGrade|string>=>{
   const url = `${apInformApi.url}/${apInformApi.inqury}?sidoName=${sidoName}&returnType=JSON&serviceKey=${publicApiKey}&numOfRows=100000&ver=1.3`;
-  const items =await getApiItems(url ,"apInform");
-  const targetItem:ApItem = items.filter((i:ApItem)=> stationName.includes(i.stationName))[0];
-  const gradeArry : PmType[]=["좋음","보통","나쁨","매우 나쁨"];
-  const pm :PmGrade = {
-    pm10Grade1h:gradeArry[Number(targetItem.pm10Grade1h) -1],
-    pm25Grade1h:gradeArry[Number(targetItem.pm25Grade1h)-1]
-  };
-  return pm
+  const items =await getApiItems(url);
+  if(typeof items !=="string"){
+    const targetItem:ApItem = items.filter((i:ApItem)=> stationName.includes(i.stationName))[0];
+    const gradeArry : PmType[]=["좋음","보통","나쁨","매우 나쁨"];
+    const pm :PmGrade = {
+      pm10Grade1h:gradeArry[Number(targetItem.pm10Grade1h) -1],
+      pm25Grade1h:gradeArry[Number(targetItem.pm25Grade1h)-1]
+    };
+    return pm
+  }else{
+    return items
+  }
+
 };
 
 /**
@@ -332,7 +376,7 @@ const getSunInform =async(longitude:string, latitude:string,baseDate:string)=>{
                     location:location
                   }
                 })
-                .catch(e=>{console.log("error",e); return null});
+                .catch((e:Error)=> {return JSON.stringify(e)});
 };
 
 
@@ -386,9 +430,9 @@ export const  getAreaData =async(latitude:string, longitude:string)=>{
     }
 
   })
-  .catch(e => {
-    console.log("error",e);
-    return null
+  .catch((e:Error) => {
+    
+    return JSON.stringify(e)
 });
 };
 
@@ -484,34 +528,13 @@ function getApAreaCode(sfGrid:SFGridItem):ApiAreaCode{
     const first =pt1.slice(0,1);
     const second =pt1.slice(2,3);
     const area = first.concat(second) as ApiAreaCode
-    console.log("[getApAreaCode]","are", area)
     return area
   }else{
     const area = pt1.slice(0,2);
-    console.log("[getApAreaCode]","are", area)
     return area as ApiAreaCode
   }
 };
 
-
-const sucess =async(pos: GeolocationPosition)=>{
-  const latitude =JSON.stringify(pos.coords.latitude) ;
-  const longitude =JSON.stringify(pos.coords.longitude);
-  const sfGrid = await getAreaData(latitude,longitude);
-  if(sfGrid!==null){
-    getData(sfGrid, longitude,latitude);
-  }else{
-    console.log("[Error] Can't find sfGrid");
-  }
-    
-};
-export const getPositionData =async()=>{
-  navigator.geolocation.getCurrentPosition((pos)=>sucess(pos),(err)=>{
-    console.warn("error",err);
-  });
-  
-};
-//getPositionData();
 
 /**
  * 한자리 숫자를 0${number}를 바꾸는 함수
@@ -543,7 +566,7 @@ const changeHourToString =(h:number)=> {
   return `${changedH}00`;
 };
 
-export const getData =async(sfGrid:SFGridItem , longitude:string, latitude:string)=>{
+export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitude:string)=>{
   const nX:string = typeof sfGrid.nX === "number"? 
   JSON.stringify(sfGrid.nX)
   : sfGrid.nX
@@ -629,7 +652,16 @@ export const getData =async(sfGrid:SFGridItem , longitude:string, latitude:strin
                 )
                 :await getUSNcast(nX, nY, baseDate_today, fcstTime);
   const sVFcst =await getSVFcast(nX,nY,baseDate_svf,baseTime_svf ,baseDate_yesterday,timeArry,todayTimeArry, threeDays);
-  const midFcst =landRegId !==undefined && taRegId !==undefined? await getMidFcast(landRegId, taRegId,baseDate_today,baseDate_yesterday, hours ): undefined;
+  const midFcst =landRegId !==undefined && taRegId !==undefined? await getMidFcast(landRegId, taRegId,baseDate_today,baseDate_yesterday, hours ): (
+    landRegId === undefined?
+    (
+      taRegId ===undefined?
+      '[Error] landRegId and taRegId are undefined'
+      :
+      '[Error] landRegId is undefined'
+    ):
+    '[Error] taRegId is undefined'
+  );
   const apGrade = await getApInform(sidoName,stationName);
   const sunInform =await getSunInform(longitude,latitude,baseDate_today);
 
@@ -649,15 +681,21 @@ export const getData =async(sfGrid:SFGridItem , longitude:string, latitude:strin
     reh:t.reh
   });
 
-  const targetSVFcst = sVFcst.map((i:SVFDay)=>{
-    if(sVFcst.indexOf(i)===0){
-      return sVFcst[0].filter((t:SVFTime)=> todayTimeArry.includes(t.fcstTime))
-    }else{
-      return i
-    }
-  });
 
-  if(midFcst !==undefined && sunInform !== null ){
+
+  if(typeof skyCode !== "string"  &&   
+    typeof sVFcst !== "string"  && 
+    typeof uSNcst !== "string" &&
+    typeof midFcst  !== "string"  && 
+    typeof apGrade  !== "string"  &&  
+    typeof sunInform !== "string" ){
+    const targetSVFcst = sVFcst.map((i:SVFDay)=>{
+      if(sVFcst.indexOf(i)===0){
+        return sVFcst[0].filter((t:SVFTime)=> todayTimeArry.includes(t.fcstTime))
+      }else{
+        return i
+      }
+    });
     const svfDay :Day[] = sVFcst.map((d:SVFDay)=>{
       const am = d.slice(0,11);
       const pm =d.slice(12);
@@ -712,7 +750,9 @@ export const getData =async(sfGrid:SFGridItem , longitude:string, latitude:strin
       return day
     });
     
-    const weather :WeatherData ={
+    const weather :WeatherState ={
+      state:"sucess",
+      error:null,
       nowWeather : {
         tmp:uSNcst.t1h,
         sky:skyCode,
@@ -738,9 +778,15 @@ export const getData =async(sfGrid:SFGridItem , longitude:string, latitude:strin
         sunSet : sunInform.sunset
       }
     };
-    console.log("Success get weather data");
     return weather;
   }else{
-    console.log("Can't get weather data");
+    let string ="[Error]";
+    typeof skyCode !== "string"  &&   string.concat(`skyCode error: ${skyCode}`);
+    typeof sVFcst !== "string"  && string.concat(`skyCode error: ${sVFcst}`);
+    typeof uSNcst !== "string" && string.concat(`skyCode error: ${uSNcst}`);
+    typeof midFcst  !== "string"  && string.concat(`skyCode error: ${midFcst}`);
+    typeof apGrade  !== "string"  &&  string.concat(`skyCode error: ${apGrade}`);
+    typeof sunInform !== "string" && string.concat(`skyCode error: ${sunInform}`);
+    return string
   }
 };
