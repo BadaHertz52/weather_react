@@ -3,7 +3,7 @@ import { getAreaData } from "../api";
 import { getPositionAsync } from "./actions";
 import { PositionAction, PositionState } from "./types";
 
-export const getPosition =():ThunkAction<void, PositionState,unknown,PositionAction>=>async(dispatch)=>{
+export const getPositionThunk =():ThunkAction<void, PositionState,unknown,PositionAction>=>async(dispatch)=>{
   const {request, success, failure}= getPositionAsync ;
   dispatch(request());
   navigator.geolocation.getCurrentPosition(async(pos: GeolocationPosition)=>{

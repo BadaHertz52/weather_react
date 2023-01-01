@@ -5,7 +5,7 @@ import { getWeatherAsynce} from "./actions";
 import { WeatherAction, WeatherState } from "./types";
 
 
-export const getWeather =(position:PositionState):ThunkAction<void,WeatherState, unknown,WeatherAction>=>async(dispatch)=>{
+export const getWeatherThunk =(position:PositionState):ThunkAction<void,WeatherState, unknown,WeatherAction>=>async(dispatch)=>{
   const {request,success,failure}=getWeatherAsynce;
   const {longitude, latitude, sfGrid}=position;
   dispatch(request());
