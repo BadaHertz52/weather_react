@@ -1,7 +1,7 @@
 import { ThunkAction } from "redux-thunk";
-import { getAreaData } from "../api";
+import { getAreaData  } from "../api";
 import { getPositionAsync } from "./actions";
-import { PositionAction, PositionState } from "./types";
+import { PositionAction, PositionState} from "./types";
 
 export const getPositionThunk =():ThunkAction<void, PositionState,unknown,PositionAction>=>async(dispatch)=>{
   const {request, success, failure}= getPositionAsync ;
@@ -10,7 +10,7 @@ export const getPositionThunk =():ThunkAction<void, PositionState,unknown,Positi
     const latitude =JSON.stringify(pos.coords.latitude) ;
     const longitude =JSON.stringify(pos.coords.longitude);
     const sfGrid = await getAreaData(latitude,longitude);
-    if(typeof sfGrid!== "string"){
+    if(!(sfGrid instanceof Error)){
       const position :PositionState={
         state:"success",
         error:null,
