@@ -10,6 +10,7 @@ import { getWeatherThunk } from './modules/weather/thunk';
 
 function App () {
   const {weather, position}= useSelector((state:RootState) => state);
+  const {longitude, latitude, sfGrid}=position; 
   const positionDispatch =useDispatch<ThunkDispatch<PositionState,unknown,PositionAction>>();
   const weatherDispatch =useDispatch<ThunkDispatch<WeatherState, unknown,WeatherAction>>();
 
@@ -19,7 +20,7 @@ function App () {
       positionDispatch(getPositionThunk());
     }else{
       console.log("position", position);
-      if(position.sfGrid !==null && weather.state === "none"){
+      if( weather.state === "none" && position.state =="success"){
         weatherDispatch(getWeatherThunk(position));
       }
     };
