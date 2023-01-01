@@ -1,4 +1,4 @@
-import { createAsyncAction } from "typesafe-actions/dist/create-async-action";
+import { createAsyncAction } from "typesafe-actions";
 import { PositionState } from "./types";
 
 export const GET_POSITION_REQUEST ="GET_POSITION_REQUEST";
