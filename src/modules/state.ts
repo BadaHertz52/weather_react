@@ -1,8 +1,10 @@
+import { PositionState } from "./position/types";
 import { WeatherState } from "./weather/types";
-
-const initialState :WeatherState ={
-  longitude:null,
-  latitude:null,
+const initialPsotion :PositionState ={
+  state:"success",
+  error:null,
+  latitude: "37.6462313",
+  longitude: "127.0132763",
   sfGrid:{
     areaCode: "1130564500",
   arePt1: "서울특별시",
@@ -13,6 +15,10 @@ const initialState :WeatherState ={
   longitude: "127.01406666666666",
   latitude: "37.64519444444444"
   },
+}
+const initialState :WeatherState ={
+  state:"success",
+  error:null,
   nowWeather:{"tmp":-0.5,"sky":"맑음",reh:"72",wind:{vec:"남서향",wsd:"0.6"},"pm10Grade":"보통","pm25Grade":"나쁨"},
   threeDay:[
     {date:"20221231",
