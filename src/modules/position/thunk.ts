@@ -10,13 +10,14 @@ export const getPositionThunk =():ThunkAction<void, PositionState,unknown,Positi
     const latitude =JSON.stringify(pos.coords.latitude) ;
     const longitude =JSON.stringify(pos.coords.longitude);
     const sfGrid = await getAreaData(latitude,longitude);
-    if(sfGrid!==null){
+    if(typeof sfGrid!== "string"){
       const position :PositionState={
-        state:"loading",
+        state:"success",
+        error:null,
         latitude:latitude,
         longitude:longitude,
         sfGrid:sfGrid
-      }
+      };
       dispatch(success(position));
       
       //getData(sfGrd, longitude,latitude);
