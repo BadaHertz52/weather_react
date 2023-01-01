@@ -178,7 +178,7 @@ export type SunRiseAndSet ={
 };
 const none ="none";
 const loading ="loading";
-const success ="sucess";
+const success ="success";
 const error ="error";
 
 export type DataState = typeof none| typeof loading| typeof success|typeof error;

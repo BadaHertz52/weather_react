@@ -751,7 +751,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     });
     
     const weather :WeatherState ={
-      state:"sucess",
+      state:"success",
       error:null,
       nowWeather : {
         tmp:uSNcst.t1h,
