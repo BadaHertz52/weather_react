@@ -2,12 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import rootReducer from './modules/index';
+import rootReducer, { rootSaga } from './modules/index';
 import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
-const store =createStore(rootReducer ,applyMiddleware(thunk)
-)
+import createSagaMiddleware from '@redux-saga/core';
+const sagaMiddleware =createSagaMiddleware();
+const store =createStore(rootReducer ,applyMiddleware(thunk,sagaMiddleware)
+);
+sagaMiddleware.run(rootSaga);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
