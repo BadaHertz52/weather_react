@@ -1,12 +1,12 @@
 import { ThunkAction } from "redux-thunk";
 import { getWeatherData } from "../api";
 import { PositionState } from "../position/types";
-import { getWeatherAsynce} from "./actions";
+import { getWeatherAsync} from "./actions";
 import { WeatherAction, WeatherState } from "./types";
 
 
 export const getWeatherThunk =(position:PositionState):ThunkAction<void,WeatherState, unknown,WeatherAction>=>async(dispatch)=>{
-  const {request,success,failure}=getWeatherAsynce;
+  const {request,success,failure}=getWeatherAsync;
   const {longitude, latitude, sfGrid}=position;
   dispatch(request());
   if(sfGrid !==null && latitude !==null && longitude !==null){
