@@ -19,8 +19,6 @@ export const getPositionThunk =():ThunkAction<void, PositionState,unknown,Positi
         sfGrid:sfGrid
       };
       dispatch(success(position));
-      
-      //getData(sfGrd, longitude,latitude);
     }else{
       const error =new Error (`Can't find sfGrid:{latitude:${latitude}, logitude:${longitude}}`);
       dispatch(failure(error));

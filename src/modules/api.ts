@@ -174,9 +174,6 @@ const getUSNcast =async(nx:string, ny:string, baseDate:string ,fcstTime:string)=
 const getDaySvf =(arry:string[], targetDaySVF :SFcstItem[], fcstData:string ,tmn:SFcstItem ,tmx:SFcstItem):SVFTime[]=>{
     return arry.map((t:string)=>{
       const timeSVF = targetDaySVF.filter((i:SFcstItem)=> i.fcstTime=== t);
-      if(timeSVF.filter((i:SFcstItem)=> i.category === "POP")[0] ===undefined){
-        console.log("undefined","TARGET", targetDaySVF ,"timeSVF",timeSVF, fcstData, t );
-      };
       
       const fcast :SVFTime ={
         fcstDate:fcstData,

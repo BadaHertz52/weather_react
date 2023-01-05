@@ -12,7 +12,6 @@ function* getWeatherSaga(action:ReturnType<typeof getWeatherSagaAction>){
           const data : string|WeatherState = yield call(()=>(getWeatherData(sfGrid, longitude, latitude)));
           if(typeof data === "string"){
             const error =new Error(data);
-            console.log(error);
             yield put(getWeatherAsync.failure(error));
           }else{
             yield put(getWeatherAsync.success(data))
@@ -22,7 +21,6 @@ function* getWeatherSaga(action:ReturnType<typeof getWeatherSagaAction>){
           Is latitude null? : ${latitude ===null}
           Is sfGrid null? : ${sfGrid ===null}
           `);
-          console.log(error);
           yield put(getWeatherAsync.failure(error));
           
         }
@@ -31,7 +29,6 @@ function* getWeatherSaga(action:ReturnType<typeof getWeatherSagaAction>){
 
   } catch (error) {
     const e = new Error(`Can't get weather data ${error}`);
-    console.log(error);
     yield put(getWeatherAsync.failure(e));
   }
 };

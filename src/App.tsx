@@ -19,7 +19,6 @@ function App () {
     try {
       positionDispatch(getPositionThunk());
     } catch (error) {
-      console.log(error)
     }finally {
         weatherDispatch(getWeatherThunk(position));
     };
