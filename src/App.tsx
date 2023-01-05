@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch  } from 'react-redux';
 import { useSelector } from 'react-redux';
 import {  ThunkDispatch } from 'redux-thunk';
@@ -8,20 +8,20 @@ import { getPositionThunk } from './modules/position/thunk';
 import {  getWeatherSagaAction, WeatherAction, WeatherState } from './modules/weather';
 import { getWeatherThunk } from './modules/weather/thunk';
 
-function App () {
-  const {weather, position}= useSelector((state:RootState) => state);
+function App () {  
+  const position =useSelector((state:RootState)=> state.position);
   const {longitude, latitude, sfGrid}=position; 
+  const weather= useSelector((state:RootState) => state.weather);
+  const startThunk =useRef<boolean>(false);
+  const startSaga =useRef<boolean>(false);
+  
   const positionDispatch =useDispatch<ThunkDispatch<PositionState,unknown,PositionAction>>();
   const weatherDispatch =useDispatch<ThunkDispatch<WeatherState, unknown,WeatherAction>>();
   const dispatch =useDispatch();
 
   function onClickThunk(){
-    try {
-      positionDispatch(getPositionThunk());
-    } catch (error) {
-    }finally {
-        weatherDispatch(getWeatherThunk(position));
-    };
+    positionDispatch(getPositionThunk());
+    startThunk.current = true; 
   };  
 
   function onClickSaga (){
@@ -32,23 +32,40 @@ function App () {
         longitude:longitude,
         latitude:latitude
       };
-
       try{
         dispatch(getPositionSagaAction(currentPosition));
+        startSaga.current = true;
       }catch(error){
         const e =new Error (`can't find sfGrid`)
         dispatch(getPositionAsync.failure(e));
-      }finally{
-
-          dispatch(getWeatherSagaAction(position));
       }
     },(error)=>{
       const e =new Error (`can't find currentPostion`)
       dispatch(getPositionAsync.failure(e));
     });
-
-
   };
+
+  useEffect(()=>{
+    if(position.state ==="success"){
+      startThunk.current === true &&
+      weatherDispatch(getWeatherThunk(position));
+
+      startSaga.current === true && dispatch(getWeatherSagaAction(position));
+    }
+  },[position.state]);
+
+  useEffect(()=>{
+    if(weather.state ==="success"){
+      if(startThunk.current){
+        startThunk.current = false;
+      };
+      if(startSaga.current){
+        startSaga.current = false;
+      }
+    }
+  },[weather.state]);
+
+
   return (
     <div className="App">
       <button 
