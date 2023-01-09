@@ -15,5 +15,7 @@ export const getWeatherAsync =createAsyncAction(
 
 export const getWeatherSagaAction =(position:PositionState)=>({
   type:GET_WEATHER_REQUEST,
-  meta:position
+  meta:{
+    ...position
+  }
 })
