@@ -6,9 +6,9 @@ import { WeatherAction, WeatherState } from "./types";
 
 
 export const getWeatherThunk =(position:PositionState):ThunkAction<void,WeatherState, unknown,WeatherAction>=>async(dispatch)=>{
-  const {request,success,failure}=getWeatherAsync;
+  const {success,failure}=getWeatherAsync;
   const {longitude, latitude, sfGrid}=position;
-  dispatch(request());
+  
   if(sfGrid !==null && latitude !==null && longitude !==null){
     // weatherState 이거나 error message 를 담은 string 
     const data = await getWeatherData(sfGrid,longitude,latitude);
