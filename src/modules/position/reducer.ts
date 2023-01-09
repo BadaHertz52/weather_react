@@ -11,8 +11,8 @@ const initialState:PositionState ={
 };
 
 const position =createReducer<PositionState ,PositionAction>(initialState)
-.handleType(GET_POSITION_REQUEST, (state)=>({
-  ...state,
+.handleType(GET_POSITION_REQUEST, (state, action)=>({
+  ...action.payload,
   state:"loading"
 }))
 .handleType(GET_POSITION_SUCCESS, (state, action) =>({

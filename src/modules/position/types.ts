@@ -22,8 +22,3 @@ export type PositionState ={
 };
 
 export type PositionAction = ActionType<typeof actions>;
-
-export type CurrentPositon ={
-  longitude:string,
-  latitude:string
-};
