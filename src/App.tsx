@@ -3,9 +3,9 @@ import { useDispatch  } from 'react-redux';
 import { useSelector } from 'react-redux';
 import {  ThunkDispatch } from 'redux-thunk';
 import { RootState } from './modules';
-import { CurrentPositon, getPositionAsync, getPositionSagaAction, PositionAction, PositionState } from './modules/position';
+import { getPositionAsync, PositionAction, PositionState } from './modules/position';
 import { getPositionThunk } from './modules/position/thunk';
-import {  getWeatherSagaAction, WeatherAction, WeatherState } from './modules/weather';
+import {  getWeatherAsync, getWeatherSagaAction, WeatherAction, WeatherState } from './modules/weather';
 import { getWeatherThunk } from './modules/weather/thunk';
 
 function App () {  
@@ -15,26 +15,33 @@ function App () {
   const startThunk =useRef<boolean>(false);
   const startSaga =useRef<boolean>(false);
   
-  const positionDispatch =useDispatch<ThunkDispatch<PositionState,unknown,PositionAction>>();
-  const weatherDispatch =useDispatch<ThunkDispatch<WeatherState, unknown,WeatherAction>>();
+  const positionThunkDispatch =useDispatch<ThunkDispatch<PositionState,unknown,PositionAction>>();
+  const weatherThunkDispatch =useDispatch<ThunkDispatch<WeatherState, unknown,WeatherAction>>();
   const dispatch =useDispatch();
 
-  function onClickThunk(){
-    positionDispatch(getPositionThunk());
-    startThunk.current = true; 
-  };  
+  const requestPositionThunk =(loadingPosition:PositionState)=>{
+    positionThunkDispatch(getPositionThunk(loadingPosition));
+    startThunk.current = true;
+  }
+  const requestPositionSaga =(loadingPosition:PositionState)=>{
+    dispatch(getPositionAsync.request(loadingPosition));
+    startSaga.current = true;
+  }
 
-  function onClickSaga (){
+  function dispatchPositionAction (fn:(param:PositionState)=>void){
+    dispatch(getWeatherAsync.request());
     navigator.geolocation.getCurrentPosition((pos:GeolocationPosition)=>{
       const latitude =JSON.stringify(pos.coords.latitude) ;
       const longitude =JSON.stringify(pos.coords.longitude);
-      const currentPosition :CurrentPositon ={
-        longitude:longitude,
-        latitude:latitude
+      const loadingPosition :PositionState ={
+        state:"loading",
+        error:null,
+        longitude: longitude,
+        latitude: latitude,
+        sfGrid:  null,
       };
       try{
-        dispatch(getPositionSagaAction(currentPosition));
-        startSaga.current = true;
+        fn(loadingPosition)
       }catch(error){
         const e =new Error (`can't find sfGrid`)
         dispatch(getPositionAsync.failure(e));
@@ -44,15 +51,22 @@ function App () {
       dispatch(getPositionAsync.failure(e));
     });
   };
+  function onClickThunk(){
+    dispatchPositionAction(requestPositionThunk)
+  };  
+
+  function onClickSaga (){
+    dispatchPositionAction(requestPositionSaga)
+  };
 
   useEffect(()=>{
     if(position.state ==="success"){
       startThunk.current === true &&
-      weatherDispatch(getWeatherThunk(position));
+      weatherThunkDispatch(getWeatherThunk(position));
 
       startSaga.current === true && dispatch(getWeatherSagaAction(position));
     }
-  },[position.state]);
+  },[position.state, position.latitude, position.longitude, position.sfGrid]);
 
   useEffect(()=>{
     if(weather.state ==="success"){

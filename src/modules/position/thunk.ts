@@ -3,12 +3,11 @@ import { getAreaData  } from "../api";
 import { getPositionAsync } from "./actions";
 import { PositionAction, PositionState} from "./types";
 
-export const getPositionThunk =():ThunkAction<void, PositionState,unknown,PositionAction>=>async(dispatch)=>{
-  const {request, success, failure}= getPositionAsync ;
-  dispatch(request());
-  navigator.geolocation.getCurrentPosition(async(pos: GeolocationPosition)=>{
-    const latitude =JSON.stringify(pos.coords.latitude) ;
-    const longitude =JSON.stringify(pos.coords.longitude);
+export const getPositionThunk =(positionState:PositionState):ThunkAction<void, PositionState,unknown,PositionAction>=>async(dispatch)=>{
+  const {request ,success, failure}= getPositionAsync ;
+  const {latitude, longitude}=positionState; 
+  dispatch(request(positionState));
+  if (latitude !==null && longitude !==null) {
     const sfGrid = await getAreaData(latitude,longitude);
     if(!(sfGrid instanceof Error)){
       const position :PositionState={
@@ -23,10 +22,10 @@ export const getPositionThunk =():ThunkAction<void, PositionState,unknown,Positi
       const error =new Error (`Can't find sfGrid:{latitude:${latitude}, logitude:${longitude}}`);
       dispatch(failure(error));
     }
-      
-  },(e)=>{
-    const error =new Error (`position error: ${e}`)
-    dispatch(failure(error))
-  });
+  }else{
+    const error = new Error(`latidue or longitude is null : {type of latitude : ${typeof latitude} , typeof longitude :${typeof longitude}  }`);
+    dispatch(failure(error));
+  }
+
 };
 
