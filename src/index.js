@@ -4,12 +4,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import rootReducer, { rootSaga } from './modules/index';
 import { Provider } from 'react-redux';
-import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from '@redux-saga/core';
+import { configureStore } from '@reduxjs/toolkit';
 const sagaMiddleware =createSagaMiddleware();
-const store =createStore(rootReducer ,applyMiddleware(thunk,sagaMiddleware)
-);
+const store = configureStore({
+  reducer:rootReducer,
+  middleware: [thunk ,sagaMiddleware]
+});
 sagaMiddleware.run(rootSaga);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

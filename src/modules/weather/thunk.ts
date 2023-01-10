@@ -1,14 +1,12 @@
 import { ThunkAction } from "redux-thunk";
 import { getWeatherData } from "../api";
 import { PositionState } from "../position/types";
-import { getWeatherAsync} from "./actions";
 import { WeatherAction, WeatherState } from "./types";
-
+import { request, success, failure } from "./reducer";
 
 export const getWeatherThunk =(position:PositionState):ThunkAction<void,WeatherState, unknown,WeatherAction>=>async(dispatch)=>{
-  const {success,failure}=getWeatherAsync;
   const {longitude, latitude, sfGrid}=position;
-  
+  dispatch(request(position));
   if(sfGrid !==null && latitude !==null && longitude !==null){
     // weatherState 이거나 error message 를 담은 string 
     const data = await getWeatherData(sfGrid,longitude,latitude);

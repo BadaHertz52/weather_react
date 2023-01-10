@@ -3,33 +3,33 @@ import { useDispatch  } from 'react-redux';
 import { useSelector } from 'react-redux';
 import {  ThunkDispatch } from 'redux-thunk';
 import { RootState } from './modules';
-import { getPositionAsync, PositionAction, PositionState } from './modules/position';
+import { PositionAction, PositionState } from './modules/position';
+import { positionSlice } from './modules/position/reducer';
 import { getPositionThunk } from './modules/position/thunk';
-import {  getWeatherAsync, getWeatherSagaAction, WeatherAction, WeatherState } from './modules/weather';
+import {   WeatherAction, WeatherState } from './modules/weather';
+import { weatherSlice } from './modules/weather/reducer';
 import { getWeatherThunk } from './modules/weather/thunk';
 
 function App () {  
-  const position =useSelector((state:RootState)=> state.position);
+  const position =useSelector((state:RootState)=> state.positionReducer);
   const {longitude, latitude, sfGrid}=position; 
-  const weather= useSelector((state:RootState) => state.weather);
-  const startThunk =useRef<boolean>(false);
-  const startSaga =useRef<boolean>(false);
-  
+  const weather= useSelector((state:RootState) => state.weatherReducer);
+  const positionActions = positionSlice.actions;
+  const weatherActions =weatherSlice.actions;
   const positionThunkDispatch =useDispatch<ThunkDispatch<PositionState,unknown,PositionAction>>();
   const weatherThunkDispatch =useDispatch<ThunkDispatch<WeatherState, unknown,WeatherAction>>();
   const dispatch =useDispatch();
+  const startThunk =useRef<boolean>(false);
+  const startSaga =useRef<boolean>(false);
+  const thunk ="thunk" ;
+  const saga ="saga";
+  type Middleware = typeof thunk | typeof saga; 
 
-  const requestPositionThunk =(loadingPosition:PositionState)=>{
-    positionThunkDispatch(getPositionThunk(loadingPosition));
-    startThunk.current = true;
-  }
-  const requestPositionSaga =(loadingPosition:PositionState)=>{
-    dispatch(getPositionAsync.request(loadingPosition));
-    startSaga.current = true;
-  }
+  function dispatchAction (middleware:Middleware){
+    position.state !=="none" &&
+    dispatch(positionActions.reset());
+    position.state !=="none" && dispatch(weatherActions.reset()) ;
 
-  function dispatchPositionAction (fn:(param:PositionState)=>void){
-    dispatch(getWeatherAsync.request());
     navigator.geolocation.getCurrentPosition((pos:GeolocationPosition)=>{
       const latitude =JSON.stringify(pos.coords.latitude) ;
       const longitude =JSON.stringify(pos.coords.longitude);
@@ -41,45 +41,40 @@ function App () {
         sfGrid:  null,
       };
       try{
-        fn(loadingPosition)
+        if(middleware === thunk){
+          startThunk.current = true; 
+          positionThunkDispatch(getPositionThunk(loadingPosition))
+        }else{
+          startSaga.current = true;
+          dispatch(positionActions.request(loadingPosition));
+        }
       }catch(error){
         const e =new Error (`can't find sfGrid`)
-        dispatch(getPositionAsync.failure(e));
+        dispatch(positionActions.failure(e));
       }
     },(error)=>{
       const e =new Error (`can't find currentPostion`)
-      dispatch(getPositionAsync.failure(e));
+      dispatch(positionActions.failure(e));
     });
   };
   function onClickThunk(){
-    dispatchPositionAction(requestPositionThunk)
+    dispatchAction(thunk)
   };  
 
   function onClickSaga (){
-    dispatchPositionAction(requestPositionSaga)
+    dispatchAction(saga)
   };
-
   useEffect(()=>{
-    if(position.state ==="success"){
-      startThunk.current === true &&
-      weatherThunkDispatch(getWeatherThunk(position));
-
-      startSaga.current === true && dispatch(getWeatherSagaAction(position));
-    }
-  },[position.state, position.latitude, position.longitude, position.sfGrid]);
-
-  useEffect(()=>{
-    if(weather.state ==="success"){
+    if(position.state === "success"){
       if(startThunk.current){
-        startThunk.current = false;
-      };
-      if(startSaga.current){
-        startSaga.current = false;
+        weatherThunkDispatch(getWeatherThunk(position))
+        startThunk.current = false; 
+      }else{
+        dispatch(weatherActions.request(position));
+        startSaga.current =false;
       }
     }
-  },[weather.state]);
-
-
+  },[position.state]);
   return (
     <div className="App">
       <button 

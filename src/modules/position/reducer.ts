@@ -1,6 +1,5 @@
-import { PositionAction, PositionState } from "./types";
-import {createReducer} from 'typesafe-actions';
-import { GET_POSITION_FAILURE, GET_POSITION_REQUEST, GET_POSITION_SUCCESS } from "./actions";
+import { PositionState } from "./types";
+import { createSlice , PayloadAction } from "@reduxjs/toolkit";
 
 const initialState:PositionState ={
   state:"none",
@@ -9,19 +8,36 @@ const initialState:PositionState ={
   latitude:null,
   sfGrid: null
 };
+const noneState:PositionState ={
+  state:"none",
+  error:null,
+  longitude: null,
+  latitude:null,
+  sfGrid: null
+};
 
-const position =createReducer<PositionState ,PositionAction>(initialState)
-.handleType(GET_POSITION_REQUEST, (state, action)=>({
-  ...action.payload,
-  state:"loading"
-}))
-.handleType(GET_POSITION_SUCCESS, (state, action) =>({
-  ...action.payload
-}))
-.handleType(GET_POSITION_FAILURE, (state, action)=>({
-  ...state,
-  state:"error",
-  error:action.payload
-}));
+export const positionSlice =createSlice({
+  name:'position',
+  initialState,
+  reducers :{
+    reset :(state)=>({
+      ...noneState
+    }),
+    request :(state ,action:PayloadAction<PositionState> )=>({
+      ...action.payload,
+      state:"loading"
+    }),
+    success:(state, action:PayloadAction<PositionState>)=>({
+      ...action.payload
+    }),
+    failure :(state, action: PayloadAction<Error>)=>({
+      ...state,
+      state:"error",
+      error:action.payload
+    })
+  }
+});
 
-export default position ;
+export const {reset,request, success, failure} = positionSlice.actions ;
+
+export default positionSlice.reducer;

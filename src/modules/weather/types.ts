@@ -1,5 +1,4 @@
-import * as actions from './actions';
-import {ActionType} from 'typesafe-actions';
+import {reset , request, success ,failure } from './reducer';
 
 export const sunny ="맑음"; // sky code =1
 export const cloudy ="구름많음" // sky code =3
@@ -178,10 +177,10 @@ export type SunRiseAndSet ={
 };
 const none ="none";
 const loading ="loading";
-const success ="success";
+const dataSuccess ="success";
 const error ="error";
 
-export type DataState = typeof none| typeof loading| typeof success|typeof error;
+export type DataState = typeof none| typeof loading| typeof dataSuccess|typeof error;
 
 export type WeatherState ={
   state:DataState,
@@ -193,7 +192,11 @@ export type WeatherState ={
   sunRiseAndSet :SunRiseAndSet |null
 };
 
-export type WeatherAction =ActionType<typeof actions>;
+export type WeatherAction =
+ReturnType<typeof reset> |
+ReturnType<typeof request> |
+ReturnType<typeof success> |
+ReturnType<typeof failure>  ;
 
 // state로 변경 시 필요한 함수 
 export const getSkyCode =(code:number):SkyCodeType=>{

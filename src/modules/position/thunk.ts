@@ -1,10 +1,9 @@
 import { ThunkAction } from "redux-thunk";
 import { getAreaData  } from "../api";
-import { getPositionAsync } from "./actions";
+import { request, success,failure } from "./reducer";
 import { PositionAction, PositionState} from "./types";
 
 export const getPositionThunk =(positionState:PositionState):ThunkAction<void, PositionState,unknown,PositionAction>=>async(dispatch)=>{
-  const {request ,success, failure}= getPositionAsync ;
   const {latitude, longitude}=positionState; 
   dispatch(request(positionState));
   if (latitude !==null && longitude !==null) {

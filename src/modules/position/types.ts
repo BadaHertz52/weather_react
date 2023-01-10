@@ -1,6 +1,5 @@
 import { DataState } from "../weather/types";
-import * as actions from './actions';
-import { ActionType } from "typesafe-actions";
+import { reset,request, success,failure } from "./reducer";
 
 export type SFGridItem ={
   areaCode: string|number,
@@ -21,4 +20,7 @@ export type PositionState ={
   sfGrid:SFGridItem |null,
 };
 
-export type PositionAction = ActionType<typeof actions>;
+export type PositionAction = ReturnType<typeof reset> |
+ReturnType<typeof request> |
+ReturnType<typeof success> |
+ReturnType<typeof failure>  ;

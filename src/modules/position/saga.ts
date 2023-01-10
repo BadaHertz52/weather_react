@@ -1,9 +1,10 @@
 import { getAreaData } from "../api";
-import { getPositionAsync, GET_POSITION_REQUEST } from "./actions";
 import {  PositionState, SFGridItem } from "./types";
 import {call, put, takeEvery} from 'redux-saga/effects';
+import { request ,success, failure } from "./reducer";
 
-function* getPositionSaga(action:ReturnType<typeof getPositionAsync.request>){
+
+function* getPositionSaga(action:ReturnType<typeof request>){
     const {longitude, latitude}= action.payload;
     if(longitude !==null && latitude !==null){
       try {
@@ -16,22 +17,22 @@ function* getPositionSaga(action:ReturnType<typeof getPositionAsync.request>){
             longitude:longitude,
             sfGrid:sfGrid
           };
-          yield put(getPositionAsync.success(position));
+          yield put(success(position));
         }else{
           const e =new Error(`can't get sfGrid`);
-        yield put(getPositionAsync.failure(e))
+        yield put(failure(e))
         }
     
       } catch (error) {
         const e =new Error(`can't get sfGrid ${error}`);
-        yield put(getPositionAsync.failure(e))
+        yield put(failure(e))
       }
     }
 
 };
 
 export function* positionSaga(){
-  yield takeEvery(GET_POSITION_REQUEST, getPositionSaga)
+  yield takeEvery(request, getPositionSaga)
 };
 
 
