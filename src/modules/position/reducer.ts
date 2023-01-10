@@ -1,5 +1,6 @@
 import { PositionState } from "./types";
-import { createSlice , PayloadAction } from "@reduxjs/toolkit";
+import {  createSlice , PayloadAction } from "@reduxjs/toolkit";
+import { toolkitPosition} from "./thunk";
 
 const initialState:PositionState ={
   state:"none",
@@ -35,7 +36,32 @@ export const positionSlice =createSlice({
       state:"error",
       error:action.payload
     })
-  }
+  },
+  extraReducers(builder) {
+    builder
+    .addCase(toolkitPosition.pending ,(state, actoin)=>{
+      return {
+        state :"loading",
+        error :null,
+        longitude:null,
+        latitude:null,
+        sfGrid:null
+      }
+    })
+    .addCase(toolkitPosition.fulfilled ,(state, action)=>{
+      return {...action.payload}
+    })
+    .addCase(toolkitPosition.rejected, (state, action)=>{
+      const error = new Error (`Rejected get sfGrid`);
+     return {
+        state:"error",
+        error :error,
+        longitude:null,
+        latitude:null,
+        sfGrid:null
+      }
+    })
+  },
 });
 
 export const {reset,request, success, failure} = positionSlice.actions ;

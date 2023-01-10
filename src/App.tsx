@@ -1,11 +1,12 @@
-import React, { useEffect, useRef } from 'react';
-import { useDispatch  } from 'react-redux';
-import { useSelector } from 'react-redux';
-import {  ThunkDispatch } from 'redux-thunk';
+import { AnyAction, AsyncThunkAction } from '@reduxjs/toolkit';
+import React, { useEffect, useRef} from 'react';
+import { useDispatch , useSelector   } from 'react-redux';
+import {  ThunkDispatch  } from 'redux-thunk';
+import { AppDispatch } from '.';
 import { RootState } from './modules';
 import { PositionAction, PositionState } from './modules/position';
 import { positionSlice } from './modules/position/reducer';
-import { getPositionThunk } from './modules/position/thunk';
+import { getPositionThunk,toolkitPosition } from './modules/position/thunk';
 import {   WeatherAction, WeatherState } from './modules/weather';
 import { weatherSlice } from './modules/weather/reducer';
 import { getWeatherThunk } from './modules/weather/thunk';
@@ -19,11 +20,16 @@ function App () {
   const positionThunkDispatch =useDispatch<ThunkDispatch<PositionState,unknown,PositionAction>>();
   const weatherThunkDispatch =useDispatch<ThunkDispatch<WeatherState, unknown,WeatherAction>>();
   const dispatch =useDispatch();
+  const toolkitDispatch =useDispatch<ThunkDispatch<PositionState, unknown, AnyAction>>();
   const startThunk =useRef<boolean>(false);
   const startSaga =useRef<boolean>(false);
+  const startToolkit =useRef<boolean>(false);
+
   const thunk ="thunk" ;
   const saga ="saga";
-  type Middleware = typeof thunk | typeof saga; 
+  const toolkit="toolkit";
+
+  type Middleware = typeof thunk | typeof saga | typeof toolkit; 
 
   function dispatchAction (middleware:Middleware){
     position.state !=="none" &&
@@ -44,9 +50,12 @@ function App () {
         if(middleware === thunk){
           startThunk.current = true; 
           positionThunkDispatch(getPositionThunk(loadingPosition))
-        }else{
+        }else if(middleware=== saga){
           startSaga.current = true;
           dispatch(positionActions.request(loadingPosition));
+        }else{
+          const currentPosition = {longitude:longitude ,latitude:latitude};
+          toolkitDispatch(toolkitPosition(currentPosition));
         }
       }catch(error){
         const e =new Error (`can't find sfGrid`)
@@ -64,6 +73,10 @@ function App () {
   function onClickSaga (){
     dispatchAction(saga)
   };
+
+  function onClickToolkitThunk (){
+    dispatchAction(toolkit);
+  };
   useEffect(()=>{
     if(position.state === "success"){
       if(startThunk.current){
@@ -78,16 +91,22 @@ function App () {
   return (
     <div className="App">
       <button 
+        className='toolKitThunkBtn'
+        onClick={onClickToolkitThunk}
+      >
+        toolkit-thunk
+      </button>
+      <button 
         className='thunkBtn'
         onClick={onClickThunk}
       >
-        thunk
+        redux-thunk
       </button>
       <button
         className='sagaBtn'
         onClick ={onClickSaga}
       >
-        saga
+        redux-saga
       </button>
       <div>position state : ${position.state}</div>
       <div>weather state : ${weather.state}</div>
