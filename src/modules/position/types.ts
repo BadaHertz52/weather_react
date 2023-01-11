@@ -20,6 +20,11 @@ export type PositionState ={
   sfGrid:SFGridItem |null,
 };
 
+export type PositionSuccessData ={
+  longitude:string,
+  latitude:string,
+  sfGrid:SFGridItem,
+};
 export type PositionAction = ReturnType<typeof reset> |
 ReturnType<typeof request> |
 ReturnType<typeof success> |

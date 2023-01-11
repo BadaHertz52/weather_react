@@ -1,13 +1,13 @@
 import { ThunkAction } from "redux-thunk";
 import { getWeatherData } from "../api";
-import { PositionState } from "../position/types";
+import { PositionState, PositionSuccessData, SFGridItem } from "../position/types";
 import { WeatherAction, WeatherState } from "./types";
 import { request, success, failure } from "./reducer";
 
-export const getWeatherThunk =(position:PositionState):ThunkAction<void,WeatherState, unknown,WeatherAction>=>async(dispatch)=>{
-  const {longitude, latitude, sfGrid}=position;
-  dispatch(request(position));
-  if(sfGrid !==null && latitude !==null && longitude !==null){
+export const getWeatherThunk =(positionSuccessData:PositionSuccessData):ThunkAction<void,WeatherState, unknown,WeatherAction>=>async(dispatch)=>{
+  const {longitude, latitude, sfGrid}=positionSuccessData;
+  dispatch(request(positionSuccessData));
+  try{
     // weatherState 이거나 error message 를 담은 string 
     const data = await getWeatherData(sfGrid,longitude,latitude);
     if(typeof data === "string"){
@@ -16,9 +16,8 @@ export const getWeatherThunk =(position:PositionState):ThunkAction<void,WeatherS
     }else{
       dispatch(success(data));
     }
-  }else{
-    const error =new Error(`[Error] Is longitude null? ${longitude ===null} //   Is latitude null? ${latitude ===null} //   Is sfGrid null? ${sfGrid ===null} //  `);
-    dispatch(failure(error)) ; 
+  }catch(e){
+    const error =new Error ("Fail get weather data");
+    dispatch(failure(error));
   }
   
-}
