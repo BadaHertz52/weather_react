@@ -1,14 +1,16 @@
 import { PositionState } from "./types";
 import {  createSlice , PayloadAction } from "@reduxjs/toolkit";
 import { CurrentPosition, toolkitPosition} from "./thunk";
+import { positionSample } from "../sample";
 
-const initialState:PositionState ={
-  state:"none",
-  error:null,
-  longitude: null,
-  latitude:null,
-  sfGrid: null
-};
+// const initialState:PositionState ={
+//   state:"none",
+//   error:null,
+//   longitude: null,
+//   latitude:null,
+//   sfGrid: null
+// };
+const initialState = positionSample;
 const noneState:PositionState ={
   state:"none",
   error:null,

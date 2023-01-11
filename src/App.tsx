@@ -75,7 +75,9 @@ function App () {
     dispatchAction(toolkit);
   };
   useEffect(()=>{
-    if(position.state === "success" && (
+    if(position.state === "success" &&
+    weather.state !=="success"&&
+    (
       position.longitude !==null &&
       position.latitude !==null &&
       position.sfGrid !==null
