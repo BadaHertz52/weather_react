@@ -19,7 +19,7 @@ function App () {
   const positionThunkDispatch =useDispatch<ThunkDispatch<PositionState,unknown,PositionAction>>();
   const weatherThunkDispatch =useDispatch<ThunkDispatch<WeatherState, unknown,WeatherAction>>();
   const dispatch =useDispatch();
-  const toolkitDispatch =useDispatch<ThunkDispatch<PositionState|WeatherState, CurrentPosition|PositionState, AnyAction>>();
+  const toolkitDispatch =useDispatch<ThunkDispatch<PositionState|WeatherState, CurrentPosition|PositionSuccessData, AnyAction>>();
   
   const startThunk =useRef<boolean>(false);
   const startSaga =useRef<boolean>(false);
