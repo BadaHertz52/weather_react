@@ -25,14 +25,15 @@ export const positionSlice =createSlice({
       ...noneState
     }),
     request :(state ,action:PayloadAction<CurrentPosition> )=>({
-      state:"loading",
+      state:"pending",
       error:null,
       longitude:action.payload.longitude,
       latitude:action.payload.latitude,
       sfGrid:null
     }),
     success:(state, action:PayloadAction<PositionState>)=>({
-      ...action.payload
+      ...action.payload,
+      state:"success"
     }),
     failure :(state, action: PayloadAction<Error>)=>({
       ...state,
@@ -44,7 +45,7 @@ export const positionSlice =createSlice({
     builder
     .addCase(toolkitPosition.pending ,(state, action)=>{
       return {
-        state :action.meta.requestStatus,
+        state :"pending",
         error :null,
         longitude: action.meta.arg.longitude,
         latitude:action.meta.arg.latitude,
@@ -53,15 +54,14 @@ export const positionSlice =createSlice({
     })
     .addCase(toolkitPosition.fulfilled ,(state, action)=>{
       return {
-        ...action.payload
-        ,
-        state:action.meta.requestStatus
+        ...action.payload,
+        state:'success'
       }
     })
     .addCase(toolkitPosition.rejected, (state, action)=>{
       const err = action.error as Error 
       return {
-        state:action.meta.requestStatus,
+        state:"failure",
         error :err,
         longitude:action.meta.arg.longitude,
         latitude:action.meta.arg.latitude,

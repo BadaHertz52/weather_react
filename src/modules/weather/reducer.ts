@@ -13,7 +13,7 @@ const initialState :WeatherState ={
   nation:null,
   sunRiseAndSet:null
 };
-const noneState :WeatherState ={
+export const noneState :WeatherState ={
   state:"none",
   error:null,
   nowWeather:null,
@@ -32,10 +32,11 @@ export const weatherSlice =createSlice({
     }),
     request :(state , action:PayloadAction<PositionSuccessData>)=>({
         ...noneState,
-        state:"loading"
+        state:"pending"
       }),
     success :(state, action:PayloadAction<WeatherState>) =>({
-      ...action.payload
+      ...action.payload,
+      state:"success"
     }),
     failure : (state, action:PayloadAction< Error>)=>({
       ...noneState,
@@ -48,7 +49,7 @@ export const weatherSlice =createSlice({
     .addCase( toolkitWeather.pending , (state, action)=>{
       return {
         ...noneState,
-        state:action.meta.requestStatus
+        state:"pending"
       }
     })
     .addCase(toolkitWeather.fulfilled , (state, action)=>{
@@ -59,13 +60,12 @@ export const weatherSlice =createSlice({
     .addCase(toolkitWeather.rejected, (state, action)=>{
       return {
         ...noneState,
-        state:action.meta.requestStatus,
+        state:"failure",
         error:action.error as Error
       }
     })
-  },
+  }
 });
 
 export const {reset,request, success, failure} = weatherSlice.actions ;
-
 export default weatherSlice.reducer;

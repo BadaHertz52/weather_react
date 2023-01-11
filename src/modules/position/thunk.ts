@@ -1,4 +1,4 @@
-import { createAsyncThunk, Dispatch } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ThunkAction } from "redux-thunk";
 import { getAreaData  } from "../api";
 import { request, success,failure } from "./reducer";
@@ -44,7 +44,7 @@ export const toolkitPosition = createAsyncThunk(
       const sfGrid = await getAreaData(latitude,longitude);
       const error =new Error (`Can't find sfGrid:{latitude:${latitude}, logitude:${longitude}}`);
       const position :PositionState={
-        state: sfGrid instanceof Error ? "rejected" :  "fulfilled",
+        state: sfGrid instanceof Error ? 'failure' :  "success",
         error: sfGrid instanceof Error ? error :null,
         latitude:latitude,
         longitude:longitude,
