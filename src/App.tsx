@@ -2,7 +2,6 @@ import { AnyAction, AsyncThunkAction } from '@reduxjs/toolkit';
 import React, { useEffect, useRef} from 'react';
 import { useDispatch , useSelector   } from 'react-redux';
 import {  ThunkDispatch  } from 'redux-thunk';
-import { AppDispatch } from '.';
 import { RootState } from './modules';
 import { PositionAction, PositionState } from './modules/position';
 import { positionSlice } from './modules/position/reducer';
@@ -21,6 +20,7 @@ function App () {
   const weatherThunkDispatch =useDispatch<ThunkDispatch<WeatherState, unknown,WeatherAction>>();
   const dispatch =useDispatch();
   const toolkitDispatch =useDispatch<ThunkDispatch<PositionState, unknown, AnyAction>>();
+
   const startThunk =useRef<boolean>(false);
   const startSaga =useRef<boolean>(false);
   const startToolkit =useRef<boolean>(false);
