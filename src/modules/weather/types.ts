@@ -1,3 +1,6 @@
+import { MidLandAreaCode, MidTaAreaCode } from '../areaCodeType';
+import { SFGridItem } from '../position';
+import { sfGrid } from '../sfGrid';
 import {reset , request, success ,failure } from './reducer';
 
 export const sunny ="맑음"; // sky code =1
@@ -123,12 +126,7 @@ export type Day ={
   tmx:number
 };
 
-
-type PresentType ={
-  sky:SkyType,
-  temp:number
-};
-const 서울 ="서울";
+const 서울="서울";
 const 춘천="춘천";
 const 강릉 ="강릉";
 const 청주 ="청주";
@@ -146,29 +144,262 @@ const 여수 ="여수";
 const 부산 ="부산";
 const 제주 ="제주";
 
-type AreaNameType = typeof 서울 |
-                typeof 춘천|
-                typeof 강릉 |
-                typeof 청주 |
-                typeof 백령|
-                typeof 수원 |
-                typeof 안동|
-                typeof 울릉독도|
-                typeof 대전|
-                typeof 전주 |
-                typeof 대구 |
-                typeof 광주 |
-                typeof 울산 |
-                typeof 목표 |
-                typeof 여수 |
-                typeof 부산 |
-                typeof 제주 ;
+export type AreaName =typeof 서울|
+                      typeof 춘천|
+                      typeof 강릉|
+                      typeof 청주|
+                      typeof 백령|
+                      typeof 수원|
+                      typeof 안동|
+                      typeof 울릉독도|
+                      typeof 대전|
+                      typeof 전주 |
+                      typeof 대구 |
+                      typeof 광주 |
+                      typeof 울산 |
+                      typeof 목표 |
+                      typeof 여수 |
+                      typeof 부산 |
+                      typeof 제주 ;
 
+export type AreaInform ={
+  name:AreaName,
+  sfGrid:SFGridItem,
+  landRegId :MidLandAreaCode| undefined,
+  taRegId:MidTaAreaCode | undefined,
+};
+export const areaArry: AreaInform[] =[
+  {
+    name:서울,
+    sfGrid :  {
+      areaCode: "1100000000",
+      arePt1: "서울특별시",
+      arePt2: null,
+      arePt3: null,
+      nX: "60",
+      nY: "127",
+      longitude: "126.98000833333333",
+      latitude: "37.56356944444444"
+    },
+    landRegId:"11B00000",
+    taRegId:"11B10101"
+  },{
+    name:춘천,
+    sfGrid:{
+      areaCode: "4211000000",
+      arePt1: "강원도",
+      arePt2: "춘천시",
+      arePt3: null,
+      nX: "73",
+      nY: "134",
+      longitude: "127.73231111111112",
+      latitude: "37.87854166666667"
+    },
+    landRegId:"11D10000",
+    taRegId:"11D10301"
+  }
+,{
+  name:강릉,
+  sfGrid:{
+    areaCode: "4215000000",
+    arePt1: "강원도",
+    arePt2: "강릉시",
+    arePt3: null,
+    nX: "92",
+    nY: "131",
+    longitude: "128.87849722222222",
+    latitude: "37.74913611111111"
+  },
+  landRegId:"11D20000",
+  taRegId:"11D20501"
+ },{
+  name:청주,
+  sfGrid:{
+    areaCode: "4311100000",
+    arePt1: "충청북도",
+    arePt2: "청주시 상당구",
+    arePt3: null,
+    nX: "69",
+    nY: "106",
+    longitude: "127.51173055555556",
+    latitude: "36.58399722222222"
+   },
+   landRegId:"11C20000",
+   taRegId:"11C10301"
+ },{
+  name:백령,
+  sfGrid:{
+    areaCode: "2872033000",
+  arePt1: "인천광역시",
+  arePt2: "옹진군",
+  arePt3: "백령면",
+  nX: "21",
+  nY: "135",
+  longitude: "124.7186911",
+  latitude: "37.9741764"
+  },
+  landRegId:"11B00000",
+  taRegId:"11B20201"
+ },{
+  name:수원,
+  sfGrid:{
+    areaCode: "4111100000",
+    arePt1: "경기도",
+    arePt2: "수원시 장안구",
+    arePt3: null,
+    nX: "60",
+    nY: "121",
+    longitude: "127.01222222222222",
+    latitude: "37.30101111111111"
+   },
+   landRegId:"11B00000",
+   taRegId:"11B20601"
+ }, {
+  name:안동,
+  sfGrid:{
+    areaCode: "4717000000",
+    arePt1: "경상북도",
+    arePt2: "안동시",
+    arePt3: null,
+    nX: "91",
+    nY: "106",
+    longitude: "128.73162222222223",
+    latitude: "36.565463888888885"
+  },
+  landRegId:"11F10000",
+  taRegId:"11H10501"
+ },{
+  name:울릉독도,
+  sfGrid:{
+    areaCode: "4794000000",
+  arePt1: "경상북도",
+  arePt2: "울릉군",
+  arePt3: null,
+  nX: "127",
+  nY: "127",
+  longitude: "130.9037888888889",
+  latitude: "37.480575"
+  },
+  landRegId:"11F10000" ,
+  taRegId:"1.10E+102"
+ },{
+  name:대전,
+  sfGrid:{
+    areaCode: "3000000000",
+    arePt1: "대전광역시",
+    arePt2: null,
+    arePt3: null,
+    nX: "67",
+    nY: "100",
+    longitude: "127.38656666666667",
+    latitude: "36.347119444444445"
+  },
+  landRegId:"11D20000",
+  taRegId:"11C20401"
+ },
+ {
+  name:전주,
+  sfGrid:{
+    areaCode: "4511100000",
+    arePt1: "전라북도",
+    arePt2: "전주시 완산구",
+    arePt3: null,
+    nX: "63",
+    nY: "89",
+    longitude: "127.12191944444444",
+    latitude: "35.80918888888888"
+  },
+  landRegId:"11F10000",
+  taRegId:"11F10201"
+ },{
+  name:대구,
+  sfGrid:{
+    areaCode: "2700000000",
+    arePt1: "대구광역시",
+    arePt2: null,
+    arePt3: null,
+    nX: "89",
+    nY: "90",
+    longitude: "128.60355277777776",
+    latitude: "35.868541666666665"
+  },
+  landRegId:"11F10000",
+  taRegId:"11H10701"
+ },{
+  name:광주,
+  sfGrid:{
+    areaCode: "2900000000",
+    arePt1: "광주광역시",
+    arePt2: null,
+    arePt3: null,
+    nX: "58",
+    nY: "74",
+    longitude: "126.85336388888888",
+    latitude: "35.156974999999996"
+  },
+  landRegId:"11C10000",
+  taRegId:"11F20501"
+ },{
+  name:울산,
+  sfGrid:{
+    areaCode: "3100000000",
+    arePt1: "울산광역시",
+    arePt2: null,
+    arePt3: null,
+    nX: "102",
+    nY: "84",
+    longitude: "129.3136888888889",
+    latitude: "35.53540833333333" 
+  },
+  landRegId:"11H10000",
+  taRegId:"11H20101"
+ },{
+  name:여수,
+  sfGrid:{
+    areaCode: "4613000000",
+    arePt1: "전라남도",
+    arePt2: "여수시",
+    arePt3: null,
+    nX: "73",
+    nY: "66",
+    longitude: "127.66438611111111",
+    latitude: "34.757311111111115"
+  },
+  landRegId:"11C10000",
+  taRegId:"11F20401"
+ },{
+  name:부산,
+  sfGrid:{
+    areaCode: "2600000000",
+    arePt1: "부산광역시",
+    arePt2: null,
+    arePt3: null,
+    nX: "98",
+    nY: "76",
+    longitude: "129.07695277777776",
+    latitude: "35.17701944444444" 
+  },
+  landRegId:"11H10000",
+  taRegId:"11H20201"
+ },{
+  name:제주,
+  sfGrid:{
+    areaCode: "5000000000",
+    arePt1: "제주특별자치도",
+    arePt2: null,
+    arePt3: null,
+    nX: "52",
+    nY: "38",
+    longitude: "126.50033333333333",
+    latitude: "33.48569444444445"
+  },
+  landRegId:"11H20000",
+  taRegId:"11G00201"
+ }
+];
 export type Area ={
-  areaName: AreaNameType,
-  present :PresentType|null,
-  am:AmPmType,
-  pm:AmPmType
+  areaInform: AreaInform,
+  day:Day[]|null
 };
 
 export type SunRiseAndSet ={

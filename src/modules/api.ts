@@ -1,5 +1,5 @@
 import { ApiAreaCode, MidLandAreaCode, midLandAreaCodeZip, midTaArea, midTaAreaCode, MidTaAreaCode } from "./areaCodeType";
-import {  DailyWeather, Day, getSkyCode, getSkyType, getWsd, PmType, SkyCodeType, WeatherState } from "./weather/types";
+import {  Area, areaArry, AreaInform, DailyWeather, Day, getSkyCode, getSkyType, getWsd, PmType, SkyCodeType, WeatherState } from "./weather/types";
 import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApItem, SVFBaseTime,  KakaoDoumentType, MidFcstDay}from "./apiType";
 import { sfGrid} from './sfGrid'; 
 import { SFGridItem } from "./position/types";
@@ -457,7 +457,7 @@ function getMidLandAreaCode (sfGrid:SFGridItem){
   const mid4 =["대전광역시", "세종특별자치시", "충청남도"];
   const mid5 =["충청북도"];
   const mid6 =["광주광역시", "전라남도"];
-  const mid7 =["전라남도"];
+  const mid7 =["전라북도"];
   const mid8 =["대구광역시", "경상북도"];
   const mid9 =["부산광역시", "울산광역시" ,"경상북도"];
   const mid10 =["제주특별자치도"];
@@ -601,19 +601,179 @@ const changeHourToString =(h:number)=> {
   const changedH =changeTwoDigit(h);
   return `${changedH}00`;
 };
+/**
+ * sVFcst를 Day[]으로 변환
+ * @param sVFcst 
+ * @returns 
+ */
+function changeSvfToDay ( sVFcst: SVFcst){
+  return sVFcst.map((d:SVFDay)=>{
+    const am = d.slice(0,11);
+    const pm =d.slice(12);
+    const getAvg =(arry:number[])=>{
+      const length =arry.length;
+      const sum =arry.reduce((a,b)=>a+b);
+      const avg = sum / length; 
+      return avg 
+    };
+    const amData = {
+      sky : getAvg(am.map((t:SVFTime)=>Number(t.sky))),
+      pop:getAvg(am.map((t:SVFTime)=>Number(t.pop))),
+      pty : getAvg(am.map((t:SVFTime)=> Number(t.pty))),
+    };
+    const pmData = {
+      sky : getAvg(pm.map((t:SVFTime)=>Number(t.sky))),
+      pop:getAvg(pm.map((t:SVFTime)=>Number(t.pop))),
+      pty : getAvg(pm.map((t:SVFTime)=> Number(t.pty))),
+    };
 
-export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitude:string)=>{
+
+    const day:Day ={
+      dayslater:sVFcst.indexOf(d), //0-5 (today=0)
+      am:{
+        pop: amData.pop,
+        sky :getSkyType(amData.sky, amData.pty)
+      },
+      pm:{
+        pop: pmData.pop,
+        sky :getSkyType(pmData.sky, pmData.pty)
+      },
+      tmn:Number(d[0].tmn),
+      tmx:Number(d[0].tmx)
+    };
+    return day
+  });
+};  
+/**
+ * midFcst를 Day[]으로 변환
+ * @param midFcst 
+ * @returns 
+ */
+function changeMidToDay(midFcst: MidFcst){
+return midFcst.map((d:MidFcstDay)=>{
+  const day:Day ={
+    dayslater: midFcst.indexOf(d) + 3 ,
+    am: {
+      pop:Number(d.rnStAm),
+      sky: d.wfAm
+    },
+    pm:{
+      pop:Number(d.rnStPm),
+      sky: d.wfPm
+    },
+    tmn: d.taMin,
+    tmx: d.taMax
+  };
+  return day
+});
+};
+/**
+ * sfGrid 속 nX 와 nY를 string type 의 값으로 반환하는 함수 
+ * @param sfGrid 
+ * @returns 
+ */
+const changeNType =(sfGrid:SFGridItem)=>{
   const nX:string = typeof sfGrid.nX === "number"? 
-  JSON.stringify(sfGrid.nX)
-  : sfGrid.nX
-  ;
-  const nY: string = typeof sfGrid.nY === "number"? 
-  JSON.stringify(sfGrid.nY)
-  : sfGrid.nY
-  ;
-  const stationName: string[] =(sfGrid.arePt3 !==null && sfGrid.arePt2 !==null )?  [sfGrid.arePt1, sfGrid.arePt2, sfGrid.arePt3] : sfGrid.arePt2!==null? [sfGrid.arePt1, sfGrid.arePt2] :[sfGrid.arePt1];const landRegId: MidLandAreaCode |undefined =getMidLandAreaCode(sfGrid);
+    JSON.stringify(sfGrid.nX)
+    : sfGrid.nX
+    ;
+    const nY: string = typeof sfGrid.nY === "number"? 
+    JSON.stringify(sfGrid.nY)
+    : sfGrid.nY
+    ;
 
+    return {
+      nX:nX,
+      nY:nY
+    }
+};
+/**
+ * sfGrid를 활용해 해당 위치의 단기 예보를 찾는데 쓰이는 midLandAreaCode와 midTaAreaCode를 찾아서 이를 반환
+ * @param sfGrid 
+ * @returns landRegId: MidLandAreaCode | undefined , taRegId: MidTaAreaCode | undefined;
+ */
+const findLandTaCode =(sfGrid:SFGridItem)=>{
+  const landRegId: MidLandAreaCode |undefined =getMidLandAreaCode(sfGrid);
   const taRegId:MidTaAreaCode|undefined  = getMidTaAreaCode(sfGrid);
+
+  return {
+    landRegId:landRegId,
+    taRegId:taRegId
+  }
+};
+/**
+ * weather 의 nation 값을 반환
+ * @param baseDate_svf 
+ * @param baseDate_today 
+ * @param hours 
+ * @param baseTime_svf 
+ * @param baseDate_yesterday 
+ * @param timeArry 
+ * @param todayTimeArry 
+ * @param threeDays 
+ * @returns  Promise<Error | Area[]>
+ */
+const  getNationData =(baseDate_svf: string, baseDate_today:string, hours:number, baseTime_svf: SVFBaseTime, baseDate_yesterday: string, timeArry: string[], todayTimeArry: string[], threeDays: string[])=>{
+  const data =Promise
+  .all(areaArry.map(async(item:AreaInform)=>{
+    const {nX, nY}= changeNType
+    (item.sfGrid);
+    const {landRegId, taRegId} =item ;
+    const sVFcst =  await getSVFcast(nX,nY,baseDate_svf,baseTime_svf ,baseDate_yesterday,timeArry,todayTimeArry, threeDays);
+
+    const midFcst =landRegId !==undefined && taRegId !==undefined? await getMidFcast(landRegId, taRegId,baseDate_today,baseDate_yesterday, hours ): (
+      landRegId === undefined?
+      (
+        taRegId ===undefined?
+        new Error('[Error] landRegId and taRegId are undefined')
+        :
+        new Error('[Error] landRegId is undefined')
+      ):
+      new Error('[Error] taRegId is undefined')
+    );
+    
+    if(!(sVFcst instanceof Error) && !(midFcst instanceof Error)){
+      const svfDay :Day[] =changeSvfToDay(sVFcst);
+      const midDay: Day[] = changeMidToDay(midFcst);
+
+      const area : Area ={
+        areaInform:{
+          ...item
+        },
+        day:[...svfDay, ...midDay]
+      };
+      return area
+    }else{
+      const area : Area ={
+        areaInform:{
+          ...item
+        },
+        day:null
+      };
+      return area
+    }
+
+  }
+  ))
+  .then((result)=> result)
+  .catch((err)=>{
+    const error =new Error( err);
+    return error
+  })
+  ;
+  return data
+};
+/**
+ * 현 위치에 대한  현재 날씨, 앞으로의 기상 전망, 일몰,전국 날씨를 반환하거나 error 메시지가 담긴 글을 반환
+ * @param sfGrid 
+ * @param longitude 
+ * @param latitude 
+ * @returns 
+ */
+export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitude:string)=>{
+  const {nX, nY}= changeNType(sfGrid);
+  const stationName: string[] =(sfGrid.arePt3 !==null && sfGrid.arePt2 !==null )?  [sfGrid.arePt1, sfGrid.arePt2, sfGrid.arePt3] : sfGrid.arePt2!==null? [sfGrid.arePt1, sfGrid.arePt2] :[sfGrid.arePt1];
+  const {landRegId, taRegId} = findLandTaCode(sfGrid);
   const sidoName: ApiAreaCode = getApAreaCode(sfGrid);
   const today = new Date();
   const hours =today.getHours();
@@ -698,9 +858,11 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     ):
     new Error('[Error] taRegId is undefined')
   );
+  const nationData = await getNationData(baseDate_svf,baseDate_today,hours,baseTime_svf,baseDate_yesterday,timeArry ,todayTimeArry, threeDays);
+
   const apGrade = await getApInform(sidoName,stationName);
   const sunInform =await getSunInform(longitude,latitude,baseDate_today);
-
+    
   // state로 변경 
   const changeHourItem =(t:SVFTime)=>({
     date:t.fcstDate,
@@ -724,7 +886,8 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
       !(uSNcst instanceof Error )&&
       !(midFcst instanceof Error)  && 
       !(apGrade instanceof Error ) &&  
-      !(sunInform instanceof Error) ){
+      !(sunInform instanceof Error) &&
+      !(nationData instanceof Error)){
         
     const targetSVFcst = sVFcst.map((i:SVFDay)=>{
       if(sVFcst.indexOf(i)===0){
@@ -733,59 +896,9 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
         return i
       }
     });
-    const svfDay :Day[] = sVFcst.map((d:SVFDay)=>{
-      const am = d.slice(0,11);
-      const pm =d.slice(12);
-      const getAvg =(arry:number[])=>{
-        const length =arry.length;
-        const sum =arry.reduce((a,b)=>a+b);
-        const avg = sum / length; 
-        return avg 
-      };
-      const amData = {
-        sky : getAvg(am.map((t:SVFTime)=>Number(t.sky))),
-        pop:getAvg(am.map((t:SVFTime)=>Number(t.pop))),
-        pty : getAvg(am.map((t:SVFTime)=> Number(t.pty))),
-      };
-      const pmData = {
-        sky : getAvg(pm.map((t:SVFTime)=>Number(t.sky))),
-        pop:getAvg(pm.map((t:SVFTime)=>Number(t.pop))),
-        pty : getAvg(pm.map((t:SVFTime)=> Number(t.pty))),
-      };
+    const svfDay :Day[] =changeSvfToDay(sVFcst);
 
-
-      const day:Day ={
-        dayslater:sVFcst.indexOf(d), //0-5 (today=0)
-        am:{
-          pop: amData.pop,
-          sky :getSkyType(amData.sky, amData.pty)
-        },
-        pm:{
-          pop: pmData.pop,
-          sky :getSkyType(pmData.sky, pmData.pty)
-        },
-        tmn:Number(d[0].tmn),
-        tmx:Number(d[0].tmx)
-      };
-      return day
-    });
-
-    const midDay = midFcst.map((d:MidFcstDay)=>{
-      const day:Day ={
-        dayslater: midFcst.indexOf(d) + 3 ,
-        am: {
-          pop:Number(d.rnStAm),
-          sky: d.wfAm
-        },
-        pm:{
-          pop:Number(d.rnStPm),
-          sky: d.wfPm
-        },
-        tmn: d.taMin,
-        tmx: d.taMax
-      };
-      return day
-    });
+    const midDay: Day[] = changeMidToDay(midFcst);
     
     const weather :WeatherState ={
       state:"success",
@@ -809,7 +922,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
         return daily
       }),
       weekly:[...svfDay, ...midDay],
-      nation:null,
+      nation:nationData,
       sunRiseAndSet : {
         sunRise :sunInform.sunrise ,
         sunSet : sunInform.sunset
@@ -824,6 +937,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     midFcst  instanceof Error  && string.concat(`skyCode error: ${midFcst}`);
     apGrade  instanceof Error  &&  string.concat(`skyCode error: ${apGrade}`);
     sunInform instanceof Error && string.concat(`skyCode error: ${sunInform}`);
+    nationData instanceof Error && string.concat(`nationData error: ${nationData}`)
     return string
   }
 };
