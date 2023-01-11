@@ -3,12 +3,12 @@ import React, { useEffect, useRef} from 'react';
 import { useDispatch , useSelector   } from 'react-redux';
 import {  ThunkDispatch  } from 'redux-thunk';
 import { RootState } from './modules';
-import { PositionAction, PositionState } from './modules/position';
+import { PositionAction, PositionState, PositionSuccessData } from './modules/position';
 import { positionSlice } from './modules/position/reducer';
-import { getPositionThunk,toolkitPosition } from './modules/position/thunk';
+import { CurrentPosition, getPositionThunk,toolkitPosition } from './modules/position/thunk';
 import {   WeatherAction, WeatherState } from './modules/weather';
 import { weatherSlice } from './modules/weather/reducer';
-import { getWeatherThunk } from './modules/weather/thunk';
+import { getWeatherThunk, toolkitWeather } from './modules/weather/thunk';
 
 function App () {  
   const position =useSelector((state:RootState)=> state.positionReducer);
@@ -19,8 +19,8 @@ function App () {
   const positionThunkDispatch =useDispatch<ThunkDispatch<PositionState,unknown,PositionAction>>();
   const weatherThunkDispatch =useDispatch<ThunkDispatch<WeatherState, unknown,WeatherAction>>();
   const dispatch =useDispatch();
-  const toolkitDispatch =useDispatch<ThunkDispatch<PositionState, unknown, AnyAction>>();
-
+  const toolkitDispatch =useDispatch<ThunkDispatch<PositionState|WeatherState, CurrentPosition|PositionState, AnyAction>>();
+  
   const startThunk =useRef<boolean>(false);
   const startSaga =useRef<boolean>(false);
   const startToolkit =useRef<boolean>(false);
@@ -39,21 +39,19 @@ function App () {
     navigator.geolocation.getCurrentPosition((pos:GeolocationPosition)=>{
       const latitude =JSON.stringify(pos.coords.latitude) ;
       const longitude =JSON.stringify(pos.coords.longitude);
-      const loadingPosition :PositionState ={
-        state:"loading",
-        error:null,
+      const currentPosition :CurrentPosition ={
         longitude: longitude,
-        latitude: latitude,
-        sfGrid:  null,
-      };
+        latitude: latitude
+      }
       try{
         if(middleware === thunk){
           startThunk.current = true; 
-          positionThunkDispatch(getPositionThunk(loadingPosition))
+          positionThunkDispatch(getPositionThunk(currentPosition))
         }else if(middleware=== saga){
           startSaga.current = true;
-          dispatch(positionActions.request(loadingPosition));
+          dispatch(positionActions.request(currentPosition));
         }else{
+          startToolkit.current =true;
           const currentPosition = {longitude:longitude ,latitude:latitude};
           toolkitDispatch(toolkitPosition(currentPosition));
         }
@@ -78,13 +76,25 @@ function App () {
     dispatchAction(toolkit);
   };
   useEffect(()=>{
-    if(position.state === "success"){
+    if(position.state === "success" && (
+      position.longitude !==null &&
+      position.latitude !==null &&
+      position.sfGrid !==null
+    ) ){
+      const positionSuccessDate: PositionSuccessData ={
+        longitude:position.longitude,
+        latitude:position.latitude,
+        sfGrid:position.sfGrid 
+      }
       if(startThunk.current){
-        weatherThunkDispatch(getWeatherThunk(position))
+        weatherThunkDispatch(getWeatherThunk(positionSuccessDate))
         startThunk.current = false; 
-      }else{
-        dispatch(weatherActions.request(position));
+      }else if(startSaga.current){
+        dispatch(weatherActions.request(positionSuccessDate));
         startSaga.current =false;
+      }else{
+        startToolkit.current =false;
+        toolkitDispatch(toolkitWeather(positionSuccessDate))
       }
     }
   },[position.state]);
