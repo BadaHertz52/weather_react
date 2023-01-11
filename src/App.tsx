@@ -52,7 +52,6 @@ function App () {
           dispatch(positionActions.request(currentPosition));
         }else{
           startToolkit.current =true;
-          const currentPosition = {longitude:longitude ,latitude:latitude};
           toolkitDispatch(toolkitPosition(currentPosition));
         }
       }catch(error){
