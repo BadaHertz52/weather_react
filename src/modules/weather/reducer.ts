@@ -1,5 +1,6 @@
 import { createSlice  ,PayloadAction} from "@reduxjs/toolkit";
-import { PositionState } from "../position";
+import { PositionState, PositionSuccessData } from "../position";
+import { toolkitWeather } from "./thunk";
 import { WeatherState } from "./types";
 
 
@@ -41,6 +42,28 @@ export const weatherSlice =createSlice({
       state:"failure",
       error:action.payload
     })
+  },
+  extraReducers(builder) {
+    builder
+    .addCase( toolkitWeather.pending , (state, action)=>{
+      return {
+        ...noneState,
+        state:action.meta.requestStatus
+      }
+    })
+    .addCase(toolkitWeather.fulfilled , (state, action)=>{
+      return{
+        ...action.payload
+      }
+    })
+    .addCase(toolkitWeather.rejected, (state, action)=>{
+      return {
+        ...noneState,
+        state:action.meta.requestStatus,
+        error:action.error as Error
+      }
+    })
+  },
 });
 
 export const {reset,request, success, failure} = weatherSlice.actions ;

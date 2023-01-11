@@ -3,6 +3,7 @@ import { getWeatherData } from "../api";
 import { PositionState, PositionSuccessData, SFGridItem } from "../position/types";
 import { WeatherAction, WeatherState } from "./types";
 import { request, success, failure } from "./reducer";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getWeatherThunk =(positionSuccessData:PositionSuccessData):ThunkAction<void,WeatherState, unknown,WeatherAction>=>async(dispatch)=>{
   const {longitude, latitude, sfGrid}=positionSuccessData;
@@ -21,3 +22,23 @@ export const getWeatherThunk =(positionSuccessData:PositionSuccessData):ThunkAct
     dispatch(failure(error));
   }
   
+};
+
+export const toolkitWeather = createAsyncThunk (
+  'weather/toolkitWeather',
+  async ( positionSuccessData:PositionSuccessData,thunkAPI) => {
+    const {longitude, latitude, sfGrid} = positionSuccessData;
+    try {
+      const data = await getWeatherData(sfGrid,longitude,latitude);
+      if(typeof data === "string"){
+        const error = new Error (`[Error : weather data]:${data}`);
+        return thunkAPI.rejectWithValue(error);
+      }else{
+        return data
+      }
+    } catch (error) {
+      
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+)
