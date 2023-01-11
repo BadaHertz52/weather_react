@@ -12,7 +12,7 @@ const initialState :WeatherState ={
   nation:null,
   sunRiseAndSet:null
 };
-const nonState :WeatherState ={
+const noneState :WeatherState ={
   state:"none",
   error:null,
   nowWeather:null,
@@ -27,21 +27,20 @@ export const weatherSlice =createSlice({
   initialState,
   reducers :{
     reset :(state)=>({
-      ...nonState
+      ...noneState
     }),
-    request :(state , action:PayloadAction<PositionState|null>)=>({
-        ...nonState,
+    request :(state , action:PayloadAction<PositionSuccessData>)=>({
+        ...noneState,
         state:"loading"
       }),
     success :(state, action:PayloadAction<WeatherState>) =>({
       ...action.payload
     }),
     failure : (state, action:PayloadAction< Error>)=>({
-      ...state,
-      state:"error",
+      ...noneState,
+      state:"failure",
       error:action.payload
     })
-  }
 });
 
 export const {reset,request, success, failure} = weatherSlice.actions ;

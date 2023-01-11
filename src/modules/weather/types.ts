@@ -176,11 +176,22 @@ export type SunRiseAndSet ={
   sunSet :string|null|undefined
 };
 const none ="none";
+//redux- middleware
 const loading ="loading";
 const dataSuccess ="success";
-const error ="error";
+const dataFailure ="failure";
+//redux-toolkit createAsyncThunk
+const pending ="pending";
+const fulfilled ="fulfilled";
+const rejected ="rejected";
 
-export type DataState = typeof none| typeof loading| typeof dataSuccess|typeof error;
+export type DataState = typeof none|
+                        typeof pending|
+                        typeof loading| 
+                        typeof dataSuccess|
+                        typeof fulfilled |
+                        typeof rejected|
+                        typeof dataFailure;
 
 export type WeatherState ={
   state:DataState,
