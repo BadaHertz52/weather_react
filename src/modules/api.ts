@@ -81,6 +81,7 @@ const sunApi:Api ={
   url :"http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService",
   inqury :"getLCRiseSetInfo"
 };
+
 /**
  * url 에 요청을 보내 외부 api에서 data를 가져오는 함수
  * @param url 
@@ -382,7 +383,11 @@ Promise<{
                 .catch((e:Error)=> {return e});
 };
 
-
+/**
+ * kako API 에서 받아온 data를 활용해 적합한 sfGrid 값을 도출하는 함수 
+ * @param doc 
+ * @returns 
+ */
 const findAreaGrid =(doc:KakaoDoumentType)=>{
   const arry1 = sfGrid.filter((i)=> i.arePt1 === doc.region_1depth_name);
 
@@ -406,7 +411,12 @@ const findAreaGrid =(doc:KakaoDoumentType)=>{
 
   
 };
-
+/**
+ * 현재 사용자의 위치(위도,경도)를 이용해 kakao API를 통해 현재 위치의 행정구역명을 찾아낸 후, 적합한 sfGrid 값을 반환하는 함수 
+ * @param latitude 
+ * @param longitude 
+ * @returns 
+ */
 export const  getAreaData =async(latitude:string, longitude:string):Promise<SFGridItem | Error>=>{
   const url =`https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${longitude}&y=${latitude}`;
   return await fetch(url,{
@@ -436,7 +446,11 @@ export const  getAreaData =async(latitude:string, longitude:string):Promise<SFGr
   .catch((e:Error) => e);
 };
 
-
+/**
+ * sfGrid를 이용해 현 위치에 대한 midLandAreaCode 를 반환
+ * @param sfGrid 
+ * @returns 
+ */
 function getMidLandAreaCode (sfGrid:SFGridItem){
   const mid1 =["서울특별시", "인천광역시", "경기도"];
   const mid2_3 =["강원도"];
@@ -474,7 +488,11 @@ function getMidLandAreaCode (sfGrid:SFGridItem){
     }
   }
 };
-
+/**
+ * sfGrid를 이용해 현 위치에 대한 midLandAreaCode 를 반환
+ * @param sfGrid 
+ * @returns 
+ */
 function getMidTaAreaCode(sfGrid:SFGridItem){
   const pt1 =sfGrid.arePt1;
   const pt2 =sfGrid.arePt2;
@@ -519,7 +537,11 @@ function getMidTaAreaCode(sfGrid:SFGridItem){
     }
   }
 };
-
+/**
+ * sfGrid를 이용해 현 위치에 대한 ApiAreaCode 를 반환
+ * @param sfGrid 
+ * @returns 
+ */
 function getApAreaCode(sfGrid:SFGridItem):ApiAreaCode{
   const pt1 =sfGrid.arePt1;
   const arry =["충청븍도", "층청남도","전라북도",
@@ -548,6 +570,11 @@ const changeTwoDigit =(n:number)=>{
     return JSON.stringify(n)
   }
 }
+/**
+ * day(type:Date)를 `yyyymmdd` 형태로 변환
+ * @param day 
+ * @returns 
+ */
 const changeBaseDate =(day:Date)=>{
   const month =day.getMonth()+1;
   const date = day.getDate();
@@ -555,12 +582,21 @@ const changeBaseDate =(day:Date)=>{
   const baseDate = `${year}${changeTwoDigit(month)}${changeTwoDigit(date)}`;
   return baseDate
 };
+/**
+ * 어제 날짜를 `yyyymmdd` 형태로 변환
+ * @param date 
+ * @returns 
+ */
 const getYesterDay =(date:number)=>{
   const yesterday = new Date( new Date().setDate(date -1));
   // new Date() 말고 today를 쓰면 today 가 이전 날로 변경되는 오류 발생
   return changeBaseDate(yesterday);
 };
-
+/**
+ * 시간을 `hhmm`으로 변환
+ * @param h 
+ * @returns 
+ */
 const changeHourToString =(h:number)=> {
   const changedH =changeTwoDigit(h);
   return `${changedH}00`;
