@@ -39,12 +39,12 @@ export const positionSlice =createSlice({
   },
   extraReducers(builder) {
     builder
-    .addCase(toolkitPosition.pending ,(state, actoin)=>{
+    .addCase(toolkitPosition.pending ,(state, action)=>{
       return {
         state :"loading",
         error :null,
-        longitude:null,
-        latitude:null,
+        longitude: action.meta.arg.longitude,
+        latitude:action.meta.arg.latitude,
         sfGrid:null
       }
     })
@@ -52,12 +52,12 @@ export const positionSlice =createSlice({
       return {...action.payload}
     })
     .addCase(toolkitPosition.rejected, (state, action)=>{
-      const error = new Error (`Rejected get sfGrid`);
-     return {
+      const err = action.error as Error 
+      return {
         state:"error",
-        error :error,
-        longitude:null,
-        latitude:null,
+        error :err,
+        longitude:action.meta.arg.longitude,
+        latitude:action.meta.arg.latitude,
         sfGrid:null
       }
     })
