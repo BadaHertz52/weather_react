@@ -4,10 +4,10 @@ import { getAreaData  } from "../api";
 import { request, success,failure } from "./reducer";
 import { PositionAction, PositionState} from "./types";
 
-export const getPositionThunk =(positionState:PositionState):ThunkAction<void, PositionState,unknown,PositionAction>=>async(dispatch)=>{
-  const {latitude, longitude}=positionState; 
-  dispatch(request(positionState));
-  if (latitude !==null && longitude !==null) {
+export const getPositionThunk =(currentPosition:CurrentPosition):ThunkAction<void, PositionState,unknown,PositionAction>=>async(dispatch)=>{
+  const {latitude, longitude}=currentPosition; 
+  dispatch(request(currentPosition));
+  try {
     const sfGrid = await getAreaData(latitude,longitude);
     if(!(sfGrid instanceof Error)){
       const position :PositionState={
@@ -22,14 +22,15 @@ export const getPositionThunk =(positionState:PositionState):ThunkAction<void, P
       const error =new Error (`Can't find sfGrid:{latitude:${latitude}, logitude:${longitude}}`);
       dispatch(failure(error));
     }
-  }else{
-    const error = new Error(`latidue or longitude is null : {type of latitude : ${typeof latitude} , typeof longitude :${typeof longitude}  }`);
-    dispatch(failure(error));
+  
+  } catch (error) {
+    const e = new Error ('Fail to get area data');
+    dispatch(failure(e));
   }
 
 };
 
-type CurrentPosition ={
+export type CurrentPosition ={
   longitude:string,
   latitude:string
 };
@@ -43,7 +44,7 @@ export const toolkitPosition = createAsyncThunk(
       const sfGrid = await getAreaData(latitude,longitude);
       const error =new Error (`Can't find sfGrid:{latitude:${latitude}, logitude:${longitude}}`);
       const position :PositionState={
-        state: sfGrid instanceof Error ? "error" :  "success",
+        state: sfGrid instanceof Error ? "rejected" :  "fulfilled",
         error: sfGrid instanceof Error ? error :null,
         latitude:latitude,
         longitude:longitude,
