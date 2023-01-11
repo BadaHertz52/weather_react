@@ -37,22 +37,22 @@ type CurrentPosition ={
 
 export const toolkitPosition = createAsyncThunk(
   'position/toolkitPosition',
-  async (currentPosition:CurrentPosition , {rejectWithValue}) => {
+  async (currentPosition:CurrentPosition , thunkAPI) => {
     const {latitude, longitude}=currentPosition;
     try {
       const sfGrid = await getAreaData(latitude,longitude);
-    const error =new Error (`Can't find sfGrid:{latitude:${latitude}, logitude:${longitude}}`);
-    const position :PositionState={
-      state: sfGrid instanceof Error ? "error" :  "success",
-      error: sfGrid instanceof Error ? error :null,
-      latitude:latitude,
-      longitude:longitude,
-      sfGrid:sfGrid instanceof Error ? null : sfGrid
-    };
-    return position;
+      const error =new Error (`Can't find sfGrid:{latitude:${latitude}, logitude:${longitude}}`);
+      const position :PositionState={
+        state: sfGrid instanceof Error ? "error" :  "success",
+        error: sfGrid instanceof Error ? error :null,
+        latitude:latitude,
+        longitude:longitude,
+        sfGrid:sfGrid instanceof Error ? null : sfGrid
+      };
+      return position;
     } catch (err) {
-      return rejectWithValue(err)
-    } 
-    
-  }
+      const error = err as Error
+      return thunkAPI.rejectWithValue(error.message)
+    };
+  } 
 )
