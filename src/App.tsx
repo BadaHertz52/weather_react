@@ -1,79 +1,40 @@
-import { AnyAction, AsyncThunkAction } from '@reduxjs/toolkit';
+import './assets/main.css';
+import { AnyAction} from '@reduxjs/toolkit';
 import React, { useEffect, useRef} from 'react';
 import { useDispatch , useSelector   } from 'react-redux';
 import {  ThunkDispatch  } from 'redux-thunk';
+import Hourly from './component/Hourly';
+import Loaction from './component/Loaction';
+import Nation from './component/Nation';
+import Now from './component/Now';
+import Sun from './component/Sun';
+import Weekly from './component/Weekly';
 import { RootState } from './modules';
 import { PositionAction, PositionState, PositionSuccessData } from './modules/position';
-import { positionSlice } from './modules/position/reducer';
-import { CurrentPosition, getPositionThunk,toolkitPosition } from './modules/position/thunk';
+import { CurrentPosition} from './modules/position/thunk';
 import {   WeatherAction, WeatherState } from './modules/weather';
 import { weatherSlice } from './modules/weather/reducer';
 import { getWeatherThunk, toolkitWeather } from './modules/weather/thunk';
 
 function App () {  
   const position =useSelector((state:RootState)=> state.positionReducer);
-  const {longitude, latitude, sfGrid}=position; 
+
   const weather= useSelector((state:RootState) => state.weatherReducer);
-  const positionActions = positionSlice.actions;
+  
   const weatherActions =weatherSlice.actions;
-  const positionThunkDispatch =useDispatch<ThunkDispatch<PositionState,unknown,PositionAction>>();
+
+  const positionThunkDispatch = useDispatch<ThunkDispatch<PositionState, unknown, PositionAction>>();
+
   const weatherThunkDispatch =useDispatch<ThunkDispatch<WeatherState, unknown,WeatherAction>>();
   const dispatch =useDispatch();
+
   const toolkitDispatch =useDispatch<ThunkDispatch<PositionState|WeatherState, CurrentPosition|PositionSuccessData, AnyAction>>();
   
   const startThunk =useRef<boolean>(false);
   const startSaga =useRef<boolean>(false);
   const startToolkit =useRef<boolean>(false);
 
-  const thunk ="thunk" ;
-  const saga ="saga";
-  const toolkit="toolkit";
 
-  type Middleware = typeof thunk | typeof saga | typeof toolkit; 
-
-  function dispatchAction (middleware:Middleware){
-    position.state !=="none" &&
-    dispatch(positionActions.reset());
-    position.state !=="none" && dispatch(weatherActions.reset()) ;
-
-    navigator.geolocation.getCurrentPosition((pos:GeolocationPosition)=>{
-      const latitude =JSON.stringify(pos.coords.latitude) ;
-      const longitude =JSON.stringify(pos.coords.longitude);
-      const currentPosition :CurrentPosition ={
-        longitude: longitude,
-        latitude: latitude
-      }
-      try{
-        if(middleware === thunk){
-          startThunk.current = true; 
-          positionThunkDispatch(getPositionThunk(currentPosition))
-        }else if(middleware=== saga){
-          startSaga.current = true;
-          dispatch(positionActions.request(currentPosition));
-        }else{
-          startToolkit.current =true;
-          toolkitDispatch(toolkitPosition(currentPosition));
-        }
-      }catch(error){
-        const e =new Error (`can't find sfGrid`)
-        dispatch(positionActions.failure(e));
-      }
-    },(error)=>{
-      const e =new Error (`can't find currentPostion`)
-      dispatch(positionActions.failure(e));
-    });
-  };
-  function onClickThunk(){
-    dispatchAction(thunk)
-  };  
-
-  function onClickSaga (){
-    dispatchAction(saga)
-  };
-
-  function onClickToolkitThunk (){
-    dispatchAction(toolkit);
-  };
   useEffect(()=>{
     if(position.state === "success" &&
     weather.state !=="success"&&
@@ -101,40 +62,30 @@ function App () {
   },[position.state]);
   return (
     <div className="App">
-      <button 
-        className='toolKitThunkBtn'
-        onClick={onClickToolkitThunk}
-      >
-        toolkit-thunk
-      </button>
-      <button 
-        className='thunkBtn'
-        onClick={onClickThunk}
-      >
-        redux-thunk
-      </button>
-      <button
-        className='sagaBtn'
-        onClick ={onClickSaga}
-      >
-        redux-saga
-      </button>
-      <div>position state : ${position.state}</div>
-      <div>weather state : ${weather.state}</div>
-      {weather.state==="success"&&
-        <div>
-          <div>today:{weather.threeDay!==null && weather.threeDay[0].date}</div>
-          <div>sky:{weather.nowWeather?.sky}</div>
-          <div>
-            sunrise:{weather.sunRiseAndSet?.sunRise}
+      <div className='top' role="menu">
+        <Loaction
+          startSaga={startSaga}
+          startThunk={startThunk}
+          startToolkit={startToolkit}
+          positionThunkDispatch={positionThunkDispatch}
+          toolkitDispatch={toolkitDispatch}
+        />
+      </div>
+      <div id='container' role="main">
+        <div className ="section">
+          <div className="section_center">
+            <Now
+            />
+            <Hourly/>
+            <Weekly/>
+            
           </div>
-          <div>
-            sunset:{weather.sunRiseAndSet?.sunSet}
+          <div className="section_rigth">
+            <Nation/>
+            <Sun/>
           </div>
-          <div>tmn:{weather.weekly!==null && weather.weekly[0].tmn}</div>
-          <div>tmx:{weather.weekly!==null && weather.weekly[0].tmx}</div>
         </div>
-      }
+      </div>
 
     </div>
   );

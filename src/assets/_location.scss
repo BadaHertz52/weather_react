@@ -1,0 +1,27 @@
+.location_dropdown{
+  width: fit-content;
+  height: 1.5rem;
+  &:hover{
+    .dropdown-content{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }
+}
+.dropdown-content {
+  display: none;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 6px;
+  background-color: rgb(243, 243, 243);
+  -webkit-box-shadow: 0px 0px 27px 1px #BFBFBF; 
+  box-shadow: 0px 0px 27px 1px #BFBFBF;
+
+  .btns{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 8px;
+    width: 100%;
+  }
+}
