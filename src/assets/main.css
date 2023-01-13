@@ -1,8 +1,34 @@
+.location {
+  display: flex;
+  align-items: center;
+}
+
+.location_area {
+  font-size: 1.5rem;
+  font-weight: bolder;
+}
+
+.dropBtn {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.7rem;
+}
+.dropBtn svg {
+  font-size: 1.3rem;
+}
+
 .location_dropdown {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  height: 1.5rem;
+  position: relative;
 }
 .location_dropdown:hover .dropdown-content {
   display: flex;
@@ -12,17 +38,39 @@
 
 .dropdown-content {
   display: none;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
+  position: absolute;
+  width: 310px;
   padding: 10px;
   border-radius: 6px;
   background-color: rgb(243, 243, 243);
   box-shadow: 0px 0px 27px 1px #BFBFBF;
+}
+.dropdown-content .header {
+  font-size: 15px;
+  text-align: center;
 }
 .dropdown-content .btns {
   display: flex;
   justify-content: space-around;
   margin-top: 8px;
   width: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.topbar {
+  display: flex;
+  height: 4rem;
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  align-items: center;
+  border-bottom: 1px solid black;
+}
+.topbar > div:first-child {
+  font-size: 1.5rem;
+  font-weight: bolder;
+  margin-right: 14px;
 }/*# sourceMappingURL=main.css.map */

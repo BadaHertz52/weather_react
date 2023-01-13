@@ -1,1 +1,18 @@
 @import './location';
+body{
+  margin: 0;
+}
+.topbar{
+  display: flex;
+  height: 4rem;
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  align-items: center;
+  border-bottom: 1px solid black;
+  & > div:first-child {
+    font-size: 1.5rem;
+    font-weight: bolder;
+    margin-right: 14px;
+  }
+}
