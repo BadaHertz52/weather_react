@@ -62,7 +62,10 @@ function App () {
   },[position.state]);
   return (
     <div className="App">
-      <div className='top' role="menu">
+      <div className='topbar'>
+        <div>
+          날씨
+        </div>
         <Loaction
           startSaga={startSaga}
           startThunk={startThunk}
