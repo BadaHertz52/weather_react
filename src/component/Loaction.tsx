@@ -8,10 +8,11 @@ import { CurrentPosition, getPositionThunk, PositionAction, PositionState, Posit
 import { positionSlice } from '../modules/position/reducer';
 import { WeatherState } from '../modules/weather';
 import { weatherSlice } from '../modules/weather/reducer';
- 
+import {MdLocationSearching ,MdShareLocation,MdMyLocation ,MdLocationDisabled,} from 'react-icons/md';
 
 const StyledBtn =styled.button`
-  width: 100px;
+  width: 30%;
+  font-size:1rem;
   box-shadow:inset 0px 1px 0px 0px #ffffff;
 	background:linear-gradient(to bottom, #ebebeb 25%, #dad9d9e9 100%);
 	background-color:#ededed;
@@ -114,11 +115,22 @@ const Loation =({
       </div>
       <div className="location_dropdown">
         <div className="dropBtn">
-          dropdown
+          {position.state ==="none" &&
+            <MdLocationSearching/>
+          }
+          {position.state ==="pending" &&
+            <MdShareLocation/>
+          }
+          {position.state === "success" &&
+          <MdMyLocation/>
+          }
+          {position.state === "failure"&&
+          <MdLocationDisabled/>
+          }
         </div>
         <div className="dropdown-content">
           <div className="header">
-          Select the method to get weather information.
+          Select the method to get weather data.
           </div>
           <div className="btns">
             <StyledBtn 
