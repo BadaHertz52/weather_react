@@ -62,32 +62,37 @@ function App () {
   },[position.state]);
   return (
     <div className="App">
-      <div className='topbar'>
-        <div>
-          날씨
+      <div id='topbar' role="banner">
+        <div className="inner">
+          <div className="logo">
+            날씨
+          </div>
+          <Loaction
+            startSaga={startSaga}
+            startThunk={startThunk}
+            startToolkit={startToolkit}
+            positionThunkDispatch={positionThunkDispatch}
+            toolkitDispatch={toolkitDispatch}
+          />
         </div>
-        <Loaction
-          startSaga={startSaga}
-          startThunk={startThunk}
-          startToolkit={startToolkit}
-          positionThunkDispatch={positionThunkDispatch}
-          toolkitDispatch={toolkitDispatch}
-        />
+
       </div>
       <div id='container' role="main">
-        <div className ="section">
-          <div className="section_center">
-            <Now
-            />
-            <Hourly/>
-            <Weekly/>
-            
+        <div id="content">
+          <div className ="section_wrap">
+            <div className="section_center">
+              <Now
+              />
+              <Hourly/>
+              <Weekly/>
+
+            </div>
+            <div className="section_rigth">
+              <Nation/>
+              <Sun/>
+            </div>
           </div>
-          <div className="section_rigth">
-            <Nation/>
-            <Sun/>
-          </div>
-        </div>
+      </div>
       </div>
 
     </div>
