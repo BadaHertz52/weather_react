@@ -1,4 +1,5 @@
 import React from 'react';
+const nonePosition ="현재 위치";
 const noneWeather ="현재 위치에 대한 날씨";
 const nowWeather ="실시간 날씨";
 const sun ="일출,일몰";
@@ -6,7 +7,8 @@ const weekly ="주간 날씨예보";
 const hourly ="시간별 날씨 예보";
 const nation ="전국 날씨 예보";
 
-type NoneTarget = typeof noneWeather|
+type NoneTarget = typeof nonePosition|
+                  typeof noneWeather|
                   typeof nowWeather| 
                   typeof sun| 
                   typeof weekly| 
