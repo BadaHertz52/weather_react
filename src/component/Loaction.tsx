@@ -9,6 +9,7 @@ import { positionSlice } from '../modules/position/reducer';
 import { WeatherState } from '../modules/weather';
 import { weatherSlice } from '../modules/weather/reducer';
 import {MdLocationSearching ,MdShareLocation,MdMyLocation ,MdLocationDisabled,} from 'react-icons/md';
+import None from './None';
 
 const StyledBtn =styled.button`
   width: 30%;
@@ -99,18 +100,26 @@ const Loation =({
   return (
     <div className="location">
       <div className="loaction_area">
-        {position.sfGrid !==null ?
-          ( position.sfGrid.arePt2 !== null ?
-              position.sfGrid.arePt3 !==null?
-                `${position.sfGrid.arePt2}
-                
-                ${position.sfGrid.arePt3}`
-              :
-              position.sfGrid.arePt2
-            :
-            position.sfGrid.arePt1 
+        {(position.state ==="failure" || position.state === "none" )&&
+          <None target="현재 위치" />
+        }
+        {position.state ==="pending" &&
+          "위치 찾는 중"
+        }
+        {position.state ==="success" &&
+          (position.sfGrid !==null ?
+              ( position.sfGrid.arePt2 !== null ?
+                  position.sfGrid.arePt3 !==null?
+                    `${position.sfGrid.arePt2}
+
+                    ${position.sfGrid.arePt3}`
+                  :
+                  position.sfGrid.arePt2
+                :
+                position.sfGrid.arePt1 
+              )
+            : <None target="현재 위치" />
           )
-        : "위치 정보 없음"
         }
       </div>
       <div className="location_dropdown">
@@ -130,7 +139,12 @@ const Loation =({
         </div>
         <div className="dropdown-content">
           <div className="header">
-          Select the method to get weather data.
+            <p>
+              어떤 방식으로 날씨 정보를 불러올까요?
+            </p>
+            <p>
+              원하는 방식을 선택해주세요.
+            </p>
           </div>
           <div className="btns">
             <StyledBtn 
