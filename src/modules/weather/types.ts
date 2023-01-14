@@ -29,14 +29,10 @@ export type PtyCodeType = typeof sunny |
                           typeof snowRain | 
                           typeof snow|
                           typeof shower;
-export type SkyType = typeof sunny |
-                      typeof cloudy| 
-                      typeof veryCloudy |
+
+export type SkyType = SkyCodeType | 
+                      PtyCodeType |
                       typeof spellRain|
-                      typeof rainy |
-                      typeof snowRain |
-                      typeof snow |
-                      typeof shower |
                       typeof cldRain |
                       typeof cldSnow |
                       typeof cldRainSnow|
@@ -81,6 +77,12 @@ export type PmType = typeof good|
               typeof bad | 
               typeof veryBad;
 
+export const gradeArry : PmType[]=["좋음","보통","나쁨","매우 나쁨"];
+
+type AmPmType ={
+  pop:number,
+  sky:SkyType|string
+};
 
 export type NowWeather ={
   //온도
@@ -94,7 +96,14 @@ export type NowWeather ={
   //초미세먼지
   pm25Grade:PmType,
 };
-
+export type TomorrowWeather ={
+    //미세먼지
+    pm10Grade:PmType,
+    //초미세먼지
+    pm25Grade:PmType,
+    am:AmPmType,
+    pm:AmPmType,
+};
 export type HourWeather ={
   date:string,
   hour:string, //24시간제
@@ -111,10 +120,7 @@ export type DailyWeather ={
   date:string,
   hourly :HourWeather[]
 };
-type AmPmType ={
-  pop:number,
-  sky:SkyType|string
-};
+
 
 export type Day ={
   dayslater:number, //0-5 (today=0)
@@ -420,6 +426,7 @@ export type WeatherState ={
   state:DataState,
   error:Error|null,
   nowWeather:NowWeather |null,
+  tomrrowWeather : TomorrowWeather|null,
   threeDay:DailyWeather[]|null,
   weekly:Day[]|null,
   nation:Area[]|null,

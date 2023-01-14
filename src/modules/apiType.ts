@@ -161,7 +161,7 @@ export type MidFcstDay ={
 export type MidFcst =MidFcstDay[];
 
 //api;
-export type ApItem ={
+export type ApNowItem ={
               stationName : string
               mangName : string
               sidoName : string
@@ -190,6 +190,51 @@ export type ApItem ={
               no2Flag : string
               pm10Flag : string
               pm25Flag : string
+};
+export type ApFcstItem ={
+  resultCode:string,
+  resultMsg:string,
+  numOfRows :string,
+  pageNo :string,
+  totalCount:string, 
+  items :any,
+  dataTime :string,
+  informCode:string, 
+  informOverall :string
+  informCause :string
+  informGrade :string
+  actionKnack :any,
+  imageUrl1 :string
+  imageUrl2 :string
+  imageUrl3 :string
+  imageUrl4 :string
+  imageUrl5 :string
+  imageUrl6 :string
+  imageUrl7 :string
+  imageUrl8 :string
+  imageUrl9 :string
+  informData :string
+};
+export type ApFcstInformGrade ={
+  서울 : PmType,
+  제주 : PmType,
+  전남 : PmType,
+  전북 : PmType,
+  광주 : PmType,
+  경남 : PmType,
+  경북 : PmType,
+  울산 : PmType,
+  대구 : PmType,
+  부산 : PmType,
+  충남 : PmType,
+  충북 : PmType,
+  세종 : PmType,
+  대전 : PmType,
+  영동 : PmType,
+  영서 : PmType,
+  경기남부 : PmType,
+  경기북부 : PmType,
+  인천 : PmType
 };
 
 export type PmGrade ={

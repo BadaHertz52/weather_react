@@ -23,6 +23,18 @@ export const weatherSample :WeatherState ={
   state:"success",
   error:null,
   nowWeather:{"tmp":-0.5,sky:"맑음",reh:"72",wind:{vec:"남서향",wsd:"0.6"},"pm10Grade":"보통","pm25Grade":"나쁨"},
+  tomrrowWeather:{
+    pm10Grade:"좋음",
+    pm25Grade:"좋음",
+    am:{
+      pop:0,
+      sky:"맑음"
+    },
+    pm:{
+      pop:5,
+      sky:"흐림"
+    }
+  },
   threeDay:[
     {date:"20221231",
     hourly:[

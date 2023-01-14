@@ -1,6 +1,6 @@
-import { ApiAreaCode, MidLandAreaCode, midLandAreaCodeZip, midTaArea, midTaAreaCode, MidTaAreaCode } from "./areaCodeType";
-import {  Area, areaArry, AreaInform, DailyWeather, Day, getSkyCode, getSkyType, getWsd, PmType, SkyCodeType, WeatherState } from "./weather/types";
-import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApItem, SVFBaseTime,  KakaoDoumentType, MidFcstDay}from "./apiType";
+import { ApFcstAreaCode, ApiAreaCode, MidLandAreaCode, midLandAreaCodeZip, midTaArea, midTaAreaCode, MidTaAreaCode, west } from "./areaCodeType";
+import {  Area, areaArry, AreaInform, DailyWeather, Day, getSkyCode, getSkyType, getWsd, gradeArry, PmType, SkyCodeType, WeatherState } from "./weather/types";
+import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApNowItem, SVFBaseTime,  KakaoDoumentType, MidFcstDay, ApFcstItem}from "./apiType";
 import { sfGrid} from './sfGrid'; 
 import { SFGridItem } from "./position/types";
 
@@ -38,6 +38,10 @@ const inqury_mid_midTa ="getMidTa";
  * 시도별 실시간 대기오염 측정 정보 조회 
  */
 const inqury_air_ctprvnRltmMesureDnsty  ="getCtprvnRltmMesureDnsty";
+/**
+ * 시도별 대기오염 예보 
+ */
+const inqury_air_minuDustFrcstDspth ="getMinuDustFrcstDspth";
 
 type SFInqury =typeof inqury_short_ultraSrtFcst|
 typeof inqury_short_ultraSrtNcst|
@@ -71,7 +75,7 @@ const midFcstApi :Api ={
  */
 const apInformApi:Api ={
   url:"http://apis.data.go.kr/B552584/ArpltnInforInqireSvc",
-  inqury:inqury_air_ctprvnRltmMesureDnsty
+  inqury:inqury_air_ctprvnRltmMesureDnsty || inqury_air_minuDustFrcstDspth
 };
 
 /** 
@@ -331,17 +335,17 @@ const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode, today
 
 };
 /**
- * 미세먼지, 초미세먼지 등급을 반환하는 함수
+ * 실시간 미세먼지, 초미세먼지 등급을 반환하는 함수
  * @param sidoName 
  * @param stationName (type: string[]) 측정 지역의 행정구역명을 시/도 ,구/군/시, 구/시, 읍/면/동, 리/동 으로 나누어 배열형태로 나타낸것 
  * @returns Promise<PmGrade|string>
  */
-const getApInform =async(sidoName:ApiAreaCode, stationName:string[]):Promise<PmGrade|Error>=>{
-  const url = `${apInformApi.url}/${apInformApi.inqury}?sidoName=${sidoName}&returnType=JSON&serviceKey=${publicApiKey}&numOfRows=100000&ver=1.3`;
-  const items =await getApiItems(url ,"apInform");
+const getApNow =async(sidoName:ApiAreaCode, stationName:string[]):Promise<PmGrade|Error>=>{
+  const url = `${apInformApi.url}/${inqury_air_ctprvnRltmMesureDnsty}?sidoName=${sidoName}&returnType=JSON&serviceKey=${publicApiKey}&numOfRows=100000&ver=1.3`;
+  const items =await getApiItems(url ,"apNow");
   if(!(items instanceof Error)){
-    const targetItem:ApItem = items.filter((i:ApItem)=> stationName.includes(i.stationName))[0];
-    const gradeArry : PmType[]=["좋음","보통","나쁨","매우 나쁨"];
+    const targetItem:ApNowItem = items.filter((i:ApNowItem)=> stationName.includes(i.stationName))[0];
+    
     const pm :PmGrade = {
       pm10Grade1h:gradeArry[Number(targetItem.pm10Grade1h) -1],
       pm25Grade1h:gradeArry[Number(targetItem.pm25Grade1h)-1]
@@ -352,7 +356,99 @@ const getApInform =async(sidoName:ApiAreaCode, stationName:string[]):Promise<PmG
   }
 
 };
+/**
+ * 'yyymmdd'를 'yyyy-mm-dd'로 변형해 반환하는 함수
+ * @param baseDate 형태:yyymmdd
+ * @returns 
+ */
+function changeSearchDate(baseDate:string){
+  const year = baseDate.slice(0,4);
+  const month =baseDate.slice(4,6);
+  const date =baseDate.slice(6);
+  const searchDate =`${year}-${month}-${date}`;
+  return searchDate
+};
 
+function findApFcstArea (sidoName:ApiAreaCode ,sfGrid:SFGridItem):ApFcstAreaCode{
+  const targetSido =["강원", "경기"]
+  if(targetSido.includes(sidoName)){
+    const pt2 =sfGrid.arePt2;
+    switch (sidoName) {
+      case "강원":
+        if(pt2 ==null || !west.includes(pt2)){
+          // 강원도영동
+          return "영동"
+        }else{
+          //강원도영서
+          return "영서"
+        };
+      case "경기":
+        const south =["과천시","광명시","광주시","군포시","김포시","부천시","성남시","수원시","시흥시","안산시","안성시","안양시","여주시","오산시","용인시","의왕시","이천시","평택시","하남시","화성시" ,"양평군"];
+        let isSouth :boolean =false;
+        for (let i = 0; i < south.length; i++) {
+          const element = south[i];
+          if(pt2?.includes(element)){
+            isSouth = true;
+            i = south.length 
+          }
+        };
+        if(isSouth){
+          return "경기남부"
+        }else{
+          return "경기북부"
+        };
+      default: 
+        return sidoName;
+    }
+  }else{
+    return sidoName
+  }
+};
+/**
+ *  대기질 예보(오늘,내일,모레) 통보 조회
+ * @param baseDate 오늘 날짜 (형식:yyyymmdd)
+ * @param sidoName 시도 이름 
+ */
+const getApFcst =async(baseDate:string, sidoName:ApiAreaCode, sfGrid:SFGridItem)=>{
+  const searchDate = changeSearchDate(baseDate);
+  const now = new Date();
+  const tomorrow = new Date(now.setDate(now.getDate() + 1));
+  const tBaeDate = changeBaseDate(tomorrow);
+  const tSearchDate = changeSearchDate(tBaeDate);
+  const apFcstArea = findApFcstArea(sidoName,sfGrid);
+  const url=`${apInformApi.url}/${inqury_air_minuDustFrcstDspth}?&returnType=JSON&serviceKey=${publicApiKey}&numOfRows=100000&searchDate=${searchDate}` ;
+  const items =await getApiItems(url ,"apFcst") as ApFcstItem[]|Error;
+
+  if(items instanceof Error){
+    return items
+  }else{
+    const tomorrowFcst =items.filter((i:ApFcstItem)=> i.informData === tSearchDate)
+    const pm10Fcst = tomorrowFcst.filter((i:ApFcstItem)=> i.informCode ==="PM10")[0].informGrade;
+    const pm25Fcst =tomorrowFcst.filter((i:ApFcstItem)=> i.informCode ==="PM25")[0].informGrade;
+    function getPmGrde (pmData:string){
+      const indexOfSido = pmData.indexOf(apFcstArea);
+      const sliced1 = pmData.slice(indexOfSido + sidoName.length +1);
+      const indexOfComma = sliced1.indexOf(",");
+      const sliced2 = sliced1.slice(0,indexOfComma);
+      const grade = gradeArry
+                      .map((g:PmType)=> {
+                        if(sliced2.includes(g)){
+                          return g
+                        }else{
+                          return null
+                        }
+                      })
+                      .filter((i: PmType|null)=> i !==null)[0] as PmType;
+      return grade
+    };
+    const pm10Grade = getPmGrde(pm10Fcst);
+    const pm25Grade =getPmGrde(pm25Fcst);
+    return {
+      pm10Grade:pm10Grade,
+      pm25Grade:pm25Grade
+    }
+  }
+};
 /**
  * 
  * @param longitude longitude ( 실수(초/100): 서울-126.98000833333333 )
@@ -854,8 +950,8 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     new Error('[Error] taRegId is undefined')
   );
   const nationData = await getNationData(baseDate_svf,baseDate_today,hours,baseTime_svf,baseDate_yesterday,timeArry ,todayTimeArry, threeDays);
-
-  const apGrade = await getApInform(sidoName,stationName);
+  const nowApGrade = await getApNow(sidoName,stationName);
+  const tommorowApGrade =await getApFcst(baseDate_today, sidoName ,sfGrid);
   const sunInform =await getSunInform(longitude,latitude,baseDate_today);
     
   // state로 변경 
@@ -880,7 +976,8 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
       !(sVFcst instanceof Error ) && 
       !(uSNcst instanceof Error )&&
       !(midFcst instanceof Error)  && 
-      !(apGrade instanceof Error ) &&  
+      !(nowApGrade instanceof Error ) && 
+      !(tommorowApGrade instanceof Error ) && 
       !(sunInform instanceof Error) &&
       !(nationData instanceof Error)){
         
@@ -906,8 +1003,14 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
           vec: getWsd(uSNcst.vec),
           wsd: uSNcst.wsd
         },
-        pm10Grade: apGrade.pm10Grade1h,
-        pm25Grade: apGrade.pm25Grade1h
+        pm10Grade: nowApGrade.pm10Grade1h,
+        pm25Grade: nowApGrade.pm25Grade1h
+      },
+      tomrrowWeather :{
+        pm10Grade:tommorowApGrade.pm10Grade,
+        pm25Grade:tommorowApGrade.pm25Grade,
+        am:svfDay[1].am,
+        pm:svfDay[1].pm
       },
       threeDay : targetSVFcst.map((d:SVFDay)=> {
         const daily :DailyWeather ={
@@ -930,7 +1033,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     sVFcst instanceof Error  && string.concat(`skyCode error: ${sVFcst}`);
     uSNcst instanceof Error && string.concat(`skyCode error: ${uSNcst}`);
     midFcst  instanceof Error  && string.concat(`skyCode error: ${midFcst}`);
-    apGrade  instanceof Error  &&  string.concat(`skyCode error: ${apGrade}`);
+    nowApGrade  instanceof Error  &&  string.concat(`skyCode error: ${nowApGrade}`);
     sunInform instanceof Error && string.concat(`skyCode error: ${sunInform}`);
     nationData instanceof Error && string.concat(`nationData error: ${nationData}`)
     return string

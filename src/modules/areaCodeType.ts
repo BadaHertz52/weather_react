@@ -885,3 +885,13 @@ export type ApiAreaCode = typeof api_서울|
                           typeof api_경남|
                           typeof api_제주|
                           typeof api_세종;
+
+const 경기북부 ="경기북부";
+const 경기남부 ="경기남부";
+const 영서="영서";
+const 영동 ="영동";
+export type ApFcstAreaCode = ApiAreaCode | 
+                            typeof 경기북부|
+                            typeof 경기남부|
+                            typeof 영서|
+                            typeof 영동;
