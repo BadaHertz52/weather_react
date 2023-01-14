@@ -35,6 +35,9 @@ export const midLandAreaCodeZip :MidLandAreaCode[] =[
   midLand_제주 
 ];
 
+export const west =["철원군", "화천군" ,"양구군", "인제군", "춘천시", "홍천군", "횡성군","원주시","평창군","영월군", "정선군"];
+
+export const east =["강릉시", "삼척시", "태백시", "동해시", "양양군", "속초시", "고성군"];
                         
 // 중기 기온 예보 구역 코드
 const midTa_백령도 ="11A00101";

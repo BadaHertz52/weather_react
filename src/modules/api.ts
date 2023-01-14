@@ -462,11 +462,6 @@ function getMidLandAreaCode (sfGrid:SFGridItem){
   const mid9 =["부산광역시", "울산광역시" ,"경상북도"];
   const mid10 =["제주특별자치도"];
   const mid =[mid1, mid2_3, mid4 ,mid5 , mid6 ,mid7 ,mid8 ,mid9 ,mid10];
-
-  const west =["철원군", "화천군" ,"양구군", "인제군", "춘천시", "홍천군", "횡성군","원주시","평창군","영월군", "정선군"];
-
-  const east =["강릉시", "삼척시", "태백시", "동해시", "양양군", "속초시", "고성군"]
-
   const pt1 =sfGrid.arePt1;
 
   for (let i = 0; i < mid.length; i++) {
