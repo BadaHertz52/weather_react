@@ -1,0 +1,21 @@
+.weatherIcon {
+  svg{
+    fill:inherit
+  }
+}
+.overlapping{
+  display: flex;
+  position: relative;
+  .behind{
+    z-index: 0;
+    position: absolute;
+    top:0;
+    left:0;
+  }
+  .front{
+    z-index: 3;
+    position: absolute;
+    top:5px;
+    left:10px;
+  }
+}

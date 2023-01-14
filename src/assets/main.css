@@ -56,6 +56,27 @@
   width: 100%;
 }
 
+.weatherIcon svg {
+  fill: inherit;
+}
+
+.overlapping {
+  display: flex;
+  position: relative;
+}
+.overlapping .behind {
+  z-index: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.overlapping .front {
+  z-index: 3;
+  position: absolute;
+  top: 5px;
+  left: 10px;
+}
+
 body {
   margin: 0;
 }
