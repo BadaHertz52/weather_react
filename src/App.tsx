@@ -15,6 +15,7 @@ import { CurrentPosition} from './modules/position/thunk';
 import {   WeatherAction, WeatherState } from './modules/weather';
 import { weatherSlice } from './modules/weather/reducer';
 import { getWeatherThunk, toolkitWeather } from './modules/weather/thunk';
+import None from './component/None';
 
 function App () {  
   const position =useSelector((state:RootState)=> state.positionReducer);
@@ -79,19 +80,47 @@ function App () {
       </div>
       <div id='container' role="main">
         <div id="content">
+          {weather.state === "pending" &&
+            "loading"
+          }
+          {weather.state === "success" &&
           <div className ="section_wrap">
             <div className="section_center">
-              <Now
-              />
-              <Hourly/>
-              <Weekly/>
-
+              {weather.nowWeather !==null ?
+                <Now 
+                  nowWeather={weather.nowWeather}
+                />
+                : 
+                <None  target ={"실시간 날씨"} />
+              }
+              {weather.threeDay !==null?
+                <Hourly/>
+                :
+                <None  target ={"시간별 날씨 예보"} />
+              }
+              {weather.threeDay !==null?
+                <Weekly/>
+                :
+                <None  target ={"주간 날씨예보"} />
+              }
             </div>
             <div className="section_rigth">
-              <Nation/>
-              <Sun/>
+            {weather.sunRiseAndSet !==null?
+                <Nation/>
+                :
+                <None  target ={"전국 날씨 예보"} />
+              }
+            {weather.sunRiseAndSet !==null?
+                <Sun/>
+                :
+                <None  target ={"일출,일몰"} />
+              }
             </div>
           </div>
+          }
+          {(weather.state ==="failure" || weather.state ==="none")&&
+            <None target ={"현재 위치에 대한 날씨"} />
+          } 
       </div>
       </div>
 
