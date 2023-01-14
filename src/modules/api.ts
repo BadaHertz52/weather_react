@@ -1,5 +1,5 @@
 import { ApFcstAreaCode, ApiAreaCode, MidLandAreaCode, midLandAreaCodeZip, midTaArea, midTaAreaCode, MidTaAreaCode, west } from "./areaCodeType";
-import {  Area, areaArry, AreaInform, DailyWeather, Day, getSkyCode, getSkyType, getWsd, gradeArry, PmType, SkyCodeType, WeatherState } from "./weather/types";
+import {  Area, areaArry, AreaInform, DailyWeather, Day, getSkyCode, getSkyType, getWsd, gradeArry, PmType, SkyCodeType, SunRiseAndSet, WeatherState } from "./weather/types";
 import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApNowItem, SVFBaseTime,  KakaoDoumentType, MidFcstDay, ApFcstItem}from "./apiType";
 import { sfGrid} from './sfGrid'; 
 import { SFGridItem } from "./position/types";
@@ -407,14 +407,12 @@ function findApFcstArea (sidoName:ApiAreaCode ,sfGrid:SFGridItem):ApFcstAreaCode
 /**
  *  대기질 예보(오늘,내일,모레) 통보 조회
  * @param baseDate 오늘 날짜 (형식:yyyymmdd)
+ * @param tBaseDate 내일 날짜 (형식:yyyymmdd)
  * @param sidoName 시도 이름 
  */
-const getApFcst =async(baseDate:string, sidoName:ApiAreaCode, sfGrid:SFGridItem)=>{
+const getApFcst =async(baseDate:string,tBaseDate:string, sidoName:ApiAreaCode, sfGrid:SFGridItem)=>{
   const searchDate = changeSearchDate(baseDate);
-  const now = new Date();
-  const tomorrow = new Date(now.setDate(now.getDate() + 1));
-  const tBaeDate = changeBaseDate(tomorrow);
-  const tSearchDate = changeSearchDate(tBaeDate);
+  const tSearchDate = changeSearchDate(tBaseDate);
   const apFcstArea = findApFcstArea(sidoName,sfGrid);
   const url=`${apInformApi.url}/${inqury_air_minuDustFrcstDspth}?&returnType=JSON&serviceKey=${publicApiKey}&numOfRows=100000&searchDate=${searchDate}` ;
   const items =await getApiItems(url ,"apFcst") as ApFcstItem[]|Error;
@@ -454,29 +452,31 @@ const getApFcst =async(baseDate:string, sidoName:ApiAreaCode, sfGrid:SFGridItem)
  * @param longitude longitude ( 실수(초/100): 서울-126.98000833333333 )
  * @param latitude  latitude ( 실수 (초/100): 서울 -37.56356944444444)
  */
-const getSunInform =async(longitude:string, latitude:string,baseDate:string):
-Promise<{
-  sunrise: string | null | undefined;
-  sunset: string | null | undefined;
-  location: string | null | undefined;
-} | Error>=>{
-  const url =`${sunApi.url}/${sunApi.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${baseDate}&dnYn=Y&ServiceKey=${publicApiKey}`;
-  return await fetch(url)
+const getSunInform =async(longitude:string, latitude:string,threeDays:string[]):
+Promise<(Error | SunRiseAndSet)[]>=>{
+  const getUrl =(date:string)=>`${sunApi.url}/${sunApi.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${date}&dnYn=Y&ServiceKey=${publicApiKey}`;
+  const urlArry =threeDays.map((d:string)=> getUrl(d))
+  const fetchSunApi =async(url:string)=>await fetch(url)
                 .then(response => {
                   return response.text()
                 })
                 .then((data)=>{
                   const xml = new DOMParser().parseFromString(data, "text/xml");
-                  const sunrise = xml.querySelector("sunrise")?.textContent
-                  const sunset =xml.querySelector("sunset")?.textContent;
-                  const location =xml.querySelector("location")?.textContent;
-                  return {
-                    sunrise :sunrise,
-                    sunset:sunset,
-                    location:location
-                  }
+                  const sunrise = xml.querySelector("sunrise")?.textContent as string;
+                  const sunset =xml.querySelector("sunset")?.textContent as string;
+                  const inform:SunRiseAndSet  ={
+                    sunRise :sunrise,
+                    sunSet:sunset,
+                  };
+                  return inform
                 })
-                .catch((e:Error)=> {return e});
+                                        .catch((e:Error)=> {return e});
+      
+  return Promise.all(urlArry.map(async(url:string)=>{
+                const inform = await fetchSunApi(url);
+                return inform
+              })
+  )
 };
 
 /**
@@ -876,7 +876,6 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     const later = new Date (new Date().setDate(date + d )); 
     return changeBaseDate(later);
   });
-
   const baseDate_today =changeBaseDate(today);
   const baseDate_yesterday =getYesterDay(date);
   const baseDate_skyCode = minutes < 30 && hours === 0 ? 
@@ -951,8 +950,8 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
   );
   const nationData = await getNationData(baseDate_svf,baseDate_today,hours,baseTime_svf,baseDate_yesterday,timeArry ,todayTimeArry, threeDays);
   const nowApGrade = await getApNow(sidoName,stationName);
-  const tommorowApGrade =await getApFcst(baseDate_today, sidoName ,sfGrid);
-  const sunInform =await getSunInform(longitude,latitude,baseDate_today);
+  const tommorowApGrade =await getApFcst(baseDate_today,threeDays[1], sidoName ,sfGrid);
+  const sunInform =await getSunInform(longitude,latitude,threeDays);
     
   // state로 변경 
   const changeHourItem =(t:SVFTime)=>({
@@ -978,7 +977,6 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
       !(midFcst instanceof Error)  && 
       !(nowApGrade instanceof Error ) && 
       !(tommorowApGrade instanceof Error ) && 
-      !(sunInform instanceof Error) &&
       !(nationData instanceof Error)){
         
     const targetSVFcst = sVFcst.map((i:SVFDay)=>{
@@ -1021,10 +1019,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
       }),
       weekly:[...svfDay, ...midDay],
       nation:nationData,
-      sunRiseAndSet : {
-        sunRise :sunInform.sunrise ,
-        sunSet : sunInform.sunset
-      }
+      sunRiseAndSet : [...sunInform]
     };
     return weather;
   }else{

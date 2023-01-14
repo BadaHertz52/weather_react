@@ -430,7 +430,7 @@ export type WeatherState ={
   threeDay:DailyWeather[]|null,
   weekly:Day[]|null,
   nation:Area[]|null,
-  sunRiseAndSet :SunRiseAndSet |null
+  sunRiseAndSet :(SunRiseAndSet|Error)[]|null
 };
 
 export type WeatherAction =
