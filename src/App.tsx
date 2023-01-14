@@ -86,9 +86,13 @@ function App () {
           {weather.state === "success" &&
           <div className ="section_wrap">
             <div className="section_center">
-              {weather.nowWeather !==null ?
+              {(weather.nowWeather !==null && weather.tomrrowWeather !==null  &&
+              weather.sunRiseAndSet !==null 
+              ) ?
                 <Now 
                   nowWeather={weather.nowWeather}
+                  tomrrowWeather ={weather.tomrrowWeather}
+                  todaySunInform ={weather.sunRiseAndSet[0]}
                 />
                 : 
                 <None  target ={"실시간 날씨"} />
