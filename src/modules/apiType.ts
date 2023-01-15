@@ -1,4 +1,4 @@
-import { PmType } from "./weather/types";
+import { PmType, SkyType } from "./weather/types";
 
 /**
  * 초단기 실황,초단기 예보 ,단기 예보 api data 속 item 의 공통 properties
@@ -84,7 +84,7 @@ export type SVFTime ={
   reh:string,
   //1시간 신적설(cm)
   sno:string,
-  sky:string,
+  sky:SkyType,
   //1시간 기온
   tmp:number,
   //일 최저 기온
@@ -136,11 +136,11 @@ export type MidFcstDay ={
   /**
    * 오전 날씨
    */
-  wfAm:string,
+  wfAm:SkyType,
   /**
    * 오후 날씨
    */
-  wfPm:string,
+  wfPm:SkyType,
   /**
    * 오전 강수 확률
    */
