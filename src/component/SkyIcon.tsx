@@ -1,10 +1,11 @@
 import React from 'react';
 import { SkyType } from '../modules/weather';
-import {} from 'react-icons/ti';
-import {BsCloudyFill, BsFillCloudRainFill, BsFillSunFill, BsSnow2} from 'react-icons/bs';
+import {RiSunFill} from 'react-icons/ri';
+import {BsCloudyFill, BsFillCloudRainFill,  BsMoonStarsFill, BsSnow2} from 'react-icons/bs';
 import {FaCloudShowersHeavy} from 'react-icons/fa';
 type SkyIconProperty ={
-  skyType:SkyType
+  skyType:SkyType,
+  day:boolean
 };
 type WeatherIconProperty ={
   className:string |undefined
@@ -80,22 +81,39 @@ export const SnowIcon =({className}:WeatherIconProperty)=>{
     </div>
   )
 };
-export const SunnyIcon =()=>{
+export const SunnyDayIcon =()=>{
   return(
-  <div className='sunnyIcon weatherIcon'>
+  <div className='sunnyDayIcon weatherIcon'>
       <svg width="0" height="0">
-        <linearGradient id="sunny_gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <linearGradient id="sunnyDay_gradient" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop  stopColor="#fed712" offset="5%" />
           <stop  stopColor="#ff9900" offset="100%" />
         </linearGradient>
       </svg>
-      <div style={{ fill: "url(#sunny_gradient)" }} >
-          <BsFillSunFill/>
+      <div style={{ fill: "url(#sunnyDay_gradient)" }} >
+          <RiSunFill/>
       </div>
     </div>
   )
 };
-const SkyIcon =({skyType}:SkyIconProperty)=>{
+
+export const SunnyNightIcon =()=>{
+  return(
+    <div className='sunnyNightIcon weatherIcon'>
+        <svg width="0" height="0">
+          <linearGradient id="sunnyNight_gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop  stopColor="#fff2af" offset="10%" />
+            <stop  stopColor="#ffd500" offset="100%" />
+          </linearGradient>
+        </svg>
+        <div style={{ fill: "url(#sunnyNight_gradient)" }}  >
+            <BsMoonStarsFill/>
+        </div>
+      </div>
+    )
+};
+
+const SkyIcon =({skyType ,day}:SkyIconProperty)=>{
   return (
     <div className='skyIcon'>
       {skyType ==="구름많고 눈" &&
@@ -148,7 +166,12 @@ const SkyIcon =({skyType}:SkyIconProperty)=>{
         <SnowIcon className='' />
       }
       {skyType ==="맑음" &&
-        <SunnyIcon/>
+        (day ?
+          <SunnyDayIcon/>
+        :
+          <SunnyNightIcon/>
+        )
+        
       }
       { skyType ==="흐리고 눈" &&
         <div className="overlapping">
