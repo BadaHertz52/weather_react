@@ -1013,7 +1013,9 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
         pm10Grade:tommorowApGrade.pm10Grade,
         pm25Grade:tommorowApGrade.pm25Grade,
         am:svfDay[1].am,
-        pm:svfDay[1].pm
+        pm:svfDay[1].pm ,
+        tmn:svfDay[1].tmn,
+        tmx:svfDay[1].tmx
       },
       threeDay : targetSVFcst.map((d:SVFDay)=> {
         const daily :DailyWeather ={

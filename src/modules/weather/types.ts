@@ -104,6 +104,8 @@ export type TomorrowWeather ={
     pm25Grade:PmType,
     am:AmPmType,
     pm:AmPmType,
+    tmn:number,
+    tmx:number
 };
 export type HourWeather ={
   date:string,
