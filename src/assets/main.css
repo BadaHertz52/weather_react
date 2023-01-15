@@ -77,6 +77,10 @@
   left: 10px;
 }
 
+.sunnyNightIcon {
+  transform: rotateY(180deg);
+}
+
 body {
   margin: 0;
 }
