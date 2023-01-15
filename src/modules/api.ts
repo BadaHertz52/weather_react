@@ -184,16 +184,16 @@ const getDaySvf =(arry:string[], targetDaySVF :SFcstItem[], fcstData:string ,tmn
         fcstDate:fcstData,
         fcstTime:t,
         pop: timeSVF.filter((i:SFcstItem)=> i.category === "POP")[0].fcstValue,
-      pty: timeSVF.filter((i:SFcstItem)=> i.category === "PTY")[0].fcstValue, 
-      pcp: timeSVF.filter((i:SFcstItem)=> i.category === "PCP")[0].fcstValue,
-      reh: timeSVF.filter((i:SFcstItem)=> i.category === "REH")[0].fcstValue ,
-      sno: timeSVF.filter((i:SFcstItem)=> i.category === "SNO")[0].fcstValue,
-      sky: timeSVF.filter((i:SFcstItem)=> i.category === "SKY")[0].fcstValue,
-      tmp:Number(timeSVF.filter((i:SFcstItem)=> i.category === "TMP")[0].fcstValue) ,
-      tmn:(tmn.fcstValue) ,
-      tmx:(tmx.fcstValue) ,
-      vec: Number(timeSVF.filter((i:SFcstItem)=> i.category === "VEC")[0].fcstValue) ,
-      wsd: timeSVF.filter((i:SFcstItem)=> i.category === "WSD")[0].fcstValue
+        pty: timeSVF.filter((i:SFcstItem)=> i.category === "PTY")[0].fcstValue, 
+        pcp: timeSVF.filter((i:SFcstItem)=> i.category === "PCP")[0].fcstValue,
+        reh: timeSVF.filter((i:SFcstItem)=> i.category === "REH")[0].fcstValue ,
+        sno: timeSVF.filter((i:SFcstItem)=> i.category === "SNO")[0].fcstValue,
+        sky: timeSVF.filter((i:SFcstItem)=> i.category === "SKY")[0].fcstValue as SkyType,
+        tmp:Number(timeSVF.filter((i:SFcstItem)=> i.category === "TMP")[0].fcstValue) ,
+        tmn:(tmn.fcstValue) ,
+        tmx:(tmx.fcstValue) ,
+        vec: Number(timeSVF.filter((i:SFcstItem)=> i.category === "VEC")[0].fcstValue) ,
+        wsd: timeSVF.filter((i:SFcstItem)=> i.category === "WSD")[0].fcstValue
     };
     return fcast;
   });
