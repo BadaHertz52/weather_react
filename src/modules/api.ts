@@ -464,13 +464,18 @@ Promise<(Error | SunRiseAndSet)[]>=>{
                   const xml = new DOMParser().parseFromString(data, "text/xml");
                   const sunrise = xml.querySelector("sunrise")?.textContent as string;
                   const sunset =xml.querySelector("sunset")?.textContent as string;
+                  const changeTimeString =(string:string)=>{
+                    const time = string.slice(0,2);
+                    const min = string.slice(2);
+                    return `${time}:${min}`;
+                  }
                   const inform:SunRiseAndSet  ={
-                    sunRise :sunrise,
-                    sunSet:sunset,
+                    sunRise :changeTimeString(sunrise),
+                    sunSet:changeTimeString(sunset),
                   };
                   return inform
                 })
-                                        .catch((e:Error)=> {return e});
+                .catch((e:Error)=> {return e});
       
   return Promise.all(urlArry.map(async(url:string)=>{
                 const inform = await fetchSunApi(url);
