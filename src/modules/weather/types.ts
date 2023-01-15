@@ -79,21 +79,22 @@ export type PmType = typeof good|
 
 export const gradeArry : PmType[]=["좋음","보통","나쁨","매우 나쁨"];
 
-type AmPmType ={
-  pop:number,
-  sky:SkyType|string
+export type AmPmType ={
+  sky:SkyType,
+  /* 강수 확률(%)*/
+  pop:number
 };
 
 export type NowWeather ={
-  //온도
+  /**온도*/
   tmp :number,
   sky:SkyType,
-  //습도
+  /**습도*/
   reh:string,
   wind:WindType
-  //미세먼지
+  /**미세먼지*/
   pm10Grade:PmType,
-  //초미세먼지
+  /**초미세먼지*/
   pm25Grade:PmType,
 };
 export type TomorrowWeather ={
@@ -107,10 +108,12 @@ export type TomorrowWeather ={
 export type HourWeather ={
   date:string,
   hour:string, //24시간제
+  /** 온도
+   */
   temp:number,
-  //강수확률(%)
+  /**강수확률(%)*/
   pop:string,
-  //강수량(mm)
+  /**강수량(mm)*/
   pcp:string,
   wind:WindType,
   //습도
