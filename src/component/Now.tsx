@@ -250,19 +250,19 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
                 </div>
               </div>
               <div className="tabList">
-                <button className='tabBtn on' onClick={showCurrent}>
-                  현재 날씨
+                <button 
+                  className={wrapStyle.left !=="-100%"? 'tabBtn on': 'tabBtn'} 
+                  onClick={showCurrent}
+                  name="현재 날씨"
+                >
                 </button>
-                <button className='tabBtn' onClick={showTomorrow}>
-                  내일 날씨
+                <button 
+                  className={wrapStyle.left ==="-100%"? 'tabBtn on': 'tabBtn'} 
+                  onClick={showTomorrow}
+                  name="내일 날씨"
+                >
                 </button>
               </div>
-              <button className='btn_prev' onClick={showCurrent}>
-                이전 보기
-              </button>
-              <button className='btn_next' onClick={showTomorrow}>
-                다음 보기
-              </button>
             </div>
           </div>
         </div>
