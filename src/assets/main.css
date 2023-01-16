@@ -67,10 +67,10 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 .now_now {
+  justify-content: center;
   height: 75px;
 }
 .now_now .summaryImg {
@@ -102,8 +102,12 @@
   font-size: 1rem;
 }
 
-.srcollControl, .scrollArea {
-  width: 100vw;
+.now_quickArea {
+  margin-top: 14px;
+}
+
+.scrollControl, .scrollArea {
+  width: 100%;
 }
 
 .scrollControl {
@@ -111,6 +115,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .scrollArea {
@@ -119,6 +124,7 @@
 }
 
 .summary_wrap {
+  position: absolute;
   top: 0;
   left: 0;
 }
@@ -130,8 +136,12 @@
   align-items: center;
   justify-content: center;
   height: 65px;
+  width: inherit;
 }
 
+.summary.current {
+  left: 0;
+}
 .summary.current li {
   float: left;
 }
@@ -146,6 +156,9 @@
   font-weight: bolder;
 }
 
+.summary.tomorrow {
+  left: 100%;
+}
 .summary.tomorrow td, .summary.tomorrow dl {
   display: flex;
 }
@@ -185,6 +198,62 @@
   font-size: 100%;
 }
 
+.tabList {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 0;
+}
+
+.tabBtn {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  margin-right: 10px;
+  border-radius: 50%;
+  background-color: rgb(218, 218, 218);
+  border: none;
+}
+.tabBtn.on {
+  background-color: rgb(88, 88, 88);
+}
+
+.scrollBtn {
+  display: none;
+}
+.scrollBtn svg {
+  font-size: inherit;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  fill: inherit;
+}
+.scrollBtn svg polygon {
+  fill: inherit;
+}
+.scrollBtn.pre {
+  left: 10%;
+}
+.scrollBtn.next {
+  left: 90%;
+}
+
+@media screen and (min-width: 1025px) {
+  .scrollBtn.on {
+    display: flex;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: calc((100% - 36px) / 2);
+  }
+}
 .weatherIcon svg {
   fill: inherit;
 }
@@ -244,9 +313,13 @@ body {
   width: 100%;
 }
 
-#content {
+#container {
   display: flex;
   justify-content: center;
+}
+
+.section_wrap {
+  margin-top: 1rem;
 }
 
 .blind {

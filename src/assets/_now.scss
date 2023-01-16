@@ -8,9 +8,9 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 .now_now{
+  justify-content: center;
   height: 75px ;
   .summaryImg{
     position: relative;
@@ -42,20 +42,25 @@
     }
   }
 }
-.srcollControl , .scrollArea {
-  width: 100vw;
+.now_quickArea{
+  margin-top: 14px;
+}
+.scrollControl , .scrollArea {
+  width: 100%;
 }
 .scrollControl{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 .scrollArea {
   position: relative;
   height: 65px;
 }
 .summary_wrap {
+  position: absolute;
   top:0;
   left: 0;
 }
@@ -66,8 +71,10 @@
   align-items: center;
   justify-content: center;
   height: 65px;
+  width: inherit;
 }
 .summary.current{
+  left:0;
   li {
     float: left;
   }
@@ -84,6 +91,7 @@
 }
 
 .summary.tomorrow{
+  left:100%;
   td , dl{
     display: flex;
   }
@@ -122,4 +130,26 @@
   width: 1.5rem;
   height: 1.5rem;
   font-size: 100%;
+}
+.tabList{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top:calc(100% + 14px);
+  left:0;
+}
+.tabBtn{
+  width: 8px;
+  height: 8px;
+  padding:0;
+  margin-right: 10px;
+  border-radius: 50%;
+  background-color: rgb(218, 218, 218);
+  border: none;
+  &.on{
+    background-color: rgb(88, 88, 88);
+  }
 }

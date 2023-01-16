@@ -1,5 +1,6 @@
 @import './location';
 @import './now';
+@import './scrollBtn';
 @import './skyIcon';
 body{
   margin: 0;
@@ -32,9 +33,12 @@ body{
 #container, #content , .section_wrap{
   width: 100%;
 }
-#content{
+#container{
   display: flex;
   justify-content: center;
+}
+.section_wrap{
+  margin-top: 1rem;
 }
 .blind{
   display: none;
@@ -53,6 +57,7 @@ li {
   top:0;
   left: 0;
 }
+
 @media screen and (min-width:1025px) {
   #topbar{
     .inner{
