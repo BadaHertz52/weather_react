@@ -2,6 +2,7 @@ import React , {useRef ,useState ,useEffect} from 'react';
 import { GiWaterDrop } from 'react-icons/gi';
 import styled, { CSSProperties } from 'styled-components';
 import { gradeArry, NowWeather, SunRiseAndSet, TomorrowWeather } from '../modules/weather';
+import ScrollBtn from './ScrollBtn';
 import SkyIcon from './SkyIcon';
 const PmDd = styled.dd`
 color: ${
@@ -263,6 +264,18 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
                 >
                 </button>
               </div>
+              <ScrollBtn
+                clickEvent ={showCurrent}
+                className ={`now_scrollBtn ${wrapStyle.left === "-100%" ? 'on' :''}`} 
+                name="이전 보기"
+                pre={true}
+              />
+              <ScrollBtn
+                className={`now_scrollBtn ${wrapStyle.left !== "-100%" ?'on':''}`} 
+                clickEvent={showTomorrow}
+                name="다음 보기"
+                pre={false}
+              />
             </div>
           </div>
         </div>

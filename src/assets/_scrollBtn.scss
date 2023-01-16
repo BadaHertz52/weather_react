@@ -1,0 +1,28 @@
+.scrollBtn {
+  display: none;
+  svg {
+    font-size: inherit;
+    width:fit-content;
+    height:fit-content;
+    fill:inherit;
+    polygon{
+      fill:inherit
+    }
+  }
+  &.pre {
+    left:10%;
+  }
+  &.next {
+    left:90%
+  }
+}
+
+@media screen and (min-width:1025px) {
+  .scrollBtn.on{
+    display: flex;
+    display:flex;
+    align-items:center;
+    position: absolute;
+    top:calc((100% - 36px) / 2);
+  }
+}
