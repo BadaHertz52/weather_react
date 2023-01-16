@@ -106,54 +106,34 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
     const day :boolean = hours < 18 ? true :false;
     const sunInformError =todaySunInform instanceof Error ;
     const quickAreaRef =useRef<HTMLDivElement>(null);
-    const [summaryStyle ,setSummaryStyle]=useState<CSSProperties|undefined>(undefined);
-    const [currentStyle ,setCurrentStyle]=useState<CSSProperties>({
-      width: summaryStyle !==undefined? summaryStyle.width : undefined,
-      left:0
-    });
-    const [tomorrowStyle ,setTomorrowStyle]=useState<CSSProperties>({
-      width: summaryStyle !==undefined? summaryStyle.width : undefined,
-      left:'100%'
+    const [wrapStyle ,setWrapStyle]=useState<CSSProperties>({
+      width:  undefined,
+      left:"0"
     });
 
     const changeSummaryStyle =()=>{
       if(quickAreaRef.current !==null ){
         const quickAreaWidth = quickAreaRef.current?.offsetWidth;
         const width = `${quickAreaWidth}px`
-        setSummaryStyle({
-          width: width
-        });
-        setCurrentStyle({
+        setWrapStyle({
           width:width,
-          left: currentStyle.left
-        })
-        setTomorrowStyle({
-          width:width,
-          left: tomorrowStyle.left
+          left: wrapStyle.left
         })
       }
       
     };
     const showCurrent=()=>{
-      setCurrentStyle({
-        width :currentStyle.width,
-        left:0
+      setWrapStyle({
+        width :wrapStyle.width,
+        left:"0"
       });
-      setTomorrowStyle({
-        width: tomorrowStyle.width,
-        left:'100%'
-      })
     };
 
     const showTomorrow =()=>{
-      setCurrentStyle({
-        width :currentStyle.width,
-        left:'100%'
+      setWrapStyle({
+        width :wrapStyle.width,
+        left:'-100%'
       });
-      setTomorrowStyle({
-        width: tomorrowStyle.width,
-        left:'0'
-      })
     };
     window.onresize = ()=>changeSummaryStyle();
     useEffect(()=>{
@@ -188,8 +168,8 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
           <div className="now_quickArea" ref={quickAreaRef}>
             <div className="scrollControl">
               <div className="scrollArea">
-                <div className="summary_wrap" style={summaryStyle}>
-                  <div className="summary current" style={currentStyle}>
+                <div className="summary_wrap" style={wrapStyle}>
+                  <div className="summary current">
                     <div className="summary_inner">
                       <ul className='summary_table'>
                         <li>
@@ -249,7 +229,7 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
                       </ul>
                     </div>
                   </div>
-                  <div className="summary tomorrow" style={tomorrowStyle}>
+                  <div className="summary tomorrow">
                     <div className="summary_inner">
                       <table className='summary_table'>
                         <tbody>
