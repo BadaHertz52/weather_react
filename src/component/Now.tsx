@@ -105,24 +105,72 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
     const hours = now.getHours()
     const day :boolean = hours < 18 ? true :false;
     const sunInformError =todaySunInform instanceof Error ;
+    const quickAreaRef =useRef<HTMLDivElement>(null);
+    const [summaryStyle ,setSummaryStyle]=useState<CSSProperties|undefined>(undefined);
+    const [currentStyle ,setCurrentStyle]=useState<CSSProperties>({
+      width: summaryStyle !==undefined? summaryStyle.width : undefined,
+      left:0
+    });
+    const [tomorrowStyle ,setTomorrowStyle]=useState<CSSProperties>({
+      width: summaryStyle !==undefined? summaryStyle.width : undefined,
+      left:'100%'
+    });
 
-    const showPre=()=>{
-
+    const changeSummaryStyle =()=>{
+      if(quickAreaRef.current !==null ){
+        const quickAreaWidth = quickAreaRef.current?.offsetWidth;
+        const width = `${quickAreaWidth}px`
+        setSummaryStyle({
+          width: width
+        });
+        setCurrentStyle({
+          width:width,
+          left: currentStyle.left
+        })
+        setTomorrowStyle({
+          width:width,
+          left: tomorrowStyle.left
+        })
+      }
+      
+    };
+    const showCurrent=()=>{
+      setCurrentStyle({
+        width :currentStyle.width,
+        left:0
+      });
+      setTomorrowStyle({
+        width: tomorrowStyle.width,
+        left:'100%'
+      })
     };
 
-    const showNext =()=>{
-
+    const showTomorrow =()=>{
+      setCurrentStyle({
+        width :currentStyle.width,
+        left:'100%'
+      });
+      setTomorrowStyle({
+        width: tomorrowStyle.width,
+        left:'0'
+      })
     };
+    window.onresize = ()=>changeSummaryStyle();
+    useEffect(()=>{
+      changeSummaryStyle();
+    },[quickAreaRef.current ]);
+
     return(
-      <div className="now">
-        <div className="inner">
+        <div className="now">
           <div className="now_now">
             <div className="summaryImg">
               <SkyIcon
                 skyType={nowWeather.sky}
                 day={day}
               />
-              <div className='temp'>
+            </div>
+            <div className="summary">
+            <div className='temp'>
                 <span className='blind'>
                   현재 온도
                 </span>
@@ -131,16 +179,17 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
                 °
                 </span>
               </div>
-            </div>
-            <div className="summary">
-              {nowWeather.sky}
+              <div className="sky">
+                {nowWeather.sky}
+              </div>
+              
             </div>
           </div>
-          <div className="now_quickArea">
+          <div className="now_quickArea" ref={quickAreaRef}>
             <div className="scrollControl">
               <div className="scrollArea">
-                <div className="summary_wrap">
-                  <div className="summary current">
+                <div className="summary_wrap" style={summaryStyle}>
+                  <div className="summary current" style={currentStyle}>
                     <div className="summary_inner">
                       <ul className='summary_table'>
                         <li>
@@ -200,7 +249,7 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
                       </ul>
                     </div>
                   </div>
-                  <div className="summary tomorrow">
+                  <div className="summary tomorrow" style={tomorrowStyle}>
                     <div className="summary_inner">
                       <table className='summary_table'>
                         <tbody>
@@ -221,23 +270,22 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
                 </div>
               </div>
               <div className="tabList">
-                <button className='tabBtn on' onClick={showPre}>
+                <button className='tabBtn on' onClick={showCurrent}>
                   현재 날씨
                 </button>
-                <button className='tabBtn' onClick={showNext}>
+                <button className='tabBtn' onClick={showTomorrow}>
                   내일 날씨
                 </button>
               </div>
-              <button className='btn_prev' onClick={showPre}>
+              <button className='btn_prev' onClick={showCurrent}>
                 이전 보기
               </button>
-              <button className='btn_next' onClick={showNext}>
+              <button className='btn_next' onClick={showTomorrow}>
                 다음 보기
               </button>
             </div>
           </div>
         </div>
-      </div>
     )
 };
 
