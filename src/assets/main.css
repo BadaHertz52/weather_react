@@ -56,6 +56,135 @@
   width: 100%;
 }
 
+.now {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.now_now, .now_quickArea {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.now_now {
+  height: 75px;
+}
+.now_now .summaryImg {
+  position: relative;
+}
+.now_now .summaryImg .weatherIcon, .now_now .summaryImg .iconWrap {
+  width: 75px;
+  height: 75px;
+}
+.now_now .summaryImg .iconWrap svg {
+  width: 100%;
+  height: 100%;
+  font-size: 100%;
+}
+.now_now .summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: bolder;
+}
+.now_now .summary .temp {
+  height: 70%;
+  font-size: 2.5rem;
+}
+.now_now .summary .sky {
+  height: 30%;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.srcollControl, .scrollArea {
+  width: 100vw;
+}
+
+.scrollControl {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.scrollArea {
+  position: relative;
+  height: 65px;
+}
+
+.summary_wrap {
+  top: 0;
+  left: 0;
+}
+
+.summary.current, .summary.tomorrow {
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 65px;
+}
+
+.summary.current li {
+  float: left;
+}
+.summary.current dl {
+  display: flex;
+}
+.summary.current dt {
+  color: rgba(110, 110, 110, 0.991);
+}
+.summary.current dd {
+  margin: 0 10px;
+  font-weight: bolder;
+}
+
+.summary.tomorrow td, .summary.tomorrow dl {
+  display: flex;
+}
+.summary.tomorrow tr {
+  display: flex;
+  align-items: center;
+}
+.summary.tomorrow th, .summary.tomorrow td {
+  height: 1.8rem;
+}
+.summary.tomorrow .skyIcon, .summary.tomorrow .weatherIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.summary.tomorrow td dl {
+  margin-left: 8px;
+}
+.summary.tomorrow dd {
+  width: 3rem;
+  font-weight: bolder;
+  text-align: center;
+}
+
+.summary_table {
+  width: 100%;
+  padding: 0;
+  display: flex;
+  font-size: 1rem;
+}
+.summary_table .unit {
+  font-size: 12px;
+}
+
+.summary_table .iconWrap svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 100%;
+}
+
 .weatherIcon svg {
   fill: inherit;
 }
@@ -111,13 +240,35 @@ body {
   content: "";
 }
 
-#container {
+#container, #content, .section_wrap {
   width: 100%;
 }
 
 #content {
   display: flex;
   justify-content: center;
+}
+
+.blind {
+  display: none;
+}
+
+ul, dl, dd {
+  margin: 0;
+}
+
+li {
+  list-style: none;
+}
+
+.weatherIcon {
+  position: relative;
+}
+
+.iconWrap {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 @media screen and (min-width: 1025px) {

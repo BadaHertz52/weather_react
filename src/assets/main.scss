@@ -1,4 +1,5 @@
 @import './location';
+@import './now';
 @import './skyIcon';
 body{
   margin: 0;
@@ -28,12 +29,29 @@ body{
     content:'';
   }
 }
-#container{
+#container, #content , .section_wrap{
   width: 100%;
 }
 #content{
   display: flex;
   justify-content: center;
+}
+.blind{
+  display: none;
+}
+ul , dl , dd{
+  margin :0;
+}
+li {
+  list-style: none;
+}
+.weatherIcon{
+  position: relative;
+}
+.iconWrap{
+  position: absolute;
+  top:0;
+  left: 0;
 }
 @media screen and (min-width:1025px) {
   #topbar{
