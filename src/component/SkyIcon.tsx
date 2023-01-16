@@ -23,10 +23,10 @@ export const CloudyIcon =({className , rain ,shower}:CloudyPorperty)=>{
           <stop  stopColor="#c5c5c5" offset="100%" />
         </linearGradient>
       </svg>
-      <div className={className} style={{ fill: "url(#cloudy_gradient)" }} >
+      <div className={`${className} iconWrap`} style={{ fill: "url(#cloudy_gradient)" }} >
       {
         rain ?
-          <BsFillCloudRainFill />
+          <BsFillCloudRainFill  />
         :
         (shower ?
           <FaCloudShowersHeavy />
@@ -50,7 +50,7 @@ export const VeryCloudyIcon =({className , rain ,shower}:CloudyPorperty)=>{
           <stop  stopColor="#7a7a7a" offset="100%" />
         </linearGradient>
       </svg>
-      <div className={className} style={{ fill: "url(#veryCloudy_gradient)" }} >
+      <div className={`${className} iconWrap`} style={{ fill: "url(#veryCloudy_gradient)" }} >
       {rain ?
           <BsFillCloudRainFill />
         :
@@ -75,7 +75,7 @@ export const SnowIcon =({className}:WeatherIconProperty)=>{
           <stop  stopColor="#019cef" offset="100%" />
         </linearGradient>
       </svg>
-      <div className={className} style={{ fill: "url(#snow_gradient)" }} >
+      <div className={`${className} iconWrap`} style={{ fill: "url(#snow_gradient)" }} >
           <BsSnow2/>
       </div>
     </div>
@@ -90,7 +90,7 @@ export const SunnyDayIcon =()=>{
           <stop  stopColor="#ff9900" offset="100%" />
         </linearGradient>
       </svg>
-      <div style={{ fill: "url(#sunnyDay_gradient)" }} >
+      <div className='iconWrap' style={{ fill: "url(#sunnyDay_gradient)" }} >
           <RiSunFill/>
       </div>
     </div>
@@ -106,7 +106,7 @@ export const SunnyNightIcon =()=>{
             <stop  stopColor="#ffd500" offset="100%" />
           </linearGradient>
         </svg>
-        <div style={{ fill: "url(#sunnyNight_gradient)" }}  >
+        <div className='iconWrap' style={{ fill: "url(#sunnyNight_gradient)" }}  >
             <BsMoonStarsFill/>
         </div>
       </div>
