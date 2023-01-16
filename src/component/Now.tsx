@@ -1,16 +1,16 @@
-import React from 'react';
-import { RiDropFill } from 'react-icons/ri';
-import styled from 'styled-components';
+import React , {useRef ,useState ,useEffect} from 'react';
+import { GiWaterDrop } from 'react-icons/gi';
+import styled, { CSSProperties } from 'styled-components';
 import { gradeArry, NowWeather, SunRiseAndSet, TomorrowWeather } from '../modules/weather';
 import SkyIcon from './SkyIcon';
 const PmDd = styled.dd`
 color: ${
 props =>
   props.className === gradeArry[0]?
-  "#15921b"
+  "#42a5f5"
   :
   props.className === gradeArry[1]?
-  "#42a5f5"
+  "#15921b"
   :
   props.className === gradeArry[2]?
   "#ff7b00"
@@ -30,8 +30,8 @@ const PopIcon =({pop}:PopIconProperty)=>{
           <stop  stopColor="#0098d8" offset="100%" />
         </linearGradient>
       </svg>
-      <div style={{ fill: "url(#pop_gradient)" }} >
-          <RiDropFill/>
+      <div style={{ fill: "url(#pop_gradient)" }}  className="iconWrap">
+          <GiWaterDrop/>
       </div>
     </div>
   )
