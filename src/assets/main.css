@@ -59,19 +59,22 @@
 .now {
   width: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-direction: column;
 }
 
 .now_now, .now_quickArea {
-  width: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .now_now {
   justify-content: center;
   height: 75px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
 }
 .now_now .summaryImg {
   position: relative;
@@ -103,36 +106,31 @@
 }
 
 .now_quickArea {
+  width: 100%;
   margin-top: 14px;
 }
 
-.scrollControl, .scrollArea {
-  width: 100%;
-}
-
 .scrollControl {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  width: calc(100% - 72px - 20px);
   position: relative;
 }
 
 .scrollArea {
+  width: 100%;
   position: relative;
   height: 65px;
   overflow-x: hidden;
 }
 
 .summary_wrap {
+  width: 100%;
   position: absolute;
-  top: 0;
   left: 0;
+  height: inherit;
 }
 
 .summary.current, .summary.tomorrow {
   position: absolute;
-  top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -223,6 +221,20 @@
   background-color: rgb(88, 88, 88);
 }
 
+@media screen and (min-width: 1025px) {
+  .now {
+    flex-direction: row;
+  }
+  .now_quickArea {
+    width: calc(100% - 200px);
+  }
+  .scrollControl {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
 .scrollBtn {
   display: none;
 }
@@ -240,10 +252,10 @@
   fill: inherit;
 }
 .scrollBtn.pre {
-  left: 10%;
+  left: -36px;
 }
 .scrollBtn.next {
-  left: 90%;
+  left: 100%;
 }
 
 @media screen and (min-width: 1025px) {
@@ -323,6 +335,13 @@ body {
   margin-top: 1rem;
 }
 
+.section_wrap, .section_center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .blind {
   display: none;
 }
@@ -351,5 +370,11 @@ li {
   }
   #content {
     width: 1160px;
+  }
+  .section_wrap {
+    flex-direction: row;
+  }
+  .section_center {
+    width: 751px;
   }
 }/*# sourceMappingURL=main.css.map */

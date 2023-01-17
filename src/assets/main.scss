@@ -40,6 +40,13 @@ body{
 .section_wrap{
   margin-top: 1rem;
 }
+.section_wrap ,.section_center{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .blind{
   display: none;
 }
@@ -66,5 +73,11 @@ li {
   }
   #content{
     width:1160px;
+  }
+  .section_wrap{
+    flex-direction: row;
+  }
+  .section_center{
+    width: 751px ;
   }
 }
