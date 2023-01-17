@@ -1,17 +1,18 @@
 .now{
   width: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-direction: column;
 }
 .now_now , .now_quickArea{
-  width: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 .now_now{
   justify-content: center;
   height: 75px ;
+  width: fit-content;
   .summaryImg{
     position: relative;
     .weatherIcon , .iconWrap{
@@ -43,31 +44,27 @@
   }
 }
 .now_quickArea{
+  width: 100%;
   margin-top: 14px;
 }
-.scrollControl , .scrollArea {
-  width: 100%;
-}
 .scrollControl{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  width: calc(100% - (36px)*2  - 20px);
   position: relative;
 }
 .scrollArea {
+  width: 100%;
   position: relative;
   height: 65px;
   overflow-x: hidden;
 }
 .summary_wrap {
+  width: 100%;
   position: absolute;
-  top:0;
   left: 0;
+  height: inherit;
 }
 .summary.current , .summary.tomorrow {
   position: absolute;
-  top:0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,7 +72,7 @@
   width: inherit;
 }
 .summary.current{
-  left:0;
+  left: 0;
   li {
     float: left;
   }
@@ -92,7 +89,7 @@
 }
 
 .summary.tomorrow{
-  left:100%;
+  left: 100%;
   td , dl{
     display: flex;
   }
@@ -152,5 +149,21 @@
   border: none;
   &.on{
     background-color: rgb(88, 88, 88);
+  }
+}
+
+@media screen and (min-width:1025px) {
+  .now{
+    flex-direction: row;
+  }
+  .now_quickArea{
+    width: calc(100% - 200px);
+  }
+  .scrollControl{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
   }
 }
