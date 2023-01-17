@@ -8,17 +8,19 @@ type AmPmProperty ={
 };
 const AmPm =({data ,am}:AmPmProperty)=>{
   return(
-    <div className="weather_inner">
+    <div className={`weather_inner ${am ? "am":"pm"}`}>
       <strong className='inner_text left'>
-        <span>오전</span>
+        <span className='timeslot'>
+          {am? "오전" : "오후"}
+        </span>
         <span className={`rainfall ${data.pop === 0 ? "none" : ""}`}>
           {Math.round(data.pop)}%
         </span>
       </strong>
       <SkyIcon
         skyType={data.sky}
-        day={am}
-      />
+        day={true}
+      /> 
     </div>
   )
 };
@@ -45,14 +47,14 @@ const Item =({item}:ItemPorperty)=>{
     <li className={`item day${item.dayslater}`}>
       <div className='day_data'>
         <div className='cell_date'>
-          <span className="date_inner">
+          <div className="date_inner">
             <strong className='day'>
               {day}
             </strong>
-            <span className='date'>
+            <div className='date'>
               {date}
-            </span>
-          </span>
+            </div>
+          </div>
         </div>
         <div className='cell_weather'>
           <AmPm
