@@ -107,10 +107,20 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
     const day :boolean = hours < 18 ? true :false;
     const sunInformError =todaySunInform instanceof Error ;
     const quickAreaRef =useRef<HTMLDivElement>(null);
+    const wrapRef =useRef<HTMLDivElement>(null);
     const [wrapStyle ,setWrapStyle]=useState<CSSProperties>({
       width:  undefined,
-      left:"0"
+      left:"0px"
     });
+    const currentWrapStyle :CSSProperties ={
+      ...wrapStyle,
+      transform:"translateX(0%)"
+    };
+    const tomorrowWrapStyle :CSSProperties ={
+      ...wrapStyle,
+      transform:`translateX(-100%)`
+    };
+    const initialSummary = useRef<SummaryType>(current);
 
     const changeSummaryStyle =()=>{
       if(quickAreaRef.current !==null ){
@@ -124,17 +134,13 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
       
     };
     const showCurrent=()=>{
-      setWrapStyle({
-        width :wrapStyle.width,
-        left:"0"
-      });
+      initialSummary.current = current 
+      setWrapStyle(currentWrapStyle);
     };
 
     const showTomorrow =()=>{
-      setWrapStyle({
-        width :wrapStyle.width,
-        left:'-100%'
-      });
+      initialSummary.current =tomorrow ;
+      setWrapStyle(tomorrowWrapStyle);
     };
     window.onresize = ()=>changeSummaryStyle();
     useEffect(()=>{
@@ -169,7 +175,7 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
           <div className="now_quickArea" ref={quickAreaRef}>
             <div className="scrollControl">
               <div className="scrollArea">
-                <div className="summary_wrap" style={wrapStyle}>
+                <div className="summary_wrap" style={wrapStyle} ref={wrapRef}>
                   <div className="summary current">
                     <div className="summary_inner">
                       <ul className='summary_table'>
@@ -252,13 +258,13 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
               </div>
               <div className="tabList">
                 <button 
-                  className={wrapStyle.left !=="-100%"? 'tabBtn on': 'tabBtn'} 
+                  className={initialSummary.current ===current? 'tabBtn on': 'tabBtn'} 
                   onClick={showCurrent}
                   name="현재 날씨"
                 >
                 </button>
                 <button 
-                  className={wrapStyle.left ==="-100%"? 'tabBtn on': 'tabBtn'} 
+                  className={initialSummary.current ===tomorrow? 'tabBtn on': 'tabBtn'} 
                   onClick={showTomorrow}
                   name="내일 날씨"
                 >
@@ -266,12 +272,12 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
               </div>
               <ScrollBtn
                 clickEvent ={showCurrent}
-                className ={`now_scrollBtn ${wrapStyle.left === "-100%" ? 'on' :''}`} 
+                className ={`now_scrollBtn ${initialSummary.current ===current ? 'on' :''}`} 
                 name="이전 보기"
                 pre={true}
               />
               <ScrollBtn
-                className={`now_scrollBtn ${wrapStyle.left !== "-100%" ?'on':''}`} 
+                className={`now_scrollBtn ${initialSummary.current === tomorrow ?'on':''}`} 
                 clickEvent={showTomorrow}
                 name="다음 보기"
                 pre={false}
