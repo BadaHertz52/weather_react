@@ -14,7 +14,7 @@ const BtnStyled = styled.button`
   box-shadow: 0px 0px 15px 2px rgba(112,112,112,0.28);
 `
 type BtnProperty ={
-  clickEvent :React.MouseEventHandler<HTMLButtonElement>,
+  clickEvent :() => void,
   className:string ,
   name:string,
   pre:boolean,
