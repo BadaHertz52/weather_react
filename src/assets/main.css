@@ -121,6 +121,7 @@
 .scrollArea {
   position: relative;
   height: 65px;
+  overflow-x: hidden;
 }
 
 .summary_wrap {
