@@ -318,12 +318,12 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
               </div>
               <ScrollBtn
                 clickEvent ={showCurrent}
-                className ={`now_scrollBtn ${initialSummary.current ===current ? 'on' :''}`} 
+                className ={`now_scrollBtn ${initialSummary.current === tomorrow ? 'on' :''}`} 
                 name="이전 보기"
                 pre={true}
               />
               <ScrollBtn
-                className={`now_scrollBtn ${initialSummary.current === tomorrow ?'on':''}`} 
+                className={`now_scrollBtn ${initialSummary.current === current ?'on':''}`} 
                 clickEvent={showTomorrow}
                 name="다음 보기"
                 pre={false}
