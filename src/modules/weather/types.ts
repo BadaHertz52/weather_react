@@ -433,7 +433,7 @@ export type WeatherState ={
   nowWeather:NowWeather |null,
   tomrrowWeather : TomorrowWeather|null,
   threeDay:DailyWeather[]|null,
-  weekly:Day[]|null,
+  week:Day[]|null,
   nation:Area[]|null,
   sunRiseAndSet :(SunRiseAndSet|Error)[]|null
 };

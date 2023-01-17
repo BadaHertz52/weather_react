@@ -10,7 +10,7 @@ import { WeatherState } from "./types";
 //   error:null,
 //   nowWeather:null,
 //   threeDay:null,
-//   weekly:null,
+//   week:null,
 //   nation:null,
 //   sunRiseAndSet:null
 // };
@@ -21,7 +21,7 @@ export const noneState :WeatherState ={
   nowWeather:null,
   tomrrowWeather:null,
   threeDay:null,
-  weekly:null,
+  week:null,
   nation:null,
   sunRiseAndSet:null
 };
