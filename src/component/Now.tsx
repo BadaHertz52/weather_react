@@ -187,7 +187,7 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
 
 
     return(
-        <div className="now">
+        <div className="now" aria-details='현재 날씨'>
           <div className="now_now">
             <div className="summaryImg">
               <SkyIcon
