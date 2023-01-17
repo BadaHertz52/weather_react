@@ -47,22 +47,25 @@
   width: 100%;
   margin-top: 14px;
 }
-.scrollControl{
-  width: calc(100% - (36px)*2  - 20px);
-  position: relative;
+.now{
+  .scrollControl{
+    width: calc(100% - (36px)*2  - 20px);
+    position: relative;
+  }
+  .scrollArea {
+    width: 100%;
+    position: relative;
+    height: 65px;
+    overflow-x: hidden;
+  }
+  .summary_wrap {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    height: inherit;
+  }
 }
-.scrollArea {
-  width: 100%;
-  position: relative;
-  height: 65px;
-  overflow-x: hidden;
-}
-.summary_wrap {
-  width: 100%;
-  position: absolute;
-  left: 0;
-  height: inherit;
-}
+
 .summary.current , .summary.tomorrow {
   position: absolute;
   display: flex;
@@ -159,7 +162,7 @@
   .now_quickArea{
     width: calc(100% - 200px);
   }
-  .scrollControl{
+  .now .scrollControl{
     display: flex;
     flex-direction: column;
     align-items: center;
