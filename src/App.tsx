@@ -8,7 +8,7 @@ import Loaction from './component/Loaction';
 import Nation from './component/Nation';
 import Now from './component/Now';
 import Sun from './component/Sun';
-import Weekly from './component/Weekly';
+import Week from './component/Week';
 import { RootState } from './modules';
 import { PositionAction, PositionState, PositionSuccessData } from './modules/position';
 import { CurrentPosition} from './modules/position/thunk';
@@ -102,8 +102,8 @@ function App () {
                 :
                 <None  target ={"시간별 날씨 예보"} />
               }
-              {weather.threeDay !==null?
-                <Weekly/>
+              {weather.week !==null?
+                <Week week ={weather.week} />
                 :
                 <None  target ={"주간 날씨예보"} />
               }

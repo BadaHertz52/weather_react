@@ -1024,7 +1024,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
         };
         return daily
       }),
-      weekly:[...svfDay, ...midDay],
+      week:[...svfDay, ...midDay],
       nation:nationData,
       sunRiseAndSet : [...sunInform]
     };
