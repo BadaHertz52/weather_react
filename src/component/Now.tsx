@@ -106,21 +106,14 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
     const hours = now.getHours()
     const day :boolean = hours < 18 ? true :false;
     const sunInformError =todaySunInform instanceof Error ;
-    const quickAreaRef =useRef<HTMLDivElement>(null);
     const wrapRef =useRef<HTMLDivElement>(null);
-    const [wrapStyle ,setWrapStyle]=useState<CSSProperties>({
-      width:  undefined,
-      left:"0px"
-    });
     const currentWrapStyle :CSSProperties ={
-      ...wrapStyle,
       transform:"translateX(0%)"
     };
     const tomorrowWrapStyle :CSSProperties ={
-      ...wrapStyle,
       transform:`translateX(-100%)`
     };
-    
+    const [wrapStyle ,setWrapStyle]=useState<CSSProperties>(currentWrapStyle);
     const scrollEvent = useRef<boolean>(false);
     const startX = useRef<number>(0);
     const moveX = useRef<number>(0);
@@ -129,17 +122,6 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
     type SummaryType = typeof current| typeof tomorrow;
     const initialSummary = useRef<SummaryType>(current);
 
-    const changeSummaryStyle =()=>{
-      if(quickAreaRef.current !==null ){
-        const quickAreaWidth = quickAreaRef.current?.offsetWidth;
-        const width = `${quickAreaWidth}px`
-        setWrapStyle({
-          width:width,
-          left: wrapStyle.left
-        })
-      }
-      
-    };
     const showCurrent=()=>{
       initialSummary.current = current 
       setWrapStyle(currentWrapStyle);
@@ -203,10 +185,6 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
       moveX.current =0;
     }
 
-    window.onresize = ()=>changeSummaryStyle();
-    useEffect(()=>{
-      changeSummaryStyle();
-    },[quickAreaRef.current ]);
 
     return(
         <div className="now">
@@ -233,7 +211,7 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
               
             </div>
           </div>
-          <div className="now_quickArea" ref={quickAreaRef}>
+          <div className="now_quickArea">
             <div className="scrollControl">
               <div className="scrollArea"
                 onMouseDown={(event)=>startScroll(event.clientX)}
