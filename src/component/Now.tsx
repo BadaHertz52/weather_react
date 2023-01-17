@@ -1,4 +1,4 @@
-import React , {useRef ,useState ,useEffect} from 'react';
+import React , {useRef ,useState ,useEffect , MouseEvent , TouchEvent} from 'react';
 import { GiWaterDrop } from 'react-icons/gi';
 import styled, { CSSProperties } from 'styled-components';
 import { gradeArry, NowWeather, SunRiseAndSet, TomorrowWeather } from '../modules/weather';
@@ -120,6 +120,13 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
       ...wrapStyle,
       transform:`translateX(-100%)`
     };
+    
+    const scrollEvent = useRef<boolean>(false);
+    const startX = useRef<number>(0);
+    const moveX = useRef<number>(0);
+    const current ="current";
+    const tomorrow ="tomorrow";
+    type SummaryType = typeof current| typeof tomorrow;
     const initialSummary = useRef<SummaryType>(current);
 
     const changeSummaryStyle =()=>{
@@ -142,6 +149,60 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
       initialSummary.current =tomorrow ;
       setWrapStyle(tomorrowWrapStyle);
     };
+    const startScroll =(clientX : number)=>{
+      if(wrapStyle !==undefined){
+        startX.current =clientX;
+        scrollEvent.current =true; 
+      }
+    }
+    const moveScroll =(clientX :number)=>{
+      if(scrollEvent.current && wrapStyle !==undefined){
+        moveX.current =clientX;
+        const gap  = clientX  - startX.current;
+
+        const conditionMoveCurrent = initialSummary.current ==="current"  && (gap < 0);
+        const conditionTommorowCurrent = initialSummary.current ==="tomorrow" && (gap > 0) ;
+        const wrapWidth =wrapStyle.width as string;
+        const widthNum : number= Number(wrapWidth.slice(0,wrapWidth.indexOf("px")));
+        const percent =(gap / widthNum) * 100 
+        if(conditionMoveCurrent || conditionTommorowCurrent){
+          setWrapStyle({
+            ...wrapStyle,
+            transform: conditionMoveCurrent ?
+                        `translateX(${percent}%)`
+                      :
+                      `translateX(${-100 + percent}%)`
+        })
+        };
+      }
+    }
+    const endScroll =()=>{
+      
+      if( scrollEvent.current && wrapRef.current !==null){
+          const transform = wrapRef.current.style.transform;
+          const startIndex= transform.indexOf("(");
+          const lastIndex= transform.indexOf("%");
+          const x = Number(transform.slice(startIndex+1, lastIndex));
+          if(initialSummary.current === current)
+          {
+            (x >= -50) ?
+            setWrapStyle(currentWrapStyle)
+            :
+            initialSummary.current = tomorrow
+          }
+          if(initialSummary.current === tomorrow
+          ){
+            (x <= -50) ?
+            setWrapStyle(tomorrowWrapStyle)
+            :
+            initialSummary.current = current;
+          }
+      };
+      scrollEvent.current = false; 
+      startX.current = 0;
+      moveX.current =0;
+    }
+
     window.onresize = ()=>changeSummaryStyle();
     useEffect(()=>{
       changeSummaryStyle();
@@ -174,7 +235,14 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
           </div>
           <div className="now_quickArea" ref={quickAreaRef}>
             <div className="scrollControl">
-              <div className="scrollArea">
+              <div className="scrollArea"
+                onMouseDown={(event)=>startScroll(event.clientX)}
+                onMouseMove={(event)=>moveScroll(event.clientX)}
+                onMouseUp={endScroll}
+                onTouchStart={(event)=>startScroll(event.touches[0].clientX)}
+                onTouchMove={(event)=>moveScroll(event.touches[0].clientX)}
+                onTouchEnd={endScroll}
+              >
                 <div className="summary_wrap" style={wrapStyle} ref={wrapRef}>
                   <div className="summary current">
                     <div className="summary_inner">
