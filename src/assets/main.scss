@@ -2,8 +2,12 @@
 @import './now';
 @import './scrollBtn';
 @import './skyIcon';
+@import './week';
+
+$font_basic_color: #424242;
 body{
   margin: 0;
+  color:$font_basic_color;
 }
 #topbar{
   position: relative;
@@ -51,15 +55,17 @@ ul , dl , dd{
 li {
   list-style: none;
 }
-.weatherIcon{
-  position: relative;
-}
-.iconWrap{
-  position: absolute;
-  top:0;
-  left: 0;
-}
 
+.hourly , .week{
+  padding: 20px 30px;
+  box-sizing: border-box;
+}
+@media screen and (min-width:780px) {
+  .hourly , .week {
+    margin: 0;
+    padding: 30px 65px;
+  }
+}
 @media screen and (min-width:1025px) {
   #topbar{
     .inner{
@@ -77,5 +83,8 @@ li {
   }
   .section_center{
     width: 751px ;
+  }
+  .hourly , .week{
+    padding: 30px 51px 40px 0;
   }
 }
