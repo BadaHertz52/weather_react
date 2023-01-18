@@ -1,0 +1,52 @@
+$d0Color :#424242;
+$d1Color:rgb(150, 107, 230);
+$d2Color:rgb(85, 184, 218);
+
+.hourly{
+  table{
+    width: 100%;
+    font-size: 13px;
+  }
+  .thead_cnTimeTable{
+    text-align: center;
+    display: flex;
+    
+    th {
+      width: 47px;
+      box-sizing: border-box;
+    }
+    .heading .time{
+      border-radius:20px;
+      color:#ffff;
+      padding: 2px 5px;
+    }
+    .heading {
+      display: flex;
+      align-items: center;
+      .threeDay_0{
+        background-color:$d0Color;
+      }
+      .threeDay_1{
+        background-color: $d1Color;
+      }
+      .threeDay_2{
+        background-color: $d2Color;
+      }
+    }
+    .cnItemTime{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .threeDay_1{
+        color:$d1Color
+      }
+      .threeDay_2{
+        color:$d2Color
+      }
+    }
+    .skyIcon{
+      width: 50%;
+      aspect-ratio: 1;
+    }
+  }
+}

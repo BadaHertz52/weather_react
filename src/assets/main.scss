@@ -1,3 +1,4 @@
+@import './hourly';
 @import './location';
 @import './now';
 @import './scrollBtn';
@@ -5,6 +6,7 @@
 @import './week';
 
 $font_basic_color: #424242;
+
 body{
   margin: 0;
   color:$font_basic_color;

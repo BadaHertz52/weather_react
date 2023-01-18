@@ -1,3 +1,49 @@
+.hourly table {
+  width: 100%;
+  font-size: 13px;
+}
+.hourly .thead_cnTimeTable {
+  text-align: center;
+  display: flex;
+}
+.hourly .thead_cnTimeTable th {
+  width: 47px;
+  box-sizing: border-box;
+}
+.hourly .thead_cnTimeTable .heading .time {
+  border-radius: 20px;
+  color: white;
+  padding: 2px 5px;
+}
+.hourly .thead_cnTimeTable .heading {
+  display: flex;
+  align-items: center;
+}
+.hourly .thead_cnTimeTable .heading .threeDay_0 {
+  background-color: #424242;
+}
+.hourly .thead_cnTimeTable .heading .threeDay_1 {
+  background-color: rgb(150, 107, 230);
+}
+.hourly .thead_cnTimeTable .heading .threeDay_2 {
+  background-color: rgb(85, 184, 218);
+}
+.hourly .thead_cnTimeTable .cnItemTime {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hourly .thead_cnTimeTable .cnItemTime .threeDay_1 {
+  color: rgb(150, 107, 230);
+}
+.hourly .thead_cnTimeTable .cnItemTime .threeDay_2 {
+  color: rgb(85, 184, 218);
+}
+.hourly .thead_cnTimeTable .skyIcon {
+  width: 50%;
+  aspect-ratio: 1;
+}
+
 .location {
   display: flex;
   align-items: center;
