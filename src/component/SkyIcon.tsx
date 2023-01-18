@@ -84,9 +84,9 @@ export const SunnyDayIcon =()=>{
   return(
     <div className='sunnyDayIcon weatherIcon'>
         <svg width="0" height="0">
-          <linearGradient id="sunnyDay_gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop  stopColor="#ffbf3e" offset="5%" />
-            <stop  stopColor="#ff7300" offset="100%" />
+          <linearGradient id="sunnyDay_gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop  stopColor="#fae85d" offset="20%" />
+            <stop  stopColor="#ff9500" offset="100%" />
           </linearGradient>
         </svg>
         <div className='iconWrap' style={{ fill: "url(#sunnyDay_gradient)" }}  >
