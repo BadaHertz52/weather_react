@@ -1,20 +1,23 @@
 $d0Color :#424242;
 $d1Color:rgb(150, 107, 230);
 $d2Color:rgb(85, 184, 218);
+$hour_grey : rgb(170,170,170);
+$unit_value_color:rgb(28, 109, 222);
 
 .hourly{
   table{
     width: 100%;
     font-size: 13px;
   }
+  th , tbody td {
+    width: 55px;
+    padding:0;
+    box-sizing: border-box;
+  }
   .thead_cnTimeTable{
     text-align: center;
     display: flex;
     
-    th {
-      width: 47px;
-      box-sizing: border-box;
-    }
     .heading .time{
       border-radius:20px;
       color:#ffff;
@@ -48,5 +51,38 @@ $d2Color:rgb(85, 184, 218);
       width: 50%;
       aspect-ratio: 1;
     }
+  }
+  //tbody
+  tbody{
+    display: flex;
+    flex-direction: column;
+    tr{
+      display: flex;
+      margin-top: 10px;
+    }
+    em{
+      font-style: initial;
+    }
+    .tit, .unit{
+      font-size: 12px;
+      width: inherit;
+      text-align: left;
+    }
+    .unit{
+      color:$hour_grey
+    }
+    td{
+      .unit_value{
+        width: 100%;
+        display: block;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+      }
+      .color{
+        color:$unit_value_color
+      }
+    }
+
   }
 }

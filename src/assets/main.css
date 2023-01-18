@@ -2,13 +2,14 @@
   width: 100%;
   font-size: 13px;
 }
+.hourly th, .hourly tbody td {
+  width: 55px;
+  padding: 0;
+  box-sizing: border-box;
+}
 .hourly .thead_cnTimeTable {
   text-align: center;
   display: flex;
-}
-.hourly .thead_cnTimeTable th {
-  width: 47px;
-  box-sizing: border-box;
 }
 .hourly .thead_cnTimeTable .heading .time {
   border-radius: 20px;
@@ -42,6 +43,35 @@
 .hourly .thead_cnTimeTable .skyIcon {
   width: 50%;
   aspect-ratio: 1;
+}
+.hourly tbody {
+  display: flex;
+  flex-direction: column;
+}
+.hourly tbody tr {
+  display: flex;
+  margin-top: 10px;
+}
+.hourly tbody em {
+  font-style: initial;
+}
+.hourly tbody .tit, .hourly tbody .unit {
+  font-size: 12px;
+  width: inherit;
+  text-align: left;
+}
+.hourly tbody .unit {
+  color: rgb(170, 170, 170);
+}
+.hourly tbody td .unit_value {
+  width: 100%;
+  display: block;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+}
+.hourly tbody td .color {
+  color: rgb(28, 109, 222);
 }
 
 .location {
