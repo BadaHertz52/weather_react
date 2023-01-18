@@ -14,7 +14,7 @@ const CnItemDay =({todaySunInform ,dailyWeather, index}:CnItemDayProperty)=>{
   return(
     <>
       <th className="data heading">
-        <span className='time'>
+        <span className={`time threeDay_${index}`}>
           {day}
         </span>
       </th>
@@ -28,7 +28,7 @@ const CnItemDay =({todaySunInform ,dailyWeather, index}:CnItemDayProperty)=>{
             data-sky ={h.sky}
             data-ymdt={`${date}${h.hour.slice(0,2)}`}
           >
-            <span className='time'>
+            <span className={`time threeDay_${index}`}>
               {hour}
             </span>
             <SkyIcon
