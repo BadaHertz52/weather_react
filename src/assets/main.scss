@@ -45,12 +45,14 @@ body{
   margin-top: 1rem;
 }
 
-
 .blind{
   display: none;
 }
 ul , dl , dd{
   margin :0;
+}
+ul{
+  padding:0
 }
 li {
   list-style: none;

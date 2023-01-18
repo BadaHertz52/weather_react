@@ -394,10 +394,69 @@
 @media screen and (min-width: 768px) {
   .week .box {
     display: flex;
+    justify-content: space-between;
+    padding: 0;
+    margin-bottom: 14px;
+  }
+  .week .box .item {
+    width: 48%;
+    box-sizing: border-box;
+    border: solid 1px #cfd4d6;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.08);
+    padding: 10px 30px;
   }
   .week .scrollArea {
     overflow: hidden;
-    height: initial;
+    height: auto;
+    width: 100%;
+    border: initial;
+    border-radius: initial;
+    box-shadow: initial;
+    display: flex;
+  }
+  .week .scrollArea .item {
+    width: 14.2857142857%;
+    height: auto;
+  }
+  .week .scrollArea .day0, .week .scrollArea .day1 {
+    display: none;
+  }
+  .week .scrollArea .day_data {
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    flex-direction: column;
+    margin-right: 0;
+    width: 100%;
+  }
+  .week .scrollArea .cell_date,
+.week .scrollArea .cell_weather,
+.week .scrollArea .cell_temperature {
+    width: 100%;
+    text-align: center;
+    justify-content: space-around;
+    margin-bottom: 10px;
+  }
+  .week .scrollArea .cell_weather .weather_inner {
+    flex-direction: column-reverse;
+    margin-right: 0;
+  }
+  .week .scrollArea .cell_weather .timeslot {
+    display: none;
+  }
+  .week .scrollArea .cell_weather .inner_text {
+    margin: 0;
+  }
+  .week .scrollArea .cell_temperature strong {
+    display: flex;
+    justify-content: space-between;
+  }
+  .week .scrollArea .cell_temperature span {
+    width: 34px;
+  }
+  .week .scrollArea .cell_temperature .bar {
+    display: none;
   }
 }
 body {
@@ -450,6 +509,10 @@ body {
 
 ul, dl, dd {
   margin: 0;
+}
+
+ul {
+  padding: 0;
 }
 
 li {

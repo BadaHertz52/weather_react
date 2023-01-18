@@ -1,5 +1,10 @@
 $blue :#3172e7;
 $grey:#8f8f8f;
+@mixin box {
+  border: solid 1px #cfd4d6 ;
+  border-radius: 8px; 
+  box-shadow: 0 1px 6px 0 rgb(0 0 0 / 8%)
+}
 .week{
   width: 100%;
   .box{
@@ -10,9 +15,7 @@ $grey:#8f8f8f;
     touch-action: pan-y pinch-zoom;
     overflow: visible;
     height: auto;
-    border: solid 1px #cfd4d6;
-    border-radius: 8px;
-    box-shadow: 0 1px 6px 0 rgb(0 0 0 / 8%);
+    @include box
   }
   .item{
     border-bottom: solid 1px #cfd4d6 ;
@@ -86,10 +89,73 @@ $grey:#8f8f8f;
   .week{
     .box{
       display: flex;
+      justify-content: space-between;
+      padding:0;
+      margin-bottom: 14px;
+      .item{
+        width: 48%;
+        box-sizing: border-box;
+        @include box;
+        padding: 10px 30px
+      }
     }
+
     .scrollArea{
       overflow: hidden;
-      height: initial;
+      height:auto;
+      width:100%;
+      border: initial;
+      border-radius: initial;
+      box-shadow: initial;
+      display: flex;
+      .item{
+        width:calc(100% / 7);
+        height: auto;
+      }
+      .day0 , .day1 {
+        display: none;
+      }
+      .day_data{
+        width: fit-content;
+        flex-direction: column;
+        margin-right: 0;
+        width: 100%;
+      }
+      .cell_date  , 
+      .cell_weather ,
+      .cell_temperature
+      {
+        width: 100%;
+        text-align: center;
+        justify-content: space-around;
+        margin-bottom: 10px;
+
+      }
+      .cell_weather{
+        .weather_inner{
+          flex-direction: column-reverse;
+          margin-right: 0;
+        }
+        .timeslot {
+          display: none;
+        }
+        .inner_text{
+          margin: 0;;
+        }
+      }
+      .cell_temperature{
+        strong{
+          display: flex;
+          justify-content: space-between;
+        }
+        span{
+          width: 34px;
+        }
+        .bar{
+          display: none;
+        }
+      }
     }
+    
   }
 }
