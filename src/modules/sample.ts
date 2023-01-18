@@ -22,7 +22,7 @@ const nation :Area[] = [{areaInform:{name:"서울",sfGrid:{areaCode:"1100000000"
 export const weatherSample :WeatherState ={
   state:"success",
   error:null,
-  nowWeather:{"tmp":-0.5,sky:"맑음",reh:"72",sno :"0" ,wind:{vec:"남서향",wsd:"0.6"},"pm10Grade":"보통","pm25Grade":"나쁨"},
+  nowWeather:{"tmp":-0.5,sky:"맑음",reh:"72",wind:{vec:"남서향",wsd:"0.6"},"pm10Grade":"보통","pm25Grade":"나쁨"},
   tomrrowWeather:{
     pm10Grade:"좋음",
     pm25Grade:"좋음",
