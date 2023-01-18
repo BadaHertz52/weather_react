@@ -968,6 +968,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     pop:t.pop,
     //강수량(mm)
     pcp:t.pcp,
+    sno:t.sno,
     wind:{
       vec :getWsd(t.vec),
       wsd:t.wsd

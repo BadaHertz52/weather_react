@@ -118,6 +118,8 @@ export type HourWeather ={
   pop:string,
   /**강수량(mm)*/
   pcp:string,
+  /**1시간 신적설량(cm) */
+  sno:string,
   wind:WindType,
   //습도
   reh:string
