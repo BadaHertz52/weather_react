@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties, useState } from 'react';
 import { AmPmType, Day } from '../modules/weather';
 import ScrollBtn from './ScrollBtn';
 import SkyIcon from './SkyIcon';
@@ -99,18 +99,13 @@ const Week =({week}:WeekProperty)=>{
         )}
       </ul>
       <div className="scrollControl">
-        <div className="scrollArea">
+        <ul className="scrollArea">
           {week.map((d:Day)=>
           <Item
             item = {d}
           />
           )}
-        </div>
-        {/* <ScrollBtn
-
-        />
-        <ScrollBtn
-        /> */}
+        </ul>
       </div>
     </div>
   )
