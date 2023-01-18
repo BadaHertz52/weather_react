@@ -970,7 +970,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     pcp:t.pcp,
     sno:t.sno,
     wind:{
-      vec :getWsd(t.vec),
+      vec :getWsd(t.wsd,t.vec),
       wsd:t.wsd
     },
     reh:t.reh
@@ -1005,7 +1005,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
         sky:skyCode,
         reh:uSNcst.reh,
         wind: {
-          vec: getWsd(uSNcst.vec),
+          vec: getWsd(uSNcst.wsd ,uSNcst.vec),
           wsd: uSNcst.wsd
         },
         pm10Grade: nowApGrade.pm10Grade1h,

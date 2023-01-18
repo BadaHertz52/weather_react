@@ -41,24 +41,43 @@ export type SkyType = SkyCodeType |
                       typeof vrCldSnow |
                       typeof vrCldRainSnow |
                       typeof vrCldShower ;
-const north = "북향";  //vec = 360/0 (345-360 . 0-15)
-const northAndEast ="북동향";  //vec : 15-74
-const northAndWeast = "북서향" // vec : 296-344
-const south ="남향"; //vec =180 (165-180 180-195)
-const southAndEast ="남동향"; // vec  106-165
-const southAndWeast ="남서향" // vec  196-254
-const east ="동향"; //vec =90 (75-90, 90-105)
-const weast ="서향"; //vec =270 (255-270  ,270-295)
+
+const north = "북풍";  
+const nne ="북북동풍"
+const ne ="북동풍"; 
+const nw = "북서풍" 
+const nnw ="북북서풍";
+const south ="남풍"; 
+const sse ="남남동풍"
+const se ="남동풍"; 
+const sw ="남서풍"
+const ssw="남남서풍"
+const east ="동풍";
+const  ene ="동북동풍";
+const ese ="동남동풍";
+const weast ="서풍"; 
+const wnw="서북서풍";
+const wsw="서남서풍";
+
+
 
 export type DirectionType = typeof north|
-                          typeof northAndEast |
-                          typeof northAndWeast |
+                          typeof ne |
+                          typeof nne|
+                          typeof nw |
+                          typeof nnw|
                           typeof south |
-                          typeof southAndEast |
-                          typeof southAndWeast |
+                          typeof se |
+                          typeof sse|
+                          typeof sw |
+                          typeof ssw|
                           typeof east |
+                          typeof ene|
+                          typeof ese|
+                          typeof wnw|
+                          typeof wsw|
                           typeof weast ;
-export const directionArry: DirectionType[] =[north, northAndEast, northAndWeast,south, southAndEast,southAndWeast,east,weast];
+const directionArry: DirectionType[] =[north,nne,ne,ene,east,ese,se,sse,south,ssw,sw,wsw,weast,wnw,nw,nnw,north];
 
 type WindType ={
     //풍향
@@ -517,32 +536,11 @@ export const getSkyType =(skyAvg:number,ptyAvg:number):SkyType=>{
     }
   }
 };
-export const getWsd =(vec:number)=>{
-  const nCondition =(vec >= 0 && vec <=15) || (vec >= 354 && vec <=360 );
+export const getWsd =(wsd:string ,vec:number):DirectionType=>{
+  const cv = Math.floor(( Number(wsd) + vec *0.5)/22.5);
   
-  const nECondtion = ( vec >=15 && vec <= 74);
+  const direction = directionArry[cv];
 
-  const nWCondition =( vec >=296 && vec<= 344);
-
-  const sCondition = (vec >=165 && vec <= 195);
-
-  const sECondition =(vec >=106 && vec <= 165);
-
-  const sWCondition =(vec >= 195 && vec <= 254);
-
-  const eCondition = (vec >= 75 && vec <= 105);
-
-  const wCondition =(vec >=255  && vec <= 295);
-
-  const conditionArry =[nCondition, nECondtion, nWCondition, sCondition,sECondition,sWCondition,eCondition,wCondition];
-  
-  for (let i = 0; i < conditionArry.length; i++) {
-    const element = conditionArry[i];
-    if(element){
-      const direction = directionArry[i];
-      return direction
-    }
-  }
-
+  return direction
 };
 
