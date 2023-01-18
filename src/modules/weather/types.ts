@@ -110,6 +110,7 @@ export type TomorrowWeather ={
 export type HourWeather ={
   date:string,
   hour:string, //24시간제
+  sky:SkyType,
   /** 온도
    */
   temp:number,
