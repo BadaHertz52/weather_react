@@ -1,6 +1,7 @@
 import React , {useRef ,useState ,useEffect , MouseEvent , TouchEvent} from 'react';
 import { GiWaterDrop } from 'react-icons/gi';
 import styled, { CSSProperties } from 'styled-components';
+import { checkDayOrNight } from '../App';
 import { gradeArry, NowWeather, SunRiseAndSet, TomorrowWeather } from '../modules/weather';
 import ScrollBtn from './ScrollBtn';
 import SkyIcon from './SkyIcon';
@@ -103,9 +104,9 @@ type NowProperty ={
 };
 const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
     const now = new Date();
-    const hours = now.getHours()
-    const day :boolean = hours < 18 ? true :false;
+    const hours = now.getHours();
     const sunInformError =todaySunInform instanceof Error ;
+    const day =checkDayOrNight(hours, todaySunInform);
     const wrapRef =useRef<HTMLDivElement>(null);
     const currentWrapStyle :CSSProperties ={
       transform:"translateX(0%)"

@@ -12,10 +12,30 @@ import Week from './component/Week';
 import { RootState } from './modules';
 import { PositionAction, PositionState, PositionSuccessData } from './modules/position';
 import { CurrentPosition} from './modules/position/thunk';
-import {   WeatherAction, WeatherState } from './modules/weather';
+import {   SunRiseAndSet, WeatherAction, WeatherState } from './modules/weather';
 import { weatherSlice } from './modules/weather/reducer';
 import { getWeatherThunk, toolkitWeather } from './modules/weather/thunk';
 import None from './component/None';
+/**
+ * hours 가 일몰,일출 시간을 기준을 낮 시간인지 밤 시간인지 확인하는 함수
+ * @param hours 
+ * @param todaySunInform 
+ * @returns 낮 시간이라면 true를 밤시간이라면 false
+ */
+export   const checkDayOrNight =(hours:number, todaySunInform:Error | SunRiseAndSet):boolean=>{
+  const sunInformError =todaySunInform instanceof Error ;
+  const sunrise :number = (sunInformError|| todaySunInform.sunRise ==null) ? 
+                            6 
+                            : 
+                            Number(todaySunInform.sunRise.slice(0,1));
+  const sunset : number = (sunInformError|| todaySunInform.sunSet ==null) ? 
+                          18 
+                          : 
+                          Number(todaySunInform.sunSet?.slice(0,2));
+  const dayCondition = (hours > sunrise) && (hours < sunset) ;
+  const day :boolean = dayCondition ? true :false;
+  return day
+};
 
 function App () {  
   const position =useSelector((state:RootState)=> state.positionReducer);
@@ -34,7 +54,6 @@ function App () {
   const startThunk =useRef<boolean>(false);
   const startSaga =useRef<boolean>(false);
   const startToolkit =useRef<boolean>(false);
-
 
   useEffect(()=>{
     if(position.state === "success" &&
@@ -97,8 +116,13 @@ function App () {
                 : 
                 <None  target ={"실시간 날씨"} />
               }
-              {weather.threeDay !==null?
-                <Hourly/>
+              {(weather.threeDay !==null &&
+                weather.sunRiseAndSet !==null 
+              )?
+                <Hourly
+                  threeDay ={weather.threeDay}
+                  todaySunInform ={weather.sunRiseAndSet[0]}
+                />
                 :
                 <None  target ={"시간별 날씨 예보"} />
               }
