@@ -181,7 +181,7 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
                             date ={h.date}
                             hours={h.hour}
                             figure={h.pcp}
-                            none={false}
+                            none={Number(h.pcp) <= 0}
                           />
                         ))
                       }
@@ -198,7 +198,7 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
                             date ={h.date}
                             hours={h.hour}
                             figure={h.sno}
-                            none={false}
+                            none={Number(h.sno) <= 0}
                           />
                         ))
                       }
