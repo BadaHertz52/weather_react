@@ -9,28 +9,39 @@ type CnItemDayProperty ={
 }
 const CnItemDay =({todaySunInform ,dailyWeather, index}:CnItemDayProperty)=>{
   const threeDay =["오늘", "내일","모레"];
+  const threeDayE =["today", "tomorrow", "dayAfter"];
   const day = threeDay[index];
+  const dayE = threeDayE[index];
   const date = dailyWeather.date;
   return(
     <>
+      { index === 0 &&
       <th className="data heading">
-        <span className={`time threeDay_${index}`}>
-          {day}
+        <span className={`label ${dayE}`}>
+            {day}
         </span>
       </th>
+      }
       {dailyWeather.hourly.map((h:HourWeather)=>{
         const hour =h.hour[0] ==="0" ? h.hour.slice(1,2):  h.hour.slice(0,2)
         return(
           <th 
             id={`hourly-${date}${h.hour.slice(0,2)}`}
-            className ="data top cnItemTime"
+            className ={`data top cnItemTime ${hour ==="0"?  dayE:""}`}
             data-tmpr ={h.temp}
             data-sky ={h.sky}
             data-ymdt={`${date}${h.hour.slice(0,2)}`}
           >
-            <span className={`time threeDay_${index}`}>
-              {hour}
+            {hour === "0" ?
+                <span className={`label ${dayE}`}>
+                  {day}
+                </span>
+              :
+              <span className={`time ${dayE}`}>
+                {hour}
             </span>
+            }
+
             <SkyIcon
               skyType={h.sky}
               day={checkDayOrNight( Number(hour) ,todaySunInform)}
