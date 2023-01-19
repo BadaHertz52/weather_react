@@ -100,11 +100,21 @@ $unit_value_color:rgb(28, 109, 222);
         text-align: center;
         font-size: 16px;
         font-weight: 500;
+        color:$hour_grey;
       }
       .color{
         color:$unit_value_color
       }
     }
-
+    //wind
+    .icon_wind{
+      display: block;
+      width: inherit;
+      text-align: center;
+      svg{
+        font-size: 1.3rem;
+        color:$unit_value_color;
+      }
+    }
   }
 }

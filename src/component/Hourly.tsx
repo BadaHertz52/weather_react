@@ -1,7 +1,10 @@
 import React from 'react';
 import { checkDayOrNight } from '../App';
-import { DailyWeather, HourWeather, SunRiseAndSet } from '../modules/weather';
+import { DailyWeather, directionArry, HourWeather, SunRiseAndSet, WindType } from '../modules/weather';
 import SkyIcon from './SkyIcon';
+import {TiLocationArrow} from 'react-icons/ti';
+import { CSSProperties } from 'styled-components';
+
 type CnItemDayProperty ={
   todaySunInform: Error | SunRiseAndSet,
   dailyWeather:DailyWeather,
@@ -91,7 +94,30 @@ const Td1=({date, hours,figure, none}:Td1Property)=>{
     </td>
   )
 };
-
+type TdWindyProperty ={
+  date: string,
+  hours:string,
+  wind: WindType
+};
+const TdWindy=({date, hours, wind}:TdWindyProperty)=>{
+  const ymdt =`${date}${hours.slice(0,2)}`;
+  const index = wind.vec ==="북풍"? 0 :  directionArry.indexOf(wind.vec);
+  const angle :number = (360 / 16)* index;
+  const deg = -15 + angle ;
+  const arrowStyle:CSSProperties ={
+    transform:`rotate(${deg}deg)`
+  };
+  return(
+    <td className='data' data-ymdt={ymdt}>
+      <span className='icon_wind' aria-details={wind.vec}>
+        <TiLocationArrow style ={arrowStyle}/>
+      </span>
+      <span className="unit_value color" >
+        <em>{wind.wsd}</em>
+      </span>
+    </td>
+  )
+};
 type HourlyProperty ={
   todaySunInform: Error | SunRiseAndSet,
   threeDay: DailyWeather[]
@@ -183,6 +209,15 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
                       title="바람"
                       unit="m/s"
                     />
+                    {threeDay.map((d:DailyWeather)=>
+                        d.hourly.map((h:HourWeather)=>
+                          <TdWindy
+                            date ={h.date}
+                            hours={h.hour}
+                            wind={h.wind}
+                          />
+                        ))
+                    }
                   </tr>
                   {/*reh*/}
                   <tr aria-details='reh'>
