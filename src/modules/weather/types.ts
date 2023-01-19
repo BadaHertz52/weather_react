@@ -77,11 +77,11 @@ export type DirectionType = typeof north|
                           typeof wnw|
                           typeof wsw|
                           typeof weast ;
-const directionArry: DirectionType[] =[north,nne,ne,ene,east,ese,se,sse,south,ssw,sw,wsw,weast,wnw,nw,nnw,north];
+export const directionArry: DirectionType[] =[north,nne,ne,ene,east,ese,se,sse,south,ssw,sw,wsw,weast,wnw,nw,nnw,north];
 
-type WindType ={
+export type WindType ={
     //풍향
-    vec:DirectionType |undefined,
+    vec:DirectionType,
     wsd:string
 };
 
