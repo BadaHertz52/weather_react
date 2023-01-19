@@ -225,6 +225,16 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
                       title="습도"
                       unit="%"
                     />
+                  {threeDay.map((d:DailyWeather)=>
+                      d.hourly.map((h:HourWeather)=>
+                        <Td1
+                          date ={h.date}
+                          hours={h.hour}
+                          figure={h.reh}
+                          none={Number(h.reh) <= 0}
+                        />
+                      ))
+                  }
                   </tr>
                 </tbody>
               </table>
