@@ -2,9 +2,18 @@ $d0Color :#424242;
 $d1Color:rgb(150, 107, 230);
 $d2Color:rgb(85, 184, 218);
 $hour_grey : rgb(170,170,170);
-$unit_value_color:rgb(28, 109, 222);
+$unit_value_color:#218be8;
 
 .hourly{
+  .weather_graph{
+    width: inherit;
+    height: fit-content;
+    border-bottom: 1px solid rgba(0,0,0,.04);
+  }
+  .scrollArea{
+    height: 361px;
+
+  }
   table{
     width: 100%;
     font-size: 13px;
