@@ -82,6 +82,13 @@
   width: 50%;
   aspect-ratio: 1;
 }
+.hourly .thead_cnTimeTable .temp {
+  margin-top: 5px;
+}
+.hourly .thead_cnTimeTable .temp em {
+  font-style: normal;
+  color: #09487e;
+}
 .hourly tbody {
   display: flex;
   flex-direction: column;

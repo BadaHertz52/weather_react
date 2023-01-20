@@ -72,6 +72,9 @@ const CnItemDay =({todaySunInform ,dailyWeather, index}:CnItemDayProperty)=>{
               skyType={h.sky}
               day={checkDayOrNight( Number(hour) ,todaySunInform)}
             />
+            <div className='temp'>
+              <em>{h.temp}°</em>
+            </div>
           </th>
         )
       })}
