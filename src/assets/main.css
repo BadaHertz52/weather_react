@@ -17,6 +17,22 @@
   padding: 0;
   box-sizing: border-box;
 }
+.hourly tr {
+  width: 100%;
+}
+.hourly #chart, .hourly .chart_area {
+  width: inherit;
+  height: 100px;
+}
+.hourly #chart {
+  overflow-x: hidden;
+}
+.hourly .chart_area {
+  display: flex;
+}
+.hourly .chart_line {
+  width: 30%;
+}
 .hourly .data.top {
   position: relative;
 }

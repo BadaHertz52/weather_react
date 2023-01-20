@@ -23,6 +23,22 @@ $unit_value_color:#218be8;
     padding:0;
     box-sizing: border-box;
   }
+  tr{
+    width: 100%;
+  }
+  #chart, .chart_area {
+    width: inherit;
+    height: 100px;
+  }
+  #chart{
+    overflow-x: hidden;
+  }
+  .chart_area{
+    display: flex
+  }
+  .chart_line{
+    width: calc(100% * 0.3)
+  };
   .data.top{
     position:relative;
     &::before{

@@ -1,15 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { checkDayOrNight } from '../App';
 import { DailyWeather, directionArry, HourWeather, SunRiseAndSet, WindType } from '../modules/weather';
 import SkyIcon from './SkyIcon';
 import {TiLocationArrow} from 'react-icons/ti';
 import { CSSProperties } from 'styled-components';
+import { Chart } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  ChartData,
+  ChartOptions
+} from 'chart.js'
 
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+)
 type CnItemDayProperty ={
   todaySunInform: Error | SunRiseAndSet,
   dailyWeather:DailyWeather,
   index:number
 }
+
 const CnItemDay =({todaySunInform ,dailyWeather, index}:CnItemDayProperty)=>{
   const threeDay =["오늘", "내일","모레"];
   const threeDayE =["today", "tomorrow", "dayAfter"];
@@ -121,8 +144,83 @@ const TdWindy=({date, hours, wind}:TdWindyProperty)=>{
 type HourlyProperty ={
   todaySunInform: Error | SunRiseAndSet,
   threeDay: DailyWeather[]
-}
+};
+
 const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
+  const hoursArry = threeDay.map((d:DailyWeather)=>d.hourly.map((h:HourWeather)=> h.hour));
+  const tempArry = threeDay.map((d:DailyWeather)=> d.hourly.map((h:HourWeather)=>h.temp));
+  const todayTempArry =tempArry[0];
+  const tomorrowTempArry =tempArry[1];
+  const dayAfterTempArry =tempArry[2];
+  const temps = [...todayTempArry ,...tomorrowTempArry, ...dayAfterTempArry]; 
+  const todyaChartData = getChartData([todayTempArry[0], ...todayTempArry , tomorrowTempArry[0]]);
+  const tomorrowChartData =getChartData([todayTempArry[todayTempArry.length-1], ...tomorrowTempArry]);
+  const dayAfterChartData = getChartData([tomorrowTempArry[tomorrowTempArry.length-1], ...dayAfterTempArry]);
+  const chartStyle :CSSProperties ={
+    width:'inherit',
+    height:'inherit',
+    position:'absolute' ,
+    left: '25px'
+  }
+  function getChartData (tempArry:number[]):ChartData{
+    const chartData : ChartData=  {
+      labels:tempArry,
+      datasets:[{
+        data: tempArry,
+        borderColor:'#1eaef1',
+        borderWidth:1,
+        spanGaps:true,
+      }]
+    };
+    return chartData
+  };
+  const chartOption:ChartOptions = {
+    responsive:false,
+    elements:{
+      point:{
+        radius:0
+      },
+    },
+    plugins:{
+      legend:{
+        display:false,
+      }
+    },
+    scales:{
+      x:{
+        grid:{
+          display:true,
+        },
+        axis:'x',
+        display:false,
+        title: {
+          display: false
+        },
+      },
+      y:{
+        grid:{
+          display:false
+        },
+        axis:'y',
+        display:false ,
+        title: {
+          display: false
+        },
+        max:Math.max(...temps) +8,
+        min:Math.min(...temps) -8
+      }
+    }
+  };
+  const getChartWrapStyle=(dayIndex:number):CSSProperties=>{
+    const arry = hoursArry[dayIndex];
+    const width = dayIndex ===0? (55 *(arry.length + 1)) : 55 * (arry.length);
+    const style :CSSProperties ={
+      width:`${width}px`,
+      height: '100%',
+      position:'relative',
+    };
+    return style 
+  };
   return (
     <div className="hourly">
       <div className="weather_graph">
@@ -148,6 +246,50 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
                 </thead>
                 <tbody>
                   {/*temp graphe */}
+                  <tr>
+                    <td 
+                    id="chart"
+                    className="chart  ">
+                      <div className=" chart chart_area">
+                        <div 
+                          className='chart_wrap'
+                          style={getChartWrapStyle(0)}
+                        > 
+                          <Chart
+                            className="chart_line"
+                            type='line'
+                            data={todyaChartData}
+                            options={chartOption}
+                            style={chartStyle}
+                          />
+                        </div>
+                        <div 
+                          className="chart_wrap"
+                          style={getChartWrapStyle(1)}
+                        >
+                          <Chart
+                            className="chart_line"
+                            type='line'
+                            data={tomorrowChartData}
+                            options={chartOption}
+                            style={chartStyle}
+                          />
+                        </div>
+                        <div 
+                          className="chart_wrap"
+                          style={getChartWrapStyle(2)}
+                        >
+                          <Chart
+                            className="chart_line"
+                            type='line'
+                            data={dayAfterChartData}
+                            options={chartOption}
+                            style={chartStyle}
+                          />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
                   {/*pop*/}
                   <tr 
                   aria-details='pop'>
