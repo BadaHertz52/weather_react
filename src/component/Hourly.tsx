@@ -236,6 +236,7 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
                 <thead>
                   <tr className='thead_cnTimeTable'>
                     {threeDay.map((d:DailyWeather)=><CnItemDay
+                        key={`cnItemDay_${threeDay.indexOf(d)}`}
                         todaySunInform={todaySunInform}
                         dailyWeather ={d}
                         index ={threeDay.indexOf(d)}
@@ -302,6 +303,7 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
                       {threeDay.map((d:DailyWeather)=>
                         d.hourly.map((h:HourWeather)=>
                           <Td1
+                          key={`pop_td_${h.date}${h.hour}`}
                             date ={h.date}
                             hours={h.hour}
                             figure={h.pop}
@@ -320,6 +322,7 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
                     {threeDay.map((d:DailyWeather)=>
                         d.hourly.map((h:HourWeather)=>
                           <Td1
+                            key={`pcp_td_${h.date}${h.hour}`}
                             date ={h.date}
                             hours={h.hour}
                             figure={h.pcp}
@@ -337,6 +340,7 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
                     {threeDay.map((d:DailyWeather)=>
                         d.hourly.map((h:HourWeather)=>
                           <Td1
+                          key={`sno_td_${h.date}${h.hour}`}
                             date ={h.date}
                             hours={h.hour}
                             figure={h.sno}
@@ -370,6 +374,7 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
                   {threeDay.map((d:DailyWeather)=>
                       d.hourly.map((h:HourWeather)=>
                         <Td1
+                          key={`reh_td_${h.date}${h.hour}`}
                           date ={h.date}
                           hours={h.hour}
                           figure={h.reh}
