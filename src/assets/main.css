@@ -20,19 +20,6 @@
 .hourly tr {
   width: 100%;
 }
-.hourly #chart, .hourly .chart_area {
-  width: inherit;
-  height: 100px;
-}
-.hourly #chart {
-  overflow-x: hidden;
-}
-.hourly .chart_area {
-  display: flex;
-}
-.hourly .chart_line {
-  width: 30%;
-}
 .hourly .data.top {
   position: relative;
 }
@@ -124,6 +111,19 @@
 }
 .hourly tbody td .color {
   color: #218be8;
+}
+.hourly tbody #tempChart {
+  overflow-x: hidden;
+}
+.hourly tbody #tempChart, .hourly tbody .chart_area {
+  width: inherit;
+  height: 100px;
+}
+.hourly tbody .chart_area {
+  display: flex;
+}
+.hourly tbody .chart_line {
+  width: 30%;
 }
 .hourly tbody .icon_wind {
   display: block;

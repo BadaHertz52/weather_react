@@ -26,19 +26,8 @@ $unit_value_color:#218be8;
   tr{
     width: 100%;
   }
-  #chart, .chart_area {
-    width: inherit;
-    height: 100px;
-  }
-  #chart{
-    overflow-x: hidden;
-  }
-  .chart_area{
-    display: flex
-  }
-  .chart_line{
-    width: calc(100% * 0.3)
-  };
+
+
   .data.top{
     position:relative;
     &::before{
@@ -131,6 +120,20 @@ $unit_value_color:#218be8;
         color:$unit_value_color
       }
     }
+    //chart
+    #tempChart{
+      overflow-x: hidden;
+    }
+    #tempChart, .chart_area {
+      width: inherit;
+      height: 100px;
+    }
+    .chart_area{
+      display: flex
+    }
+    .chart_line{
+      width: calc(100% * 0.3)
+    };
     //wind
     .icon_wind{
       display: block;

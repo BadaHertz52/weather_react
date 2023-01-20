@@ -246,12 +246,12 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
                   </tr>
                 </thead>
                 <tbody>
-                  {/*temp graphe */}
+                  {/*temp chart  */}
                   <tr>
                     <td 
-                    id="chart"
-                    className="chart  ">
-                      <div className=" chart chart_area">
+                    id="tempChart"
+                    className="chart">
+                      <div className="chart chart_area">
                         <div 
                           className='chart_wrap'
                           style={getChartWrapStyle(0)}
