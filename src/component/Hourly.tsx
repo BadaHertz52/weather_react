@@ -171,7 +171,6 @@ type HourlyProperty ={
 };
 
 const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
-  const hoursArry = threeDay.map((d:DailyWeather)=>d.hourly.map((h:HourWeather)=> h.hour));
   const tempArry = threeDay.map((d:DailyWeather)=> d.hourly.map((h:HourWeather)=>h.temp));
   const todayTempArry =tempArry[0];
   const tomorrowTempArry =tempArry[1];
