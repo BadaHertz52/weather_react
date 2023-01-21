@@ -5,6 +5,7 @@ $hour_grey : rgb(170,170,170);
 $unit_value_color:#218be8;
 
 .hourly{
+  margin-top: 22px; //now_tabList
   .weather_graph{
     width: inherit;
     height: fit-content;
@@ -86,19 +87,14 @@ $unit_value_color:#218be8;
     .skyIcon{
       width: 50%;
       aspect-ratio: 1;
-    }
-    .temp{
-      margin-top: 5px;
-      em {
-        font-style: normal;
-        color:#09487e;
-      }
+      margin-top: 4px;
     }
   }
   //tbody
   tbody{
     display: flex;
     flex-direction: column;
+    margin-top: 5px;
     tr{
       display: flex;
       margin-top: 10px;
@@ -131,16 +127,39 @@ $unit_value_color:#218be8;
     #tempChart{
       overflow-x: hidden;
     }
-    #tempChart, .chart_area {
+    #tempChart, .chart_area{
       width: inherit;
       height: 100px;
     }
     .chart_area{
-      display: flex
+      display: flex;
+      position: relative;
+    }
+    .chart_wrap{
+      position: relative;
     }
     .chart_line{
       width: calc(100% * 0.3)
     };
+    .chart_text {
+      width: inherit;
+      height: 100%;
+      position: absolute;
+      top:0;
+      left:55px;
+      display: flex;
+    }
+    .today .chart_text{
+      left: 55px
+    }
+    .chart_text .temp{
+      position: relative;
+      display: flex;
+      width: 55px;
+      height: inherit;
+      font-weight: bold;
+      }
+    }
     //wind
     .icon_wind{
       display: block;
@@ -152,4 +171,3 @@ $unit_value_color:#218be8;
       }
     }
   }
-}

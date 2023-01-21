@@ -72,9 +72,6 @@ const CnItemDay =({todaySunInform ,dailyWeather, index}:CnItemDayProperty)=>{
               skyType={h.sky}
               day={checkDayOrNight( Number(hour) ,todaySunInform)}
             />
-            <div className='temp'>
-              <em>{h.temp}°</em>
-            </div>
           </th>
         )
       })}
@@ -144,6 +141,30 @@ const TdWindy=({date, hours, wind}:TdWindyProperty)=>{
     </td>
   )
 };
+type TempValueProperty ={
+  temp:number,
+  minY:number,
+  maxY:number
+};
+const TempValue =({temp,minY,maxY}:TempValueProperty)=>{
+    const gap = minY < 0 ? -(minY) : minY ;
+    const newMax = maxY + gap;
+    const percent = (100 * (temp + gap)) / newMax ;
+    const style :CSSProperties ={
+      position:'absolute',
+      bottom: `${percent + 4}%`,
+      left:'calc(50% - 12px)'
+    };
+  return (
+    <div 
+      className="temp"
+    >
+      {temp !==null &&
+        <em style={style}>{temp}°</em>
+      }
+    </div>
+  )
+};
 type HourlyProperty ={
   todaySunInform: Error | SunRiseAndSet,
   threeDay: DailyWeather[]
@@ -155,23 +176,26 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
   const todayTempArry =tempArry[0];
   const tomorrowTempArry =tempArry[1];
   const dayAfterTempArry =tempArry[2];
-  const temps = [...todayTempArry ,...tomorrowTempArry, ...dayAfterTempArry]; 
-  const todyaChartData = getChartData([todayTempArry[0], ...todayTempArry , tomorrowTempArry[0]]);
-  const tomorrowChartData =getChartData([todayTempArry[todayTempArry.length-1], ...tomorrowTempArry]);
-  const dayAfterChartData = getChartData([tomorrowTempArry[tomorrowTempArry.length-1], ...dayAfterTempArry]);
+  const temps = [
+  ...todayTempArry ,...tomorrowTempArry, ...dayAfterTempArry];
+  const chartData =getChartData(temps);
   const chartStyle :CSSProperties ={
     width:'inherit',
     height:'inherit',
     position:'absolute' ,
-    left: '25px'
-  }
+    left: 'calc(55px * 0.5)'
+  };
+  const maxY  = Math.max(...temps) + 8 ;
+  const minY = Math.min(...temps) - 8 ;
   function getChartData (tempArry:number[]):ChartData{
+    // 오늘에서부터 나오는 그래프 선을 위해 
+    const arry =[ todayTempArry[0],...tempArry];
     const chartData : ChartData=  {
-      labels:tempArry,
+      labels:arry,
       datasets:[{
-        data: tempArry,
-        borderColor:'#1eaef1',
-        borderWidth:1,
+        data: arry,
+        borderColor:'#2fc5f3',
+        borderWidth:1.2,
         spanGaps:true,
       }]
     };
@@ -192,7 +216,7 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
     scales:{
       x:{
         grid:{
-          display:true,
+          display:false,
         },
         axis:'x',
         display:false,
@@ -209,20 +233,10 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
         title: {
           display: false
         },
-        max:Math.max(...temps) +8,
-        min:Math.min(...temps) -8
+        max: maxY,
+        min:minY
       }
     }
-  };
-  const getChartWrapStyle=(dayIndex:number):CSSProperties=>{
-    const arry = hoursArry[dayIndex];
-    const width = dayIndex ===0? (55 *(arry.length + 1)) : 55 * (arry.length);
-    const style :CSSProperties ={
-      width:`${width}px`,
-      height: '100%',
-      position:'relative',
-    };
-    return style 
   };
   return (
     <div className="hourly">
@@ -255,42 +269,22 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
                     id="tempChart"
                     className="chart">
                       <div className="chart chart_area">
-                        <div 
-                          className='chart_wrap'
-                          style={getChartWrapStyle(0)}
-                        > 
-                          <Chart
+                        <Chart
                             className="chart_line"
                             type='line'
-                            data={todyaChartData}
+                            data={chartData}
                             options={chartOption}
                             style={chartStyle}
                           />
-                        </div>
-                        <div 
-                          className="chart_wrap"
-                          style={getChartWrapStyle(1)}
-                        >
-                          <Chart
-                            className="chart_line"
-                            type='line'
-                            data={tomorrowChartData}
-                            options={chartOption}
-                            style={chartStyle}
-                          />
-                        </div>
-                        <div 
-                          className="chart_wrap"
-                          style={getChartWrapStyle(2)}
-                        >
-                          <Chart
-                            className="chart_line"
-                            type='line'
-                            data={dayAfterChartData}
-                            options={chartOption}
-                            style={chartStyle}
-                          />
-                        </div>
+                          <div className="chart_text">
+                            {temps.map((t:number)=>
+                            <TempValue
+                              minY={minY}
+                              maxY={maxY}
+                              temp={t}
+                            />
+                              )}
+                          </div>
                       </div>
                     </td>
                   </tr>

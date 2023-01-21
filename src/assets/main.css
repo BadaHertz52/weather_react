@@ -1,3 +1,6 @@
+.hourly {
+  margin-top: 22px;
+}
 .hourly .weather_graph {
   width: inherit;
   height: -webkit-fit-content;
@@ -81,17 +84,12 @@
 .hourly .thead_cnTimeTable .skyIcon {
   width: 50%;
   aspect-ratio: 1;
-}
-.hourly .thead_cnTimeTable .temp {
-  margin-top: 5px;
-}
-.hourly .thead_cnTimeTable .temp em {
-  font-style: normal;
-  color: #09487e;
+  margin-top: 4px;
 }
 .hourly tbody {
   display: flex;
   flex-direction: column;
+  margin-top: 5px;
 }
 .hourly tbody tr {
   display: flex;
@@ -128,16 +126,38 @@
 }
 .hourly tbody .chart_area {
   display: flex;
+  position: relative;
+}
+.hourly tbody .chart_wrap {
+  position: relative;
 }
 .hourly tbody .chart_line {
   width: 30%;
 }
-.hourly tbody .icon_wind {
+.hourly tbody .chart_text {
+  width: inherit;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 55px;
+  display: flex;
+}
+.hourly tbody .today .chart_text {
+  left: 55px;
+}
+.hourly tbody .chart_text .temp {
+  position: relative;
+  display: flex;
+  width: 55px;
+  height: inherit;
+  font-weight: bold;
+}
+.hourly .icon_wind {
   display: block;
   width: inherit;
   text-align: center;
 }
-.hourly tbody .icon_wind svg {
+.hourly .icon_wind svg {
   font-size: 1.3rem;
   color: #218be8;
 }
