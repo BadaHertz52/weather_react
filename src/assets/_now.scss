@@ -3,6 +3,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
+  user-select: none;
 }
 .now_now , .now_quickArea{
   display: flex;

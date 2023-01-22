@@ -1,5 +1,10 @@
 .hourly {
   margin-top: 22px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  box-sizing: border-box;
 }
 .hourly .weather_graph {
   width: inherit;
@@ -7,16 +12,30 @@
   height: -moz-fit-content;
   height: fit-content;
   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  margin-left: 16px;
 }
 .hourly .scrollArea {
   height: 361px;
+  overflow: hidden;
+  position: relative;
+}
+.hourly .scrollArea::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  width: 20%;
+  content: "";
+  background-image: linear-gradient(to left, #fff, rgba(255, 255, 255, 0));
+  background-image: -webkit-linear-gradient(right, #fff, rgba(255, 255, 255, 0));
+  background-image: -webkit-gradient(linear, right top, left top, from(#fff), to(rgba(255, 255, 255, 0)));
 }
 .hourly table {
-  width: 100%;
   font-size: 13px;
 }
 .hourly th, .hourly tbody td {
-  width: 55px;
+  width: 40px;
   padding: 0;
   box-sizing: border-box;
 }
@@ -99,7 +118,7 @@
   font-style: initial;
 }
 .hourly tbody .tit, .hourly tbody .unit {
-  font-size: 12px;
+  font-size: 10px;
   width: inherit;
   text-align: left;
 }
@@ -110,7 +129,7 @@
   width: 100%;
   display: block;
   text-align: center;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: rgb(170, 170, 170);
 }
@@ -127,6 +146,7 @@
 .hourly tbody .chart_area {
   display: flex;
   position: relative;
+  background: linear-gradient(to top, rgba(220, 242, 255, 0.895) 10%, white);
 }
 .hourly tbody .chart_wrap {
   position: relative;
@@ -139,7 +159,7 @@
   height: 100%;
   position: absolute;
   top: 0;
-  left: 55px;
+  left: 40px;
   display: flex;
 }
 .hourly tbody .today .chart_text {
@@ -225,6 +245,10 @@
   display: flex;
   align-items: center;
   flex-direction: column;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 .now_now, .now_quickArea {
@@ -684,7 +708,7 @@ li {
   list-style: none;
 }
 
-.hourly, .week {
+.week {
   padding: 20px 30px;
   box-sizing: border-box;
 }

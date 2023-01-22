@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { checkDayOrNight } from '../App';
 import { DailyWeather, directionArry, HourWeather, SunRiseAndSet, WindType } from '../modules/weather';
 import SkyIcon from './SkyIcon';
@@ -182,8 +182,16 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
     width:'inherit',
     height:'inherit',
     position:'absolute' ,
-    left: 'calc(55px * 0.5)'
+    left: 'calc(40px * 0.5)'
   };
+  const translateX =useRef<number>(0);
+  const [tableStyle, setTableStyle]=useState <CSSProperties> ({
+    transform:`translateX(0)`
+  });
+  const tableRef= useRef<HTMLTableElement>(null);
+  const min = useRef<number>(0);
+  const scrollChart =useRef<boolean>(false);
+  const startX = useRef<number>(0);
   const maxY  = Math.max(...temps) + 8 ;
   const minY = Math.min(...temps) - 8 ;
   function getChartData (tempArry:number[]):ChartData{
@@ -193,8 +201,8 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
       labels:arry,
       datasets:[{
         data: arry,
-        borderColor:'#2fc5f3',
-        borderWidth:1.2,
+        borderColor:'#333333',
+        borderWidth:1,
         spanGaps:true,
       }]
     };
@@ -237,13 +245,53 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
       }
     }
   };
+  const  startScroll=(clientX:number)=>{
+    scrollChart.current = true;
+    startX.current = clientX;
+    const string ='translateX(';
+    const transform = tableStyle.transform as string;
+    const value= transform.slice(string.length);
+    const x = value.includes("px")? value.slice(0, value.indexOf("px")) : value.slice(0, value.indexOf(")"));
+    translateX.current = Number(x) ;
+  };  
+  const moveScroll=(clientX:number)=>{
+    if(scrollChart.current  ){
+      const gap= clientX - startX.current;
+      const x  = translateX.current + gap;
+      const value = x >=0 ? 0 : (x <= -min.current ? -min.current : x);
+      setTableStyle({
+        transform:`translateX(${value}px)`
+      });
+    }
+  };
+  const endScroll =()=>{
+    startX.current =0;
+    scrollChart.current = false;
+    translateX.current = 0;
+  };
+  useEffect(()=>{
+    if(tableRef.current !==null){
+      const tableWidth =tableRef.current?.clientWidth;
+      const scrollArea = tableRef.current.parentElement 
+      if(scrollArea !==null){
+        min.current = tableWidth -scrollArea.clientWidth
+      }
+    }
+  },[tableRef])
   return (
     <div className="hourly">
       <div className="weather_graph">
         <div className="scrollControl">
-          <div className="scrollArea">
-            <div className="weather_table_wrap">
-              <table>
+          <div 
+            className="scrollArea"
+            onMouseDown={(event)=>startScroll(event.clientX)}
+            onMouseMove={(event)=>moveScroll(event.clientX)}
+            onMouseUp={endScroll}
+            onTouchStart={(event)=> startScroll(event.touches[0].clientX)}
+            onTouchMove={(event)=> moveScroll(event.touches[0].clientX)}
+            onTouchEnd={endScroll}
+          >
+              <table ref={tableRef} style={tableStyle}>
                 <caption>
                   <span className='blind'>
                     시간별 날씨 정보를 제공하는 표
@@ -381,7 +429,6 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
                   </tr>
                 </tbody>
               </table>
-            </div>
           </div>
           {/* <ScrollBtn>
             
