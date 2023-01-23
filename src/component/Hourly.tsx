@@ -445,7 +445,9 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
                 </tbody>
               </table>
           </div>
-          <ScrollBtn
+        </div>
+      </div>
+      <ScrollBtn
             clickEvent ={()=>clickScrollBtn(true)}
             className ={` ${tableStyle.transform !=='translateX(0px)'? 'on':''}`} 
             name={'tempchart_scrollBtn_pre'}
