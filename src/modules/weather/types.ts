@@ -1,6 +1,5 @@
 import { MidLandAreaCode, MidTaAreaCode } from '../areaCodeType';
 import { SFGridItem } from '../position';
-import { sfGrid } from '../sfGrid';
 import {reset , request, success ,failure } from './reducer';
 
 export const sunny ="맑음"; // sky code =1
