@@ -5,33 +5,40 @@ $hour_grey : rgb(170,170,170);
 $unit_value_color:#218be8;
 
 .hourly{
-  margin-top: 22px; //now_tabList
+  margin-top: calc(22px + 14px); //now_tabList
   user-select: none;
   box-sizing: border-box;
+  position: relative;
   .weather_graph{
     width: inherit;
     height: fit-content;
     border-bottom: 1px solid rgba(0,0,0,.04);
     margin-left: 16px;
   }
-  .scrollControl{
-    position: relative;
-  }
   .scrollArea{
     height: 361px;
     overflow: hidden;
     position: relative;
-    &::after {
+    &.afterOn::after ,
+    &.beforeOn::before {
       position: absolute;
       top:0;
-      right:0;
       bottom: 0;
       z-index: 10;
-      width:20%;
+      width:10%;
       content:'';
+    };
+    &::after{
+      right:0;
       background-image: linear-gradient(to left,#fff,rgba(255,255,255,0));
       background-image: -webkit-linear-gradient(right,#fff,rgba(255,255,255,0));
       background-image: -webkit-gradient(linear,right top,left top,from(#fff),to(rgba(255,255,255,0)));
+    };
+    &::before{
+      left: 0;
+      background-image: linear-gradient(to right,#fff,rgba(255,255,255,0));
+      background-image: -webkit-linear-gradient(left,#fff,rgba(255,255,255,0));
+      background-image: -webkit-gradient(linear,left top,right top,from(#fff),to(rgba(255,255,255,0)));
     }
   }
   table{
@@ -187,6 +194,14 @@ $unit_value_color:#218be8;
       svg{
         font-size: 1.3rem;
         color:$unit_value_color;
+      }
+    }
+  }
+
+  @media screen and (min-width:1025px) {
+    .hourly {
+      .weather_graph {
+        margin-left: 0;
       }
     }
   }

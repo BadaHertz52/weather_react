@@ -192,6 +192,14 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
   const tableRef= useRef<HTMLTableElement>(null);
   const scrollAreaWidth =useRef<number>(0);
   const min = useRef<number>(0);
+  /**
+   * scrollArea::before 이 화면에 보이는 조건
+   */
+  const scrollBeforeOn=useRef<boolean>(false);
+    /**
+   * scrollArea::after 가 화면에 보이는 조건
+   */
+  const scrollAfterOn= useRef<boolean>(true);
   const scrollChart =useRef<boolean>(false);
   const startX = useRef<number>(0);
   const maxY  = Math.max(...temps) + 8 ;
@@ -265,6 +273,8 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
       const gap= clientX - startX.current;
       const x  = translateX.current + gap;
       const value = x >=0 ? 0 : (x <= -min.current ? -min.current : x);
+      scrollAfterOn.current = (value > - min.current);
+      scrollBeforeOn.current = value <0;
       setTableStyle({
         transform:`translateX(${value}px)`
       });
@@ -279,8 +289,15 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
     const value =getTranslateXValue();
     const scrollWidth = scrollAreaWidth.current - 40
     const x= pre? value + scrollWidth : value - scrollWidth;
+    scrollAfterOn.current = (x> -min.current);
+    scrollBeforeOn.current = (x < 0)
     setTableStyle({
-      transform:x <= -min.current ? `translateX(${-min.current}px)` : `translateX(${x}px)`
+      transform:x <= -min.current ? `translateX(${-min.current}px)` :(
+        x>=0 ?
+        'translateX(0px)'
+        :
+        `translateX(${x}px)`
+      )
     })
   };
   useEffect(()=>{
@@ -298,7 +315,7 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
       <div className="weather_graph">
         <div className="scrollControl">
           <div 
-            className="scrollArea"
+            className={`scrollArea ${scrollBeforeOn.current? 'beforeOn' : ''} ${scrollAfterOn.current?'afterOn':''}`}
             onMouseDown={(event)=>startScroll(event.clientX)}
             onMouseMove={(event)=>moveScroll(event.clientX)}
             onMouseUp={endScroll}
@@ -460,8 +477,6 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
             name={'tempchanrt_scrollBtn_next'}
             pre={false}
           />
-        </div>
-      </div>
     </div>
   )
 };

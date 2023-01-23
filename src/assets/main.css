@@ -1,10 +1,11 @@
 .hourly {
-  margin-top: 22px;
+  margin-top: 36px;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
   box-sizing: border-box;
+  position: relative;
 }
 .hourly .weather_graph {
   width: inherit;
@@ -14,25 +15,30 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   margin-left: 16px;
 }
-.hourly .scrollControl {
-  position: relative;
-}
 .hourly .scrollArea {
   height: 361px;
   overflow: hidden;
   position: relative;
 }
-.hourly .scrollArea::after {
+.hourly .scrollArea.afterOn::after, .hourly .scrollArea.beforeOn::before {
   position: absolute;
   top: 0;
-  right: 0;
   bottom: 0;
   z-index: 10;
-  width: 20%;
+  width: 10%;
   content: "";
+}
+.hourly .scrollArea::after {
+  right: 0;
   background-image: linear-gradient(to left, #fff, rgba(255, 255, 255, 0));
   background-image: -webkit-linear-gradient(right, #fff, rgba(255, 255, 255, 0));
   background-image: -webkit-gradient(linear, right top, left top, from(#fff), to(rgba(255, 255, 255, 0)));
+}
+.hourly .scrollArea::before {
+  left: 0;
+  background-image: linear-gradient(to right, #fff, rgba(255, 255, 255, 0));
+  background-image: -webkit-linear-gradient(left, #fff, rgba(255, 255, 255, 0));
+  background-image: -webkit-gradient(linear, left top, right top, from(#fff), to(rgba(255, 255, 255, 0)));
 }
 .hourly table {
   font-size: 13px;
@@ -185,6 +191,11 @@
   color: #218be8;
 }
 
+@media screen and (min-width: 1025px) {
+  .hourly .weather_graph {
+    margin-left: 0;
+  }
+}
 .location {
   display: flex;
   align-items: center;
@@ -252,6 +263,7 @@
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  box-sizing: border-box;
 }
 
 .now_now, .now_quickArea {
@@ -294,6 +306,7 @@
 .now_quickArea {
   width: 100%;
   margin-top: 14px;
+  position: relative;
 }
 
 .now .scrollControl {
@@ -408,15 +421,17 @@
 @media screen and (min-width: 1025px) {
   .now {
     flex-direction: row;
+    justify-content: space-between;
   }
   .now_quickArea {
-    width: calc(100% - 200px);
+    width: 450px;
   }
   .now .scrollControl {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
   }
 }
 .scrollBtn {
@@ -439,7 +454,7 @@
   left: -36px;
 }
 .scrollBtn.next {
-  left: 100%;
+  left: calc(100% + 10px);
 }
 
 @media screen and (min-width: 1025px) {
@@ -718,7 +733,6 @@ li {
 
 @media screen and (min-width: 780px) {
   .hourly, .week {
-    margin: 0;
     padding: 30px 65px;
   }
 }
@@ -739,6 +753,6 @@ li {
     width: 751px;
   }
   .hourly, .week {
-    padding: 30px 51px 40px 0;
+    padding: 0;
   }
 }/*# sourceMappingURL=main.css.map */
