@@ -8,7 +8,7 @@
   position: relative;
 }
 .hourly .weather_graph {
-  width: inherit;
+  width: 100%;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
@@ -128,7 +128,7 @@
 }
 .hourly tbody .tit, .hourly tbody .unit {
   font-size: 10px;
-  width: inherit;
+  width: 100%;
   text-align: left;
 }
 .hourly tbody .unit {
@@ -149,7 +149,7 @@
   overflow-x: hidden;
 }
 .hourly tbody #tempChart, .hourly tbody .chart_area {
-  width: inherit;
+  width: 100%;
   height: 100px;
 }
 .hourly tbody .chart_area {
@@ -164,7 +164,7 @@
   width: 30%;
 }
 .hourly tbody .chart_text {
-  width: inherit;
+  width: 100%;
   height: 100%;
   position: absolute;
   top: 0;
@@ -178,12 +178,12 @@
   position: relative;
   display: flex;
   width: 55px;
-  height: inherit;
+  height: 100%;
   font-weight: bold;
 }
 .hourly .icon_wind {
   display: block;
-  width: inherit;
+  width: 100%;
   text-align: center;
 }
 .hourly .icon_wind svg {
@@ -254,11 +254,70 @@
   width: 100%;
 }
 
+.nation {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.nation .title, .nation .weekly_list, .nation .map_wrap {
+  width: 100%;
+  margin: 0;
+}
+.nation .weekly_list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-top: 1px solid #e6ebee;
+}
+.nation .weekly_list .item {
+  width: 14.2857142857%;
+  height: 100%;
+}
+.nation .weekly_list .item .button {
+  width: 100%;
+  height: 55px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  background-color: inherit;
+  border: none;
+  color: rgb(139, 139, 139);
+}
+.nation .weekly_list .item.on .button {
+  color: #38a2f8;
+  font-weight: bold;
+}
+.nation .weekly_list .item.on .date {
+  border-bottom: 1px solid #38a2f8;
+}
+.nation .weekly_list .item .day {
+  font-size: 14px;
+}
+.nation .weekly_list .item .date {
+  font-size: 12px;
+  padding: 5px;
+  padding-top: 0;
+}
+.nation .map_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #c8e0f8;
+}
 .nation .map_img {
   width: 358px;
   z-index: 0;
 }
 
+@media screen and (min-width: 1025px) {
+  .nation {
+    width: 358px;
+  }
+}
 .now {
   width: 100%;
   display: flex;
@@ -328,7 +387,7 @@
   width: 100%;
   position: absolute;
   left: 0;
-  height: inherit;
+  height: 100%;
 }
 
 .summary.current, .summary.tomorrow {
@@ -337,7 +396,7 @@
   align-items: center;
   justify-content: center;
   height: 65px;
-  width: inherit;
+  width: 100%;
 }
 
 .summary.current {

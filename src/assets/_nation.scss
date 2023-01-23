@@ -1,6 +1,65 @@
+$onColor :#38a2f8;
+
 .nation {
+  user-select: none;
+  .title , .weekly_list, .map_wrap{
+    width: 100%;
+    margin: 0;
+  }
+  .weekly_list{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top: 1px solid  #e6ebee;
+    .item{
+      width: calc(100% / 7);
+      height: 100%;
+      .button{
+        width: 100%;
+        height: 55px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+        background-color: inherit;
+        border: none;
+        color:rgb(139, 139, 139);
+      }
+      &.on{
+        .button {
+          color:$onColor;
+          font-weight: bold;
+        }
+        .date{
+          border-bottom: 1px solid $onColor;
+        }
+      }
+      .day{
+        font-size: 14px;
+      }
+      .date{
+        font-size: 12px;
+        padding: 5px;
+        padding-top: 0;
+      }
+    }
+  }
+  .map_wrap{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color:  #c8e0f8;
+  }
   .map_img{
     width: 358px;
     z-index: 0;
+  }
+}
+
+@media screen and (min-width:1025px) {
+  .nation{
+    width: 358px;
   }
 }
