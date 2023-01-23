@@ -4,14 +4,14 @@ import {FcNext, FcPrevious} from 'react-icons/fc';
 
 const BtnStyled = styled.button`
   border-radius:50%;
-  width:36px;
-  height:36px;
-  font-size:30px;
+  width:25px;
+  height:25px;
+  font-size:100%;
   fill:#939393;
   background-color:#ffff;
   border:none;
-  -webkit-box-shadow: 0px 0px 15px 2px rgba(112,112,112,0.28); 
-  box-shadow: 0px 0px 15px 2px rgba(112,112,112,0.28);
+  -webkit-box-shadow: 0px 0px 10x 1px rgba(112,112,112,0.28); 
+  box-shadow: 0px 0px 10px 1px rgba(112,112,112,0.28);
 `
 type BtnProperty ={
   clickEvent :() => void,
