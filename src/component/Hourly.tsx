@@ -17,6 +17,7 @@ import {
   ChartData,
   ChartOptions
 } from 'chart.js'
+import ScrollBtn from './ScrollBtn';
 
 ChartJS.register(
   CategoryScale,
@@ -186,9 +187,10 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
   };
   const translateX =useRef<number>(0);
   const [tableStyle, setTableStyle]=useState <CSSProperties> ({
-    transform:`translateX(0)`
+    transform:`translateX(0px)`
   });
   const tableRef= useRef<HTMLTableElement>(null);
+  const scrollAreaWidth =useRef<number>(0);
   const min = useRef<number>(0);
   const scrollChart =useRef<boolean>(false);
   const startX = useRef<number>(0);
@@ -245,14 +247,18 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
       }
     }
   };
+  const getTranslateXValue =()=>{
+    const string ='translateX(';
+    const transform = tableStyle.transform as string;
+    const x= transform.slice(string.length);
+    const value = x.includes("px")? x.slice(0, x.indexOf("px")) : x.slice(0, x.indexOf(")"));
+    return Number(value)
+  };
   const  startScroll=(clientX:number)=>{
     scrollChart.current = true;
     startX.current = clientX;
-    const string ='translateX(';
-    const transform = tableStyle.transform as string;
-    const value= transform.slice(string.length);
-    const x = value.includes("px")? value.slice(0, value.indexOf("px")) : value.slice(0, value.indexOf(")"));
-    translateX.current = Number(x) ;
+    const value =getTranslateXValue();
+    translateX.current = Number(value) ;
   };  
   const moveScroll=(clientX:number)=>{
     if(scrollChart.current  ){
@@ -269,12 +275,21 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
     scrollChart.current = false;
     translateX.current = 0;
   };
+  const clickScrollBtn =(pre:boolean)=>{
+    const value =getTranslateXValue();
+    const scrollWidth = scrollAreaWidth.current - 40
+    const x= pre? value + scrollWidth : value - scrollWidth;
+    setTableStyle({
+      transform:x <= -min.current ? `translateX(${-min.current}px)` : `translateX(${x}px)`
+    })
+  };
   useEffect(()=>{
     if(tableRef.current !==null){
       const tableWidth =tableRef.current?.clientWidth;
       const scrollArea = tableRef.current.parentElement 
       if(scrollArea !==null){
-        min.current = tableWidth -scrollArea.clientWidth
+        scrollAreaWidth.current = scrollArea.clientWidth;
+        min.current = tableWidth -scrollArea.clientWidth;
       }
     }
   },[tableRef])
@@ -430,12 +445,19 @@ const Hourly =({todaySunInform ,threeDay }:HourlyProperty)=>{
                 </tbody>
               </table>
           </div>
-          {/* <ScrollBtn>
-            
-          </ScrollBtn>
-          <ScrollBtn>
-
-          </ScrollBtn> */}
+          <ScrollBtn
+            clickEvent ={()=>clickScrollBtn(true)}
+            className ={` ${tableStyle.transform !=='translateX(0px)'? 'on':''}`} 
+            name={'tempchart_scrollBtn_pre'}
+            pre={true}
+          />
+  
+          <ScrollBtn
+            clickEvent={()=>clickScrollBtn(false)}
+            className={`${min.current!==undefined &&tableStyle.transform !==`translateX(${-min.current}px)`? 'on':''}`}
+            name={'tempchanrt_scrollBtn_next'}
+            pre={false}
+          />
         </div>
       </div>
     </div>

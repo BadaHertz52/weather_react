@@ -14,6 +14,9 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   margin-left: 16px;
 }
+.hourly .scrollControl {
+  position: relative;
+}
 .hourly .scrollArea {
   height: 361px;
   overflow: hidden;

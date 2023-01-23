@@ -14,6 +14,9 @@ $unit_value_color:#218be8;
     border-bottom: 1px solid rgba(0,0,0,.04);
     margin-left: 16px;
   }
+  .scrollControl{
+    position: relative;
+  }
   .scrollArea{
     height: 361px;
     overflow: hidden;
