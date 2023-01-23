@@ -60,7 +60,7 @@
     width: 100%;
     position: absolute;
     left: 0;
-    height: inherit;
+    height: 100%;
   }
 }
 
@@ -70,7 +70,7 @@
   align-items: center;
   justify-content: center;
   height: 65px;
-  width: inherit;
+  width: 100%;
 }
 .summary.current{
   left: 0;

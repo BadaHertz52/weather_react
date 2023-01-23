@@ -10,7 +10,7 @@ $unit_value_color:#218be8;
   box-sizing: border-box;
   position: relative;
   .weather_graph{
-    width: inherit;
+    width: 100%;
     height: fit-content;
     border-bottom: 1px solid rgba(0,0,0,.04);
     margin-left: 16px;
@@ -129,7 +129,7 @@ $unit_value_color:#218be8;
     }
     .tit, .unit{
       font-size: 10px;
-      width: inherit;
+      width: 100%;
       text-align: left;
     }
     .unit{
@@ -153,7 +153,7 @@ $unit_value_color:#218be8;
       overflow-x: hidden;
     }
     #tempChart, .chart_area{
-      width: inherit;
+      width: 100%;
       height: 100px;
     }
     .chart_area{
@@ -168,7 +168,7 @@ $unit_value_color:#218be8;
       width: calc(100% * 0.3)
     };
     .chart_text {
-      width: inherit;
+      width: 100%;
       height: 100%;
       position: absolute;
       top:0;
@@ -182,14 +182,14 @@ $unit_value_color:#218be8;
       position: relative;
       display: flex;
       width: 55px;
-      height: inherit;
+      height: 100%;
       font-weight: bold;
       }
     }
     //wind
     .icon_wind{
       display: block;
-      width: inherit;
+      width: 100%;
       text-align: center;
       svg{
         font-size: 1.3rem;
