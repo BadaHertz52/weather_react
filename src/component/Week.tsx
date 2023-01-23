@@ -27,14 +27,14 @@ const AmPm =({data ,am}:AmPmProperty)=>{
 type ItemPorperty ={
   item:Day
 };
+export const weekArry =["일","월", "화","수","목","금","토","일"];
 const Item =({item}:ItemPorperty)=>{
   const today = new Date();
   const month = today.getMonth() +1;
   const date:string = `${month}.${today.getDate()}`;
-  const week =["일","월", "화","수","목","금","토","일"];
   const todayDay = today.getDay();
   const itemDay = todayDay + item.dayslater;
-  const item_day = itemDay >6? week[itemDay - 6] : week[itemDay];
+  const item_day = itemDay >6? weekArry[itemDay - 6] : weekArry[itemDay];
   const day :string = item.dayslater ===0 ? 
               "오늘" 
               :(
