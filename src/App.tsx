@@ -133,8 +133,10 @@ function App () {
               }
             </div>
             <div className="section_rigth">
-            {weather.sunRiseAndSet !==null?
-                <Nation/>
+            {weather.nation !==null?
+                <Nation
+                  nation ={weather.nation}
+                />
                 :
                 <None  target ={"전국 날씨 예보"} />
               }
