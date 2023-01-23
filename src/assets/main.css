@@ -254,6 +254,11 @@
   width: 100%;
 }
 
+.nation .map_img {
+  width: 358px;
+  z-index: 0;
+}
+
 .now {
   width: 100%;
   display: flex;
