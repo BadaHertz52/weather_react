@@ -309,15 +309,7 @@ const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode, today
         rnStPm:landItems.item[0].rnSt6Pm,
         taMax:taItems.item[0].taMax6,
         taMin:taItems.item[0].taMin6
-      },{
-        dyalater:7,
-        wfAm:landItems.item[0].wf7Am,
-        wfPm:landItems.item[0].wf7Pm,
-        rnStAm:landItems.item[0].rnSt7Am,
-        rnStPm:landItems.item[0].rnSt7Pm,
-        taMax:taItems.item[0].taMax7,
-        taMin:taItems.item[0].taMin7
-      }
+      } 
     ];
     return midFcst
   }else{
