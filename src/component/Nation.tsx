@@ -34,9 +34,10 @@ const NWItem =({daylater, today_date, targetDaylater, setTargetDaylater}:NWItemP
   )
 };
 type NationProperty ={
-  nation:Area[]
+  nation:Area[],
+  todaySunInform: Error | SunRiseAndSet
 };
-const Nation =({nation}:NationProperty)=>{
+const Nation =({nation, todaySunInform}:NationProperty)=>{
   const today = new Date();
   const todya_date = today.getDate();
   const [targetDaylater, setTargetDaylater] =useState<number>(0);
