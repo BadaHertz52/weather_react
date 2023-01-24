@@ -150,12 +150,18 @@ const getUSSkyCode =async(nx:string, ny:string, baseDate:string, baseTime:string
  * 현재 시점에 대한 초단기 실황 api 데이터를 반환하는 함수
  * @param nx 예보지점 x 좌표
  * @param ny 예보지점 y좌표
- * @param baseDate  발표일자(yyyymmdd)
+ * @param baseDate_yeaterday  발표일자(yyyymmdd)
+ * @param baseDate_today  발표일자(yyyymmdd)
  * @param fcstTime   현재 시각
+ * @param preFcstTime
+ * @param minutes
+ * @param hours
  * @return Promise<USNcst|string> fcstTime 기준으로 6시간 이내의 예보
  */
-const getUSNcast =async(nx:string, ny:string, baseDate:string ,fcstTime:string)=>{
-  const url =getSFApiUrl("getUltraSrtNcst",nx,ny,baseDate,fcstTime,"16");
+const getUSNcast =async(nx:string, ny:string, baseDate_yesterday:string, baseDate_today:string ,fcstTime:string, preFcstTime:string, minutes:number, hours: number)=>{
+  const baseDate = ((minutes < 40) && (hours ===0))? baseDate_yesterday : baseDate_today;
+  const baseTime = minutes < 40 ? (hours === 0 ? "2300" : preFcstTime) : fcstTime; 
+  const url =getSFApiUrl("getUltraSrtNcst",nx,ny,baseDate,baseTime,"16");
   const items = await getApiItems(url , "usncst");
   if(items instanceof Error){
     return items; 
@@ -791,17 +797,23 @@ const findLandTaCode =(sfGrid:SFGridItem)=>{
 };
 /**
  * weather 의 nation 값을 반환
+ * @param baseDate_skyCode
  * @param baseDate_svf 
  * @param baseDate_today 
- * @param hours 
- * @param baseTime_svf 
  * @param baseDate_yesterday 
+ * @param hours 
+ * @param baseTime_skyCode
+ * @param fcstTime
+ * @param preFcstTime
+ * @param minutes
+ * @param hours
+ * @param baseTime_svf 
  * @param timeArry 
  * @param todayTimeArry 
  * @param threeDays 
  * @returns  Promise<Error | Area[]>
  */
-const  getNationData =(baseDate_svf: string, baseDate_today:string, hours:number, baseTime_svf: SVFBaseTime, baseDate_yesterday: string, timeArry: string[], todayTimeArry: string[], threeDays: string[])=>{
+const  getNationData =(baseDate_skyCode:string,baseDate_svf: string, baseDate_today:string,baseDate_yesterday: string,  baseTime_skyCode:string, fcstTime:string, preFcstTime:string,  minutes:number, hours:number, baseTime_svf: SVFBaseTime, timeArry: string[], todayTimeArry: string[], threeDays: string[])=>{
   const data =Promise
   .all(areaArry.map(async(item:AreaInform)=>{
     const {nX, nY}= changeNType
@@ -819,16 +831,25 @@ const  getNationData =(baseDate_svf: string, baseDate_today:string, hours:number
       ):
       new Error('[Error] taRegId is undefined')
     );
-    
-    if(!(sVFcst instanceof Error) && !(midFcst instanceof Error)){
+    const skyCode = await getUSSkyCode(nX, nY, baseDate_skyCode,baseTime_skyCode, fcstTime)
+    const nowWeather = await getUSNcast(nX,nY,baseDate_yesterday, baseDate_today, fcstTime, preFcstTime, minutes, hours);
+    if( !(sVFcst instanceof Error) && 
+        !(midFcst instanceof Error) &&
+        !(skyCode instanceof Error) &&
+        !(nowWeather instanceof Error) 
+    ){
       const svfDay :Day[] =changeSvfToDay(sVFcst);
       const midDay: Day[] = changeMidToDay(midFcst);
-
+      
       const area : Area ={
         areaInform:{
           ...item
         },
-        day:[...svfDay, ...midDay]
+        day:[...svfDay, ...midDay],
+        now:{
+          temp:nowWeather.t1h,
+          sky:skyCode
+        }
       };
       return area
     }else{
@@ -836,7 +857,8 @@ const  getNationData =(baseDate_svf: string, baseDate_today:string, hours:number
         areaInform:{
           ...item
         },
-        day:null
+        day:null,
+        now:null
       };
       return area
     }
@@ -927,13 +949,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
   const todayTimeArry = timeArry.slice(baseTimeIndex+1);
   //get api data
   const skyCode = await getUSSkyCode(nX, nY, baseDate_skyCode,baseTime_skyCode,fcstTime);
-  const uSNcst = minutes < 40 ? 
-                (hours === 0 ?
-                  await getUSNcast(nX, nY, baseDate_yesterday, "2300")
-                  : 
-                await getUSNcast(nX, nY, baseDate_today, preFcstTime)
-                )
-                :await getUSNcast(nX, nY, baseDate_today, fcstTime);
+  const uSNcst = await getUSNcast(nX,nY,baseDate_yesterday,baseDate_today,fcstTime,preFcstTime,minutes,hours)
   const sVFcst = await getSVFcast(nX,nY,baseDate_svf,baseTime_svf ,baseDate_yesterday,timeArry,todayTimeArry, threeDays);
   const midFcst =landRegId !==undefined && taRegId !==undefined? await getMidFcast(landRegId, taRegId,baseDate_today,baseDate_yesterday, hours ): (
     landRegId === undefined?
@@ -945,7 +961,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     ):
     new Error('[Error] taRegId is undefined')
   );
-  const nationData = await getNationData(baseDate_svf,baseDate_today,hours,baseTime_svf,baseDate_yesterday,timeArry ,todayTimeArry, threeDays);
+  const nationData = await getNationData(baseDate_skyCode,baseDate_svf, baseDate_today,baseDate_yesterday,  baseTime_skyCode, fcstTime, preFcstTime,  minutes, hours, baseTime_svf, timeArry, todayTimeArry, threeDays);
   const nowApGrade = await getApNow(sidoName,stationName);
   const tommorowApGrade =await getApFcst(baseDate_today,threeDays[1], sidoName ,sfGrid);
   const sunInform =await getSunInform(longitude,latitude,threeDays);
