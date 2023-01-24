@@ -429,9 +429,14 @@ export const areaArry: AreaInform[] =[
   taRegId:"11G00201"
  }
 ];
+type AreaNow ={
+  temp :number,
+  sky:SkyType,
+};
 export type Area ={
   areaInform: AreaInform,
-  day:Day[]|null
+  day:Day[]|null,
+  now:AreaNow|null
 };
 
 export type SunRiseAndSet ={
