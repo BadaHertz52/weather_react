@@ -71,7 +71,7 @@ const CnItemDay =({todaySunInform ,dailyWeather, index}:CnItemDayProperty)=>{
 
             <SkyIcon
               skyType={h.sky}
-              day={checkDayOrNight( Number(hour) ,todaySunInform)}
+              daytime={checkDayOrNight( Number(hour) ,todaySunInform)}
             />
           </th>
         )

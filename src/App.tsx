@@ -33,8 +33,11 @@ export   const checkDayOrNight =(hours:number, todaySunInform:Error | SunRiseAnd
                           : 
                           Number(todaySunInform.sunSet?.slice(0,2));
   const dayCondition = (hours > sunrise) && (hours < sunset) ;
-  const day :boolean = dayCondition ? true :false;
-  return day
+  /**
+   * 현재 시간이 낮인지 
+   */
+  const daytime :boolean = dayCondition ? true :false;
+  return daytime
 };
 
 function App () {  

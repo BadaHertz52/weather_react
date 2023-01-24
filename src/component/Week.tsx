@@ -19,7 +19,7 @@ const AmPm =({data ,am}:AmPmProperty)=>{
       </strong>
       <SkyIcon
         skyType={data.sky}
-        day={true}
+        daytime={true}
       /> 
     </div>
   )

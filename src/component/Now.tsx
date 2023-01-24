@@ -41,9 +41,9 @@ const PopIcon =({pop}:PopIconProperty)=>{
 type AmPmTrProperty ={
   am:boolean,
   tomrrowWeather: TomorrowWeather,
-  day:boolean
+  daytime:boolean
 }
-const AmPmTr =({am ,tomrrowWeather, day}:AmPmTrProperty)=>{
+const AmPmTr =({am ,tomrrowWeather, daytime}:AmPmTrProperty)=>{
   const weatherData = am? tomrrowWeather.am : tomrrowWeather.pm; 
   return (
     <tr>
@@ -56,7 +56,7 @@ const AmPmTr =({am ,tomrrowWeather, day}:AmPmTrProperty)=>{
       {/* sky  , tmo*/}
       <td>
         <SkyIcon
-          day ={day}
+          daytime ={daytime}
           skyType ={weatherData.sky}
         />
         <dl>
@@ -106,7 +106,7 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
     const now = new Date();
     const hours = now.getHours();
     const sunInformError =todaySunInform instanceof Error ;
-    const day =checkDayOrNight(hours, todaySunInform);
+    const daytime =checkDayOrNight(hours, todaySunInform);
     const wrapRef =useRef<HTMLDivElement>(null);
     const currentWrapStyle :CSSProperties ={
       transform:"translateX(0%)"
@@ -193,7 +193,7 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
             <div className="summaryImg">
               <SkyIcon
                 skyType={nowWeather.sky}
-                day={day}
+                daytime={daytime}
               />
             </div>
             <div className="summary">
@@ -290,12 +290,12 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
                           <AmPmTr
                             am={true}
                             tomrrowWeather={tomrrowWeather}
-                            day={day}
+                            daytime={daytime}
                           />
                           <AmPmTr
                             am={false}
                             tomrrowWeather={tomrrowWeather}
-                            day={day}
+                            daytime={daytime}
                           />
                         </tbody>
                       </table>

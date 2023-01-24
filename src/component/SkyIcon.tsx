@@ -4,7 +4,7 @@ import {BsCloudyFill, BsFillCloudRainFill,  BsMoonStarsFill, BsSnow2 ,BsFillSunF
 import {FaCloudShowersHeavy} from 'react-icons/fa';
 type SkyIconProperty ={
   skyType:SkyType,
-  day:boolean
+  daytime:boolean
 };
 type WeatherIconProperty ={
   className:string |undefined
@@ -112,7 +112,7 @@ export const SunnyNightIcon =()=>{
     )
 };
 
-const SkyIcon =({skyType ,day}:SkyIconProperty)=>{
+const SkyIcon =({skyType ,daytime}:SkyIconProperty)=>{
   return (
     <div className='skyIcon'>
       {skyType ==="구름많고 눈" &&
@@ -165,7 +165,7 @@ const SkyIcon =({skyType ,day}:SkyIconProperty)=>{
         <SnowIcon className='' />
       }
       {skyType ==="맑음" &&
-        (day ?
+        (daytime ?
           <SunnyDayIcon/>
         :
           <SunnyNightIcon/>
