@@ -312,8 +312,9 @@ export const areaArry: AreaInform[] =[
   longitude: "130.9037888888889",
   latitude: "37.480575"
   },
-  landRegId:"11F10000" ,
-  taRegId:"1.10E+102"
+  landRegId:"11H10000" ,
+  //울릉도의 taland code로 중기 기온예보 검색이 안됨, 울릉도에서 가장 가까운 육지인 울진군의 코드를 이용
+  taRegId:"11H10101" 
  },{
   name:대전,
   sfGrid:{

@@ -313,7 +313,8 @@ const nation :Area[] = [
     latitude:"37.480575"},
     landRegId:"11F10000",
     taRegId:"1.10E+102"}, 
-    now:{ temp: 0 , sky:'맑음' } ,day:null
+    now:{ temp: 0 , sky:'맑음' } ,
+    day: [{dayslater:0,am:{pop:57,sky:"흐리고 눈"},pm:{pop:60,sky:"흐리고 눈"},tmn:-7,tmx:-2},{dayslater:1,am:{pop:60,sky:"흐리고 눈"},pm:{pop:43,sky:"흐리고 비/눈"},tmn:-7,tmx:-2},{dayslater:2,am:{pop:29,sky:"흐림"},pm:{pop:39,sky:"흐리고 비"},tmn:-7,tmx:-2},{dayslater:3,am:{pop:40,sky:"구름많음"},pm:{pop:0,sky:"맑음"},tmn:-2,tmx:3},{dayslater:4,am:{pop:0,sky:"맑음"},pm:{pop:0,sky:"맑음"},tmn:-8,tmx:1},{dayslater:5,am:{pop:0,sky:"맑음"},pm:{pop:30,sky:"구름많음"},tmn:-4,tmx:5},{dayslater:6,am:{pop:10,sky:"맑음"},pm:{pop:0,sky:"맑음"},tmn:-3,tmx:3}]
   },
   {areaInform:{name:"대전",
     sfGrid:{areaCode:"3000000000",arePt1:"대전광역시",arePt2:null,arePt3:null,nX:"67",nY:"100",longitude:"127.38656666666667",

@@ -625,6 +625,10 @@ function getMidTaAreaCode(sfGrid:SFGridItem){
           default:
             break;
         }
+      }else if(pt2 ==="울릉군"){ 
+        //울릉도, 독도의 taland code 를 통한 중기 기온 예보 정보를 가져올 수 없어서 
+       // 해당 지역과 가장 가까운 육지의 taland code를 이용
+        return getCodeFromArry('울진')
       }else{
         return getCodeFromArry(pt2Area)
       }
