@@ -277,12 +277,33 @@ const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode, today
    * 중기 육상/기온 예보 요청 메세지를 보낼 때 필요한 예보 발표시각 ( 형태: YYMMDDTTMM) (일 2회(06:00,18:00)회 생성)
    */
   const tmFc =`${tmFcDate}${tmFcTime}`;
-  const common =`serviceKey=${publicApiKey}&dataType=JSON&tmFc=${tmFc}`
-  const landUrl =`${midFcstApi.url}/${inqury_mid_midLandFcst}?regId=${landRegId}&${common}`;
-  const taUrl =`${midFcstApi.url}/${inqury_mid_midTa}?regId=${taRegId}&${common}`;
-  const landItems = await getApiItems(landUrl, "midFcast_landItems");
-  const taItems = await getApiItems(taUrl , "midFcast_taItems");
+  const common =(tmFc:string)=>`serviceKey=${publicApiKey}&dataType=JSON&tmFc=${tmFc}`
+  const landUrl =(tmFc:string)=>`${midFcstApi.url}/${inqury_mid_midLandFcst}?regId=${landRegId}&${common(tmFc)}`;
+  const taUrl =(tmFc:string)=>`${midFcstApi.url}/${inqury_mid_midTa}?regId=${taRegId}&${common(tmFc)}`;
+  let landItems = await getApiItems(landUrl(tmFc), "midFcast_landItems");
+  let taItems = await getApiItems(taUrl(tmFc) , "midFcast_taItems");
   if(!(landItems instanceof Error) && !(taItems instanceof Error)){
+    if(tmFcTime ==="1800"){
+      const newTmFc = `${tmFcDate}0600`;
+      const newLandUrl = landUrl(newTmFc);
+      const newTaUrl = taUrl(newTmFc);
+      const newLandItems = await getApiItems(newLandUrl, "midFcast_landItems");
+      const newTaItems = await getApiItems(newTaUrl , "midFcast_taItems");
+      if(!(newLandItems instanceof Error)&& !(newTaItems instanceof Error)){
+        landItems = {
+          ...landItems,
+          wf3Am:newLandItems.item[0].wf3Am,
+          wf3Pm:newLandItems.item[0].wf3Pm,
+          rnSt3Am:newLandItems.item[0].rnSt3Am,
+          rnSt3Pm:newLandItems.item[0].rnSt3Pm,
+        };
+        taItems ={
+          ...taItems,
+          taMax3:newTaItems.item[0].taMax3,
+          taMin3:newTaItems.item[0].taMin3
+        }
+      }
+    };
     const midFcst:MidFcst = [{
       dyalater:3,
       wfAm:landItems.item[0].wf3Am,
