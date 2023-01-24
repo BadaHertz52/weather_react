@@ -429,7 +429,7 @@ export const areaArry: AreaInform[] =[
   taRegId:"11G00201"
  }
 ];
-type AreaNow ={
+export type AreaNow ={
   temp :number,
   sky:SkyType,
 };
