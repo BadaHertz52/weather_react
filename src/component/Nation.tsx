@@ -40,6 +40,11 @@ const Nation =({nation}:NationProperty)=>{
   const today = new Date();
   const todya_date = today.getDate();
   const [targetDaylater, setTargetDaylater] =useState<number>(0);
+  const now ="now";
+  const am ="am";
+  const pm ="pm" ;
+  type TargetTime = typeof now |typeof am |typeof pm;
+  const [targetTime, setTargetTime]=useState<TargetTime>(now);
   const weeklyList = nation[0].day?.map((d:Day)=>d.dayslater) as number[];
   return (
     <div className="nation">
@@ -61,6 +66,32 @@ const Nation =({nation}:NationProperty)=>{
           src ={mapImg}
           alt="mapImg"
         />
+        <div className="time_area">
+          {targetDaylater===0&&
+            <button
+              onClick={()=>{setTargetTime(now)}}
+              name='timeBtn_now'
+              className={targetTime === now?'on':''}
+            >
+              현재
+            </button>
+          }
+          <button
+            onClick={()=>{setTargetTime(am)}}
+            name='timeBtn_am'
+            className={targetTime === am ? 'on':''}
+          >
+            오전
+          </button>
+          <button
+            onClick={()=>{setTargetTime(pm)}}
+            name='timeBtn_pm'
+            className={targetTime === pm ? 'on':''}
+          >
+            오후
+          </button>
+          
+        </div>
       </div>
     </div>
   )
