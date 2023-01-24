@@ -560,7 +560,7 @@ function getMidLandAreaCode (sfGrid:SFGridItem){
   const mid8 =["대구광역시", "경상북도"];
   const mid9 =["부산광역시", "울산광역시" ,"경상북도"];
   const mid10 =["제주특별자치도"];
-  const mid =[mid1, mid2_3, mid4 ,mid5 , mid6 ,mid7 ,mid8 ,mid9 ,mid10];
+  const mid =[mid1, mid2_3, mid2_3, mid4 ,mid5 , mid6 ,mid7 ,mid8 ,mid9 ,mid10];
   const pt1 =sfGrid.arePt1;
 
   for (let i = 0; i < mid.length; i++) {
