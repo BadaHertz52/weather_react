@@ -444,7 +444,7 @@ export type MidTaAreaCode =typeof midTa_백령도|
                     typeof midTa_원산|
                     typeof midTa_고성_장전|
                     typeof midTa_평강;
-                    export const midTaArea =[
+export const midTaArea =[
                       "백령도",
                       "서울",
                       "과천",
