@@ -1,4 +1,4 @@
-import React , {useRef ,useState ,useEffect , MouseEvent , TouchEvent} from 'react';
+import React , {useRef ,useState } from 'react';
 import { GiWaterDrop } from 'react-icons/gi';
 import styled, { CSSProperties } from 'styled-components';
 import { checkDayOrNight } from '../App';
