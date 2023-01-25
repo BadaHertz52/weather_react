@@ -65,6 +65,13 @@ li {
   padding: 20px 30px;
   box-sizing: border-box;
 }
+.week , .nation{
+  .title{
+    width: 100%;
+    font-size: 1.2rem;
+  }
+}
+
 @media screen and (min-width:780px) {
   .hourly , .week {
     padding: 30px 65px;
@@ -80,6 +87,7 @@ li {
     width:1160px;
   }
   .section_wrap{
+    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -87,8 +95,15 @@ li {
   }
   .section_center{
     width: 751px ;
+    border-right: 1px solid #d8d8d8;
   }
   .hourly,.week{
     padding:0;
+  }
+  .section_right{
+    width: calc(100% - 751px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
