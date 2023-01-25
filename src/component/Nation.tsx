@@ -19,9 +19,10 @@ type ZoneProperty ={
   targetDaylater:number
 };
 const Zone =({daytime,area, targetTime, targetDaylater}:ZoneProperty)=>{
+  const areaName =area.areaInform.name;
   const nowData = area.now as AreaNow;
   const dayData =area.day as Day[];
-  const targetDayData = dayData[targetDaylater]
+  const targetDayData = dayData[targetDaylater];
   const amData =targetDayData.am ;
   const pmData =targetDayData.pm ;
   type ZonWeatherData ={
@@ -53,6 +54,7 @@ const Zone =({daytime,area, targetTime, targetDaylater}:ZoneProperty)=>{
 
   return(
     <div 
+    id={`zone_${areaName ==="울릉/독도" ? "울릉독도" :areaName}`}
     className="zone"
     >
       <SkyIcon
@@ -61,10 +63,10 @@ const Zone =({daytime,area, targetTime, targetDaylater}:ZoneProperty)=>{
       />
       <div className="text">
         <span className='areaName'>
-          {area.areaInform.name}
+          {areaName}
         </span>
         <span className='temp'>
-          {zoneWeatherData.temp}
+          {zoneWeatherData.temp}° 
         </span>
       </div>
   </div>
