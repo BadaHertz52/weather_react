@@ -90,7 +90,7 @@ const Week =({week}:WeekProperty)=>{
   const twoDays = week.slice(0,2);
   return (
     <div className="week" aria-details='주간 예보'>
-      <h2>주간 예보</h2>
+      <h2 className='title'>주간 예보</h2>
       <ul className='box'>
         {twoDays.map((d:Day)=>
           <Item
