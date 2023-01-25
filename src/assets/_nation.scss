@@ -48,18 +48,150 @@ $onColor :#38a2f8;
   }
   .map_wrap{
     display: flex;
-    align-items: center;
     justify-content: center;
     background-color:  #c8e0f8;
+    position:relative;
+  }
+  .time_area{
+    position: absolute;
+    top:2rem;
+    left: -3rem;
+    .timeBtn{
+      background-color: #ffff;
+      border: none;
+      padding :5px 8px;
+      color:#999999;
+      font-weight: bold;
+      font-size: 12px;
+      &:first-child {
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+      }
+      &:nth-child(2) , &:last-child {
+        border-left: 1px solid #dadada;
+      }
+      &:last-child {
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+      }
+      &.on {
+        background-color:  #469aee;
+        color:#ffff;
+      }
+    }
+  }
+  .map{
+    position: relative;
+    width: 358px;
   }
   .map_img{
-    width: 358px;
+    width: 100%;
+    height: auto;
     z-index: 0;
   }
+  .zone{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .text{
+      font-size: 12px;
+    }
+    .temp{
+      margin-left: 2px;
+      font-weight: bold;
+    }
+  }
+  .skyIcon{
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  #zone_서울 {
+    top:22%;
+    left:32%;
+  }
+  #zone_춘천 {
+    top:15%;
+    left:45%;
+  }
+  #zone_강릉{
+    top:22%;
+    left:60%;
+  }
+  #zone_청주{
+    top:29%;
+    left:48%;
+  }
+  #zone_백령{
+    top:22%;
+    left:8%;
+  }
+  #zone_수원{
+    top:34%;
+    left:30%;
+  }
+  #zone_안동{
+    top:39%;
+    left:62%;
+  }
+  #zone_울릉독도{
+    top:26%;
+    left:72%;
+    .text{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      span{
+        display: block;
+      }
+    }
+  }
+  #zone_대전{
+    top:43%;
+    left:40%;
+  }
+  #zone_전주{
+    top:50%;
+    left:28%;
+  }
+  #zone_대구{
+    top:52%;
+    left:55%;
+  }
+  #zone_광주{
+    top:62%;
+    left:29%;
+  }
+  #zone_울산{
+    top:55%;
+    left:70%;
+  }
+  #zone_목포{
+    top:72%;
+    left:21%;
+  }
+  #zone_여수{
+    top:68%;
+    left:43%;
+  }
+  #zone_부산{
+    top:65%;
+    left:65%;
+  }
+  #zone_제주{
+    bottom:4%;
+    left:20%;
+  }
+
+  
 }
 
 @media screen and (min-width:1025px) {
   .nation{
     width: 358px;
+    .time_area{
+      top:18px;
+      left: 14px;
+    }
   }
 }

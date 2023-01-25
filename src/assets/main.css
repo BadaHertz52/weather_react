@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .hourly {
   margin-top: 36px;
   -webkit-user-select: none;
@@ -274,7 +275,7 @@
   width: 14.2857142857%;
   height: 100%;
 }
-.nation .weekly_list .item .button {
+.nation .weekly_list .item .dayBtn {
   width: 100%;
   height: 55px;
   display: flex;
@@ -287,7 +288,7 @@
   border: none;
   color: rgb(139, 139, 139);
 }
-.nation .weekly_list .item.on .button {
+.nation .weekly_list .item.on .dayBtn {
   color: #38a2f8;
   font-weight: bold;
 }
@@ -304,18 +305,148 @@
 }
 .nation .map_wrap {
   display: flex;
-  align-items: center;
   justify-content: center;
   background-color: #c8e0f8;
+  position: relative;
+}
+.nation .time_area {
+  position: absolute;
+  top: 2rem;
+  left: -3rem;
+}
+.nation .time_area .timeBtn {
+  background-color: white;
+  border: none;
+  padding: 5px 8px;
+  color: #999999;
+  font-weight: bold;
+  font-size: 12px;
+}
+.nation .time_area .timeBtn:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.nation .time_area .timeBtn:nth-child(2), .nation .time_area .timeBtn:last-child {
+  border-left: 1px solid #dadada;
+}
+.nation .time_area .timeBtn:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+.nation .time_area .timeBtn.on {
+  background-color: #469aee;
+  color: white;
+}
+.nation .map {
+  position: relative;
+  width: 358px;
 }
 .nation .map_img {
-  width: 358px;
+  width: 100%;
+  height: auto;
   z-index: 0;
+}
+.nation .zone {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.nation .zone .text {
+  font-size: 12px;
+}
+.nation .zone .temp {
+  margin-left: 2px;
+  font-weight: bold;
+}
+.nation .skyIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.nation #zone_서울 {
+  top: 22%;
+  left: 32%;
+}
+.nation #zone_춘천 {
+  top: 15%;
+  left: 45%;
+}
+.nation #zone_강릉 {
+  top: 22%;
+  left: 60%;
+}
+.nation #zone_청주 {
+  top: 29%;
+  left: 48%;
+}
+.nation #zone_백령 {
+  top: 22%;
+  left: 8%;
+}
+.nation #zone_수원 {
+  top: 34%;
+  left: 30%;
+}
+.nation #zone_안동 {
+  top: 39%;
+  left: 62%;
+}
+.nation #zone_울릉독도 {
+  top: 26%;
+  left: 72%;
+}
+.nation #zone_울릉독도 .text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.nation #zone_울릉독도 .text span {
+  display: block;
+}
+.nation #zone_대전 {
+  top: 43%;
+  left: 40%;
+}
+.nation #zone_전주 {
+  top: 50%;
+  left: 28%;
+}
+.nation #zone_대구 {
+  top: 52%;
+  left: 55%;
+}
+.nation #zone_광주 {
+  top: 62%;
+  left: 29%;
+}
+.nation #zone_울산 {
+  top: 55%;
+  left: 70%;
+}
+.nation #zone_목포 {
+  top: 72%;
+  left: 21%;
+}
+.nation #zone_여수 {
+  top: 68%;
+  left: 43%;
+}
+.nation #zone_부산 {
+  top: 65%;
+  left: 65%;
+}
+.nation #zone_제주 {
+  bottom: 4%;
+  left: 20%;
 }
 
 @media screen and (min-width: 1025px) {
   .nation {
     width: 358px;
+  }
+  .nation .time_area {
+    top: 18px;
+    left: 14px;
   }
 }
 .now {
