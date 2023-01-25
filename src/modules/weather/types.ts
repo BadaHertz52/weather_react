@@ -171,7 +171,7 @@ const 전주 ="전주";
 const 대구 ="대구";
 const 광주 ="광주";
 const 울산 ="울산";
-const 목표 ="목표";
+const 목포 ="목포";
 const 여수 ="여수";
 const 부산 ="부산";
 const 제주 ="제주";
@@ -189,7 +189,7 @@ export type AreaName =typeof 서울|
                       typeof 대구 |
                       typeof 광주 |
                       typeof 울산 |
-                      typeof 목표 |
+                      typeof 목포 |
                       typeof 여수 |
                       typeof 부산 |
                       typeof 제주 ;
@@ -256,7 +256,7 @@ export const areaArry: AreaInform[] =[
     longitude: "127.51173055555556",
     latitude: "36.58399722222222"
    },
-   landRegId:"11C20000",
+   landRegId:"11C10000",
    taRegId:"11C10301"
  },{
   name:백령,
@@ -298,7 +298,7 @@ export const areaArry: AreaInform[] =[
     longitude: "128.73162222222223",
     latitude: "36.565463888888885"
   },
-  landRegId:"11F10000",
+  landRegId:"11H10000",
   taRegId:"11H10501"
  },{
   name:울릉독도,
@@ -327,7 +327,7 @@ export const areaArry: AreaInform[] =[
     longitude: "127.38656666666667",
     latitude: "36.347119444444445"
   },
-  landRegId:"11D20000",
+  landRegId:"11C20000",
   taRegId:"11C20401"
  },
  {
@@ -356,7 +356,7 @@ export const areaArry: AreaInform[] =[
     longitude: "128.60355277777776",
     latitude: "35.868541666666665"
   },
-  landRegId:"11F10000",
+  landRegId:"11H10000",
   taRegId:"11H10701"
  },{
   name:광주,
@@ -370,7 +370,7 @@ export const areaArry: AreaInform[] =[
     longitude: "126.85336388888888",
     latitude: "35.156974999999996"
   },
-  landRegId:"11C10000",
+  landRegId:"11F20000",
   taRegId:"11F20501"
  },{
   name:울산,
@@ -387,6 +387,20 @@ export const areaArry: AreaInform[] =[
   landRegId:"11H10000",
   taRegId:"11H20101"
  },{
+  name:목포,
+  sfGrid:{
+    areaCode: "4611000000",
+    arePt1: "전라남도",
+    arePt2: "목포시",
+    arePt3: null,
+    nX: "50",
+    nY: "67",
+    longitude: "126.39441944444445",
+    latitude: "34.808788888888884"
+  },
+  landRegId:"11F20000",
+  taRegId:"21F20801"
+ },{
   name:여수,
   sfGrid:{
     areaCode: "4613000000",
@@ -398,7 +412,7 @@ export const areaArry: AreaInform[] =[
     longitude: "127.66438611111111",
     latitude: "34.757311111111115"
   },
-  landRegId:"11C10000",
+  landRegId:"11F20000",
   taRegId:"11F20401"
  },{
   name:부산,
@@ -412,7 +426,7 @@ export const areaArry: AreaInform[] =[
     longitude: "129.07695277777776",
     latitude: "35.17701944444444" 
   },
-  landRegId:"11H10000",
+  landRegId:"11H20000",
   taRegId:"11H20201"
  },{
   name:제주,
@@ -426,7 +440,7 @@ export const areaArry: AreaInform[] =[
     longitude: "126.50033333333333",
     latitude: "33.48569444444445"
   },
-  landRegId:"11H20000",
+  landRegId:"11G00000",
   taRegId:"11G00201"
  }
 ];
