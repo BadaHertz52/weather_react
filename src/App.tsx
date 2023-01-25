@@ -135,7 +135,7 @@ function App () {
                 <None  target ={"주간 날씨예보"} />
               }
             </div>
-            <div className="section_rigth">
+            <div className="section_right">
             {(weather.nation !==null && weather.sunRiseAndSet !==null )?
                 <Nation
                   nation ={weather.nation}
