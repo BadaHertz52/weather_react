@@ -2,7 +2,11 @@ $onColor :#38a2f8;
 
 .nation {
   user-select: none;
-  .title , .weekly_list, .map_wrap{
+  box-sizing:border-box;
+  .title{
+    padding-left: 20px;
+  }
+  .weekly_list, .map_wrap{
     width: 100%;
     margin: 0;
   }
