@@ -193,6 +193,9 @@
 }
 
 @media screen and (min-width: 1025px) {
+  .hourly {
+    width: calc(100% - 50px);
+  }
   .hourly .weather_graph {
     margin-left: 0;
   }
@@ -260,8 +263,12 @@
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  box-sizing: border-box;
 }
-.nation .title, .nation .weekly_list, .nation .map_wrap {
+.nation .title {
+  padding-left: 20px;
+}
+.nation .weekly_list, .nation .map_wrap {
   width: 100%;
   margin: 0;
 }
@@ -615,6 +622,7 @@
 
 @media screen and (min-width: 1025px) {
   .now {
+    width: calc(100% - 50px);
     flex-direction: row;
     justify-content: space-between;
   }
@@ -649,7 +657,7 @@
   left: -36px;
 }
 .scrollBtn.next {
-  left: calc(100% + 10px);
+  left: calc(100% + 5px);
 }
 
 @media screen and (min-width: 1025px) {
@@ -861,6 +869,11 @@
     display: none;
   }
 }
+@media screen and (min-width: 1025px) {
+  .week {
+    width: calc(100% - 50px);
+  }
+}
 body {
   margin: 0;
   color: #424242;
@@ -926,6 +939,11 @@ li {
   box-sizing: border-box;
 }
 
+.week .title, .nation .title {
+  width: 100%;
+  font-size: 1.2rem;
+}
+
 @media screen and (min-width: 780px) {
   .hourly, .week {
     padding: 30px 65px;
@@ -939,6 +957,7 @@ li {
     width: 1160px;
   }
   .section_wrap {
+    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -946,8 +965,15 @@ li {
   }
   .section_center {
     width: 751px;
+    border-right: 1px solid #d8d8d8;
   }
   .hourly, .week {
     padding: 0;
+  }
+  .section_right {
+    width: calc(100% - 751px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }/*# sourceMappingURL=main.css.map */
