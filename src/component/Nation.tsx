@@ -76,21 +76,28 @@ type NWItemProperty ={
   daylater:number,
   today_date:number,
   targetDaylater:number,
-  setTargetDaylater:Dispatch<SetStateAction<number>>
+  setTargetDaylater:Dispatch<SetStateAction<number>>,
+  targetItem:TargetTime,
+  setTargetItem: Dispatch<SetStateAction<TargetTime>>
 };
-const NWItem =({daylater, today_date, targetDaylater, setTargetDaylater}:NWItemProperty)=>{
+const NWItem =({daylater, today_date, targetDaylater, setTargetDaylater, targetItem, setTargetItem}:NWItemProperty)=>{
   const itemDate = new Date( new Date().setDate(today_date + daylater)) ;
   const month = itemDate.getMonth() +1;
   const date =itemDate.getDate();
   const day = itemDate.getDay();
   const item_day = day >6? weekArry[day - 6] : weekArry[day];
-
+  const onClickBtn =()=>{
+    setTargetDaylater(daylater);
+    if(daylater === 0 && targetItem === "now"){
+      setTargetItem("am")
+    }
+  }
   return(
     <li className={`item ${targetDaylater === daylater? 'on' : ''}`}>
       <button 
         type='button'
-        className='button'
-        onClick={()=>setTargetDaylater(daylater)}
+        className='dayBtn'
+        onClick={onClickBtn}
       >
         <span className='day'>
           {item_day}
@@ -126,6 +133,8 @@ const Nation =({nation, todaySunInform}:NationProperty)=>{
           today_date={todya_date}
           targetDaylater={targetDaylater}
           setTargetDaylater={setTargetDaylater}
+          targetItem={targetTime}
+          setTargetItem={setTargetTime}
         />)}
       </ul>
       <div className="map_wrap">

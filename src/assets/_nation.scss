@@ -14,7 +14,7 @@ $onColor :#38a2f8;
     .item{
       width: calc(100% / 7);
       height: 100%;
-      .button{
+      .dayBtn{
         width: 100%;
         height: 55px;
         display: flex;
@@ -28,7 +28,7 @@ $onColor :#38a2f8;
         color:rgb(139, 139, 139);
       }
       &.on{
-        .button {
+        .dayBtn {
           color:$onColor;
           font-weight: bold;
         }
