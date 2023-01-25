@@ -138,33 +138,33 @@ const Nation =({nation, todaySunInform}:NationProperty)=>{
         />)}
       </ul>
       <div className="map_wrap">
-        <div className="time_area">
-          {targetDaylater===0&&
-            <button
-              onClick={()=>{setTargetTime(now)}}
-              name='timeBtn_now'
-              className={targetTime === now?'on':''}
-            >
-              현재
-            </button>
-          }
-          <button
-            onClick={()=>{setTargetTime(am)}}
-            name='timeBtn_am'
-            className={targetTime === am ? 'on':''}
-          >
-            오전
-          </button>
-          <button
-            onClick={()=>{setTargetTime(pm)}}
-            name='timeBtn_pm'
-            className={targetTime === pm ? 'on':''}
-          >
-            오후
-          </button>
-
-        </div>
         <div className="map">
+          <div className="time_area">
+            {targetDaylater===0&&
+              <button
+                onClick={()=>{setTargetTime(now)}}
+                name='timeBtn_now'
+                className={`timeBtn ${targetTime === now?'on':''}`}
+              >
+                현재
+              </button>
+            }
+            <button
+              onClick={()=>{setTargetTime(am)}}
+              name='timeBtn_am'
+              className={`timeBtn ${targetTime === am?'on':''}`}
+            >
+              오전
+            </button>
+            <button
+              onClick={()=>{setTargetTime(pm)}}
+              name='timeBtn_pm'
+              className={`timeBtn ${targetTime === pm?'on':''}`}
+            >
+              오후
+            </button>
+
+          </div>
           <img
             className='map_img'
             src ={mapImg}
