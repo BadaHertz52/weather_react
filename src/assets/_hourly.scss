@@ -200,6 +200,7 @@ $unit_value_color:#218be8;
 
   @media screen and (min-width:1025px) {
     .hourly {
+      width: calc(100% - 50px );
       .weather_graph {
         margin-left: 0;
       }

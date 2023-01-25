@@ -155,6 +155,7 @@
 
 @media screen and (min-width:1025px) {
   .now{
+    width: calc(100% - 50px );
     flex-direction: row;
     justify-content: space-between;
   }

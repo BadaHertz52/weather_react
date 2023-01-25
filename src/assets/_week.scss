@@ -87,6 +87,7 @@ $grey:#8f8f8f;
 
 @media screen and (min-width:768px) {
   .week{
+
     .box{
       display: flex;
       justify-content: space-between;
@@ -157,5 +158,11 @@ $grey:#8f8f8f;
       }
     }
     
+  }
+}
+
+@media screen and (min-width:1025px) {
+  .week{
+    width: calc(100% - 50px );
   }
 }
