@@ -57,7 +57,23 @@ function App () {
   const startThunk =useRef<boolean>(false);
   const startSaga =useRef<boolean>(false);
   const startToolkit =useRef<boolean>(false);
-
+  /**
+   * weather.sunRiseAndSet이 Error type 의 요소를 가지고 있으면 false, 그렇지 않으면(요소들이 모두 SunSetAndRise type)true를 반환하는 함수 
+   * @returns boolean type
+   */
+  const checkSunInfoType =(sunRiseAndSet : null |(Error|SunRiseAndSet)[])=>{
+    if(sunRiseAndSet !==null){
+      // 요소들의 값은 weather.sunRiseAndSet의 각 요소들의 타입이 Error type 여부
+      const arry = sunRiseAndSet.map((e:Error|SunRiseAndSet)=> e instanceof Error);
+      if(arry.includes(true)){
+        return false
+      }else{
+        return true
+      }
+    }else{
+      return false
+    }
+  };
   useEffect(()=>{
     if(position.state === "success" &&
     weather.state !=="success"&&
@@ -144,8 +160,12 @@ function App () {
                 :
                 <None  target ={"전국 날씨 예보"} />
               }
-            {weather.sunRiseAndSet !==null?
-                <Sun/>
+            {((weather.sunRiseAndSet !==null) &&
+              (checkSunInfoType(weather.sunRiseAndSet))
+            )?
+                <Sun
+                  sunRiseAndSet={weather.sunRiseAndSet as SunRiseAndSet[]}
+                />
                 :
                 <None  target ={"일출,일몰"} />
               }
