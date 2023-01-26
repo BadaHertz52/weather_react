@@ -1,0 +1,30 @@
+$backgroundColor:#f9c431;
+.sun{
+  background-color: $backgroundColor;
+  padding:15px 24px 30px;
+  box-sizing: border-box;
+  .title{
+    color:rgb(247, 243, 243);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.196);
+    font-size: 17px;
+    font-weight: bold;
+  }
+  span{
+    display: block;
+  }
+  .icon_area{
+    position: relative;
+    width: 5rem;
+    height:5rem;
+    .iconWrap{
+      svg{
+        display: block;
+        fill:inherit;
+        background-color: $backgroundColor;
+        font-size: 5rem;
+
+      }
+    }
+
+  }
+}

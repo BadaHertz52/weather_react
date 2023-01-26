@@ -727,6 +727,32 @@
   transform: rotateY(180deg);
 }
 
+.sun {
+  background-color: #f9c431;
+  padding: 15px 24px 30px;
+  box-sizing: border-box;
+}
+.sun .title {
+  color: rgb(247, 243, 243);
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.196);
+  font-size: 17px;
+  font-weight: bold;
+}
+.sun span {
+  display: block;
+}
+.sun .icon_area {
+  position: relative;
+  width: 5rem;
+  height: 5rem;
+}
+.sun .icon_area .iconWrap svg {
+  display: block;
+  fill: inherit;
+  background-color: #f9c431;
+  font-size: 5rem;
+}
+
 .week {
   width: 100%;
 }
