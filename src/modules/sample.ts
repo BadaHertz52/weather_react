@@ -741,5 +741,8 @@ export const weatherSample :WeatherState ={
       {dayslater:4,am:{pop:0,sky:"맑음"},pm:{pop:0,sky:"맑음"},tmn:-7,tmx:2},
       {dayslater:5,am:{pop:10,sky:"맑음"},pm:{pop:20,sky:"맑음"},tmn:-4,tmx:4},{dayslater:6,am:{pop:40,sky:"구름많음"},pm:{pop:60,sky:"구름많고 비/눈"},tmn:-2,tmx:5}],
   nation:nation,
-  sunRiseAndSet:[{sunRise:"07:47",sunSet:"17:23"},{sunRise:"07:50",sunSet:"17:23"},{sunRise:"07:55",sunSet:"17:23"}]
+  sunRiseAndSet:[
+    {date:'0101',sunRise:"07:47",sunSet:"17:23"},
+    {date:'0102',sunRise:"07:50",sunSet:"17:23"},
+    {date:'0103', sunRise:"07:55",sunSet:"17:23"}]
 };

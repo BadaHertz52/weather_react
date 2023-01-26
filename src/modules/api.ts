@@ -473,9 +473,13 @@ const getApFcst =async(baseDate:string,tBaseDate:string, sidoName:ApiAreaCode, s
  */
 const getSunInform =async(longitude:string, latitude:string,threeDays:string[]):
 Promise<(Error | SunRiseAndSet)[]>=>{
+  type Item= {
+    url:string,
+    date: string
+  };
   const getUrl =(date:string)=>`${sunApi.url}/${sunApi.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${date}&dnYn=Y&ServiceKey=${publicApiKey}`;
-  const urlArry =threeDays.map((d:string)=> getUrl(d))
-  const fetchSunApi =async(url:string)=>await fetch(url)
+  const arry :Item[] =threeDays.map((d:string)=> ({url:getUrl(d), date:d}))
+  const fetchSunApi =async(url:string, date:string)=>await fetch(url)
                 .then(response => {
                   return response.text()
                 })
@@ -488,7 +492,8 @@ Promise<(Error | SunRiseAndSet)[]>=>{
                     const min = string.slice(2);
                     return `${time}:${min}`;
                   }
-                  const inform:SunRiseAndSet  ={
+                  const inform :SunRiseAndSet ={
+                    date:date.slice(4),
                     sunRise :changeTimeString(sunrise),
                     sunSet:changeTimeString(sunset),
                   };
@@ -496,8 +501,8 @@ Promise<(Error | SunRiseAndSet)[]>=>{
                 })
                 .catch((e:Error)=> {return e});
       
-  return Promise.all(urlArry.map(async(url:string)=>{
-                const inform = await fetchSunApi(url);
+  return Promise.all(arry.map(async({url, date})=>{
+                const inform = await fetchSunApi(url ,date);
                 return inform
               })
   )

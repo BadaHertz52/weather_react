@@ -455,6 +455,7 @@ export type Area ={
 };
 
 export type SunRiseAndSet ={
+  date:string,
   sunRise :string|null|undefined ,
   sunSet :string|null|undefined
 };
