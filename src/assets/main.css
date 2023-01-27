@@ -728,7 +728,7 @@
 }
 
 .sun {
-  background-color: #f9c431;
+  background-color: #ffb300;
   padding: 15px 24px 30px;
   box-sizing: border-box;
 }
@@ -743,14 +743,52 @@
 }
 .sun .icon_area {
   position: relative;
-  width: 5rem;
-  height: 5rem;
+  width: 6rem;
+  height: 3rem;
+  overflow: hidden;
 }
-.sun .icon_area .iconWrap svg {
+.sun .sunIcon_arrow {
   display: block;
-  fill: inherit;
-  background-color: #f9c431;
-  font-size: 5rem;
+  position: absolute;
+  top: 0;
+  left: calc((100% - 1rem) / 2);
+  font-size: 1rem;
+  width: 1rem;
+  height: 1rem;
+  color: rgb(250, 240, 182);
+}
+.sun .sunIcon_arrow .up {
+  -webkit-animation: moveArrow 2s ease-in infinite;
+          animation: moveArrow 2s ease-in infinite;
+}
+.sun .sunIcon_arrow .down {
+  animation: moveArrow 2s ease-out infinite reverse;
+}
+@-webkit-keyframes moveArrow {
+  from {
+    transform: translateY(5px);
+  }
+  to {
+    transform: translateY(0px);
+  }
+}
+@keyframes moveArrow {
+  from {
+    transform: translateY(5px);
+  }
+  to {
+    transform: translateY(0px);
+  }
+}
+.sun .sunIcon_inner {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  background-color: rgb(250, 240, 182);
+  box-shadow: 0px -2px 8px 1px rgb(249, 215, 100);
 }
 
 .week {

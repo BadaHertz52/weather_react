@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
 import { SunRiseAndSet } from '../modules/weather';
-import {BsSunriseFill ,BsSunsetFill} from 'react-icons/bs';
+import {HiArrowSmDown, HiArrowSmUp} from 'react-icons/hi';
 type SunIconAreaProperty ={
   sunrise:boolean
 }
 const SunIconArea =({sunrise}:SunIconAreaProperty)=>{
   return(
     <span className="icon_area">
-      <svg  width="0" height="0">
-        <linearGradient id="sunIconArea_gradient" x1="50%" y1="100%" x2="0%" y2="0%">
-          <stop  stopColor="rgb(241, 174, 41)" offset="1%" />
-          <stop  stopColor="#ff1f01" offset="100%" />
-        </linearGradient>
-      </svg>
-      <span className="iconWrap"  style={{ fill: "url(#sunIconArea_gradient)" }}>
+      <span className="sunIcon_arrow">
         {sunrise ?
-          <BsSunriseFill/>
-          :
-          <BsSunsetFill/>
-        }
+          <HiArrowSmUp className='up'/>
+        :
+        <HiArrowSmDown className='down'/>}
+      </span>
+      <span className='sunIcon_inner'>
       </span>
     </span>
   )
