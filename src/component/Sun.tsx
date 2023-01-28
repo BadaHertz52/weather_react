@@ -6,14 +6,14 @@ type SunIconAreaProperty ={
 }
 const SunIconArea =({sunrise}:SunIconAreaProperty)=>{
   return(
-    <span className="icon_area">
+    <span className="icon_area" aria-details={sunrise ? "sunrise time" :"sunset time"}>
       <span className="sunIcon_arrow">
         {sunrise ?
           <HiArrowSmUp className='up'/>
         :
         <HiArrowSmDown className='down'/>}
       </span>
-      <span className='sunIcon_inner'>
+      <span className='sunIcon'>
       </span>
     </span>
   )
@@ -24,7 +24,7 @@ type SunTrProperty ={
 };
 const SunTr =({index,daySunInfo}:SunTrProperty)=>{
   const thArry =["오늘", "내일", "모레"];
-
+  const date = `${daySunInfo.date.slice(0,2)}.${daySunInfo.date.slice(2)}`;
   return(
     <tr className='sun_tr'>
       <th 
@@ -35,7 +35,7 @@ const SunTr =({index,daySunInfo}:SunTrProperty)=>{
           {thArry[index]}
         </span>
         <span className='sun_day'>
-          {daySunInfo.date}
+          {date}
         </span>
       </th>
       <td>
@@ -123,19 +123,18 @@ const Sun =({sunRiseAndSet}:SunProperty)=>{
               </span>
           </caption>
           <thead>
-            <th scope='col' className='blind'>
-              날짜
-            </th>
-            {["일출 시간", "일몰 시간"].map((t:string)=>
-              <th scope='col'>
-                <SunIconArea
-                  sunrise={t ==="일출 시간"}
-                />
-                <span>
-                  {t} 
-                </span>
+            <tr>
+              <th scope='col' className='blind'>
+                날짜
               </th>
-            )}
+              {["일출 시간", "일몰 시간"].map((t:string)=>
+                <th scope='col'>
+                  <SunIconArea
+                    sunrise={t ==="일출 시간"}
+                  />
+                </th>
+              )}
+            </tr>
           </thead>
           <tbody>
             {sunRiseAndSet.map((i:SunRiseAndSet)=>
