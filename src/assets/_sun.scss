@@ -1,9 +1,10 @@
 $backgroundColor:#fab411;
 $sunInnerColor:rgb(250, 240, 182);
-$sunOuterColor:rgb(250, 221, 125);
+$sunOuterColor:rgb(253, 228, 148);
 $sun_chart_width: 264px;
-$bar_precent_bg:rgb(249, 230, 119);
+$bar_precent_bg:rgb(246, 230, 142);
 $bar_bg:#f1a10b;
+$textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
 
 @mixin sunImg {
   border-radius: 50%;
@@ -156,7 +157,41 @@ $bar_bg:#f1a10b;
       box-sizing: border-box;
     }
   }
-
+  .sun_info{
+    position: absolute;
+    bottom:0;
+    left: 16px;
+    width: calc(100% - 14px - 18px);
+    height: 70%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .icon_area{
+      display: block;
+    }
+  }
+  .time_list{
+    display: inline-block;
+    line-height: 24px;
+    margin-top: 10px;
+    color:#ffff;
+    text-shadow:$textShadow;
+  }
+  .time_title, .time_sun{
+    display: inline-block;
+  }
+  .time_title {
+    font-size: 1rem;
+    margin-right: 5px;
+    &.set{
+      margin-left: 18px;
+    }
+  }
+  .time_sun{
+    font-size: 18px;
+    font-weight: 600;
+  }
   // tomorrow 
   .sun_table, thead, tbody, tr{
     width: 100%;
@@ -165,7 +200,7 @@ $bar_bg:#f1a10b;
     color:#ffff;
     font-size: 14px;
     font-weight: 500;
-    text-shadow: 0 0 2px rgba(87, 87, 87, 0.196);
+    text-shadow:$textShadow;
     tr{
       position: relative;
     }
@@ -206,5 +241,14 @@ $bar_bg:#f1a10b;
     .sun_day , strong{
       margin-left: 5px;
     }
+  }
+}
+
+
+@media screen and (min-width:1025px) {
+  .sun{
+    width: 358px;
+    border-radius: 10px;
+    margin-top:  40px ;
   }
 }
