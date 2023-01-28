@@ -735,6 +735,7 @@
 }
 
 .sun {
+  margin-top: 32px;
   background-color: #fab411;
   padding: 15px 24px 30px;
   box-sizing: border-box;
