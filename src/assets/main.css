@@ -455,6 +455,12 @@
     top: 18px;
     left: 14px;
   }
+  .nation .map_wrap {
+    border-radius: 10px;
+  }
+  .nation .map {
+    width: 90%;
+  }
 }
 .now {
   width: 100%;
@@ -622,6 +628,7 @@
 
 @media screen and (min-width: 1025px) {
   .now {
+    margin-top: 10px;
     width: calc(100% - 50px);
     flex-direction: row;
     justify-content: space-between;
@@ -817,7 +824,7 @@
   left: 1.5rem;
   border-radius: 50%;
   background-color: rgb(250, 240, 182);
-  box-shadow: 0px -2px 8px 2px rgb(250, 221, 125);
+  box-shadow: 0px -2px 8px 2px rgb(253, 228, 148);
 }
 .sun .sun_chart {
   position: relative;
@@ -841,7 +848,7 @@
   left: -15px;
   border-radius: 50%;
   background-color: rgb(250, 240, 182);
-  box-shadow: 0px -2px 8px 2px rgb(250, 221, 125);
+  box-shadow: 0px -2px 8px 2px rgb(253, 228, 148);
 }
 .sun .progress_bar {
   width: inherit;
@@ -858,7 +865,7 @@
 }
 .sun .progress_bar::before {
   left: 0;
-  background-color: rgb(249, 230, 119);
+  background-color: rgb(246, 230, 142);
 }
 .sun .progress_bar::after {
   background-color: #f1a10b;
@@ -878,9 +885,44 @@
   left: 0;
   border-radius: 50%;
   border: 7px solid #f1a10b;
-  border-bottom: 7px solid rgb(249, 230, 119);
-  border-right: 7px solid rgb(249, 230, 119);
+  border-bottom: 7px solid rgb(246, 230, 142);
+  border-right: 7px solid rgb(246, 230, 142);
   box-sizing: border-box;
+}
+.sun .sun_info {
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+  width: calc(100% - 14px - 18px);
+  height: 70%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.sun .sun_info .icon_area {
+  display: block;
+}
+.sun .time_list {
+  display: inline-block;
+  line-height: 24px;
+  margin-top: 10px;
+  color: white;
+  text-shadow: 0 0 2px rgba(87, 87, 87, 0.196);
+}
+.sun .time_title, .sun .time_sun {
+  display: inline-block;
+}
+.sun .time_title {
+  font-size: 1rem;
+  margin-right: 5px;
+}
+.sun .time_title.set {
+  margin-left: 18px;
+}
+.sun .time_sun {
+  font-size: 18px;
+  font-weight: 600;
 }
 .sun .sun_table, .sun thead, .sun tbody, .sun tr {
   width: 100%;
@@ -932,6 +974,13 @@
   margin-left: 5px;
 }
 
+@media screen and (min-width: 1025px) {
+  .sun {
+    width: 358px;
+    border-radius: 10px;
+    margin-top: 40px;
+  }
+}
 .week {
   width: 100%;
 }
@@ -1172,6 +1221,7 @@ li {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    margin-top: 0;
   }
   .section_center {
     width: 751px;
