@@ -50,7 +50,9 @@ body{
 }
 
 .blind{
-  display: none;
+  display: inline-block;
+  position: absolute;
+  top:-100%;
 }
 ul , dl , dd{
   margin :0;

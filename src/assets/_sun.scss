@@ -1,16 +1,46 @@
-$backgroundColor:#ffb300;
+$backgroundColor:#fab411;
 .sun{
   background-color: $backgroundColor;
   padding:15px 24px 30px;
   box-sizing: border-box;
+  position: relative;
   .title{
-    color:rgb(247, 243, 243);
+    color:#ffff;
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.196);
     font-size: 17px;
+    line-height: 23px;
+    margin: 0;
     font-weight: bold;
+    padding-bottom: 36px;
   }
+  .btn_wrap{
+    position: absolute;
+    top:15px;
+    right: 20px;
+  }
+  .btn_sun{
+    width: 42px;
+    height: 32px;
+    background-color:#ffff;
+    border:none ;
+    &:first-child{
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+    &:last-child{
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+    &.on{
+      background-color: #ed8b02;
+      color:#fff;
+      font-weight: 600;
+      text-shadow: 0 0 2px rgba(90, 90, 90, 0.196);
+    }
+  }
+
   span{
-    display: block;
+    display: inline-block;
   }
   .icon_area{
     position: relative;
@@ -44,7 +74,7 @@ $backgroundColor:#ffb300;
     }
   }
 
-  .sunIcon_inner{
+  .sunIcon{
     width: calc(6rem * 0.5);
     height: calc(6rem * 0.5);
     border-radius: 50%;
@@ -52,7 +82,56 @@ $backgroundColor:#ffb300;
     top:calc(6rem * 0.25);
     left:calc(6rem * 0.25);
     background-color: rgb(250, 240, 182);
-    -webkit-box-shadow: 0px -2px 5px 1px  rgb(255, 217, 91); 
-    box-shadow: 0px -2px 8px 1px  rgb(249, 215, 100);
+    -webkit-box-shadow: 0px -2px 8px 2px rgb(250, 221, 125);; 
+    box-shadow: 0px -2px 8px 2px  rgb(250, 221, 125);
+  }
+  .sun_table, thead, tbody, tr{
+    width: 100%;
+  }
+  .sun_table{
+    color:#ffff;
+    font-size: 14px;
+    font-weight: 500;
+    text-shadow: 0 0 2px rgba(87, 87, 87, 0.196);
+    tr{
+      position: relative;
+    }
+    th, td{
+      width: 33%;
+    }
+    td{
+      text-align: center;
+    }
+    thead .blind{
+      display: inline-block;
+      position: absolute;
+      top: -100%;
+      left: -100%;
+    }
+    .sun_tr{
+      line-height: 20px;
+      position: relative;
+      &::after{
+        width: 100%;
+        height: 0.5px;
+        display: inline-block;
+        background-color: rgba(255, 255, 255, 0.61);
+        content: '';
+        position: absolute;
+        bottom:0;
+        left:0
+      }
+    }
+    .sun_th, .sun_tr td {
+      padding: 10px 0 17px 0;
+    }
+    .sun_th{
+      font-weight: initial;
+      text-align: left;
+      padding-left: 14px;
+    }
+    .sun_day , strong{
+      margin-left: 5px;
+    }
   }
 }
