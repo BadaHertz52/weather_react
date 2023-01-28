@@ -1,4 +1,16 @@
 $backgroundColor:#fab411;
+$sunInnerColor:rgb(250, 240, 182);
+$sunOuterColor:rgb(250, 221, 125);
+$sun_chart_width: 264px;
+$bar_precent_bg:rgb(249, 230, 119);
+$bar_bg:#f1a10b;
+
+@mixin sunImg {
+  border-radius: 50%;
+  background-color: $sunInnerColor;
+  -webkit-box-shadow: 0px -2px 8px 2px $sunOuterColor; 
+  box-shadow: 0px -2px 8px 2px  $sunOuterColor;
+}
 .sun{
   background-color: $backgroundColor;
   padding:15px 24px 30px;
@@ -77,14 +89,75 @@ $backgroundColor:#fab411;
   .sunIcon{
     width: calc(6rem * 0.5);
     height: calc(6rem * 0.5);
-    border-radius: 50%;
     position: absolute;
     top:calc(6rem * 0.25);
     left:calc(6rem * 0.25);
-    background-color: rgb(250, 240, 182);
-    -webkit-box-shadow: 0px -2px 8px 2px rgb(250, 221, 125);; 
-    box-shadow: 0px -2px 8px 2px  rgb(250, 221, 125);
+    @include sunImg;
   }
+  //today
+  .sun_chart{
+    position: relative;
+    width: $sun_chart_width;
+    height: 136px;
+    margin: 0 auto;
+    transform-origin: 50% 100% ;
+  }
+  .move_sun{
+    position: absolute;
+    width: $sun_chart_width;
+    height: $sun_chart_width;
+    z-index: 10;
+    &::after{
+      width: 36px;
+      height: 36px;
+      content: '';
+      position: absolute;
+      top:51%;
+      left: -15px;
+      @include sunImg;
+    }
+  }
+  .progress_bar{
+    width: inherit;
+    height:inherit;
+    &::before , &::after{
+      position: absolute;
+      bottom: 0px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      content: '';
+      z-index: 5;
+    }
+    &::before{
+      left: 0;
+      background-color: $bar_precent_bg;
+    }
+    &::after{
+      background-color: $bar_bg;
+      right: 0;
+    }
+  }
+  .current_bar{
+    width: $sun_chart_width;
+    height: inherit;
+    position: absolute;
+    overflow: hidden;
+    .bar{
+      width: $sun_chart_width;
+      height: $sun_chart_width;
+      position: absolute;
+      top:0;
+      left: 0;
+      border-radius: 50%;
+      border:7px solid $bar_bg;
+      border-bottom: 7px solid $bar_precent_bg;
+      border-right: 7px solid $bar_precent_bg;
+      box-sizing: border-box;
+    }
+  }
+
+  // tomorrow 
   .sun_table, thead, tbody, tr{
     width: 100%;
   }

@@ -812,12 +812,75 @@
 .sun .sunIcon {
   width: 3rem;
   height: 3rem;
-  border-radius: 50%;
   position: absolute;
   top: 1.5rem;
   left: 1.5rem;
+  border-radius: 50%;
   background-color: rgb(250, 240, 182);
   box-shadow: 0px -2px 8px 2px rgb(250, 221, 125);
+}
+.sun .sun_chart {
+  position: relative;
+  width: 264px;
+  height: 136px;
+  margin: 0 auto;
+  transform-origin: 50% 100%;
+}
+.sun .move_sun {
+  position: absolute;
+  width: 264px;
+  height: 264px;
+  z-index: 10;
+}
+.sun .move_sun::after {
+  width: 36px;
+  height: 36px;
+  content: "";
+  position: absolute;
+  top: 51%;
+  left: -15px;
+  border-radius: 50%;
+  background-color: rgb(250, 240, 182);
+  box-shadow: 0px -2px 8px 2px rgb(250, 221, 125);
+}
+.sun .progress_bar {
+  width: inherit;
+  height: inherit;
+}
+.sun .progress_bar::before, .sun .progress_bar::after {
+  position: absolute;
+  bottom: 0px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  content: "";
+  z-index: 5;
+}
+.sun .progress_bar::before {
+  left: 0;
+  background-color: rgb(249, 230, 119);
+}
+.sun .progress_bar::after {
+  background-color: #f1a10b;
+  right: 0;
+}
+.sun .current_bar {
+  width: 264px;
+  height: inherit;
+  position: absolute;
+  overflow: hidden;
+}
+.sun .current_bar .bar {
+  width: 264px;
+  height: 264px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  border: 7px solid #f1a10b;
+  border-bottom: 7px solid rgb(249, 230, 119);
+  border-right: 7px solid rgb(249, 230, 119);
+  box-sizing: border-box;
 }
 .sun .sun_table, .sun thead, .sun tbody, .sun tr {
   width: 100%;
