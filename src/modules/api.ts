@@ -687,7 +687,7 @@ function getApAreaCode(sfGrid:SFGridItem):ApiAreaCode{
  * @param n  
  * @returns type:string
  */
-const changeTwoDigit =(n:number)=>{
+export const changeTwoDigit =(n:number)=>{
   if(n <10){
     return `0${JSON.stringify(n)}`
   }else{
