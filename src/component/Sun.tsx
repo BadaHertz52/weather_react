@@ -157,14 +157,14 @@ const Sun =({sunRiseAndSet}:SunProperty)=>{
                   <SunIconArea
                     sunrise={true}
                   />
-              <dl>
+              <dl className='time_list'>
                 <dt className='time_title'>
                   일출
                 </dt>
                 <dd className='time_sun'>
                   {sunRiseAndSet[0].sunRise}
                 </dd>
-                <dt className='time_title'>
+                <dt className='time_title set'>
                   일몰
                 </dt>
                 <dd className='time_sun'>
