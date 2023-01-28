@@ -193,9 +193,16 @@ $onColor :#38a2f8;
 @media screen and (min-width:1025px) {
   .nation{
     width: 358px;
+    
     .time_area{
       top:18px;
       left: 14px;
+    }
+    .map_wrap{
+      border-radius: 10px;
+    }
+    .map {
+      width: 90%;
     }
   }
 }
