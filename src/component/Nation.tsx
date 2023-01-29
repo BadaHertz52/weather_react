@@ -152,7 +152,15 @@ const Nation =({nation, todaySunInform}:NationProperty)=>{
             <button
               onClick={()=>{setTargetTime(am)}}
               name='timeBtn_am'
-              className={`timeBtn ${targetTime === am?'on':''}`}
+              className={`timeBtn 
+              ${((targetTime === now && targetDaylater!== 0) || 
+                  targetTime === am
+                )
+                ?
+                'on'
+                :
+                ''
+            }`}
             >
               오전
             </button>
