@@ -139,15 +139,13 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
       }
     }
     const moveScroll =(clientX :number)=>{
-      if(scrollEvent.current && wrapStyle !==undefined){
+      if(scrollEvent.current && wrapRef.current !==null){
         moveX.current =clientX;
         const gap  = clientX  - startX.current;
-
         const conditionMoveCurrent = initialSummary.current ==="current"  && (gap < 0);
         const conditionTommorowCurrent = initialSummary.current ==="tomorrow" && (gap > 0) ;
-        const wrapWidth =wrapStyle.width as string;
-        const widthNum : number= Number(wrapWidth.slice(0,wrapWidth.indexOf("px")));
-        const percent =(gap / widthNum) * 100 
+        const wrapWidth = wrapRef.current.clientWidth;
+        const percent =(gap / wrapWidth) * 100 
         if(conditionMoveCurrent || conditionTommorowCurrent){
           setWrapStyle({
             ...wrapStyle,
