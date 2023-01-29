@@ -266,7 +266,7 @@
   box-sizing: border-box;
 }
 .nation .title {
-  padding-left: 20px;
+  padding-left: 30px;
 }
 .nation .weekly_list, .nation .map_wrap {
   width: 100%;
@@ -319,7 +319,7 @@
 .nation .time_area {
   position: absolute;
   top: 2rem;
-  left: -3rem;
+  left: 1rem;
 }
 .nation .time_area .timeBtn {
   background-color: white;
@@ -447,9 +447,14 @@
   left: 20%;
 }
 
+@media screen and (min-width: 480px) {
+  .nation .time_area {
+    left: -80px;
+  }
+}
 @media screen and (min-width: 1025px) {
-  .nation {
-    width: 358px;
+  .nation .title {
+    padding-left: 20px;
   }
   .nation .time_area {
     top: 18px;
@@ -518,14 +523,14 @@
 }
 
 .now .scrollControl {
-  width: calc(100% - 72px - 20px);
+  width: 100%;
   position: relative;
 }
 .now .scrollArea {
   width: 100%;
   position: relative;
   height: 65px;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 .now .summary_wrap {
   width: 100%;
@@ -533,8 +538,7 @@
   left: 0;
   height: 100%;
 }
-
-.summary.current, .summary.tomorrow {
+.now .summary.current, .now .summary.tomorrow {
   position: absolute;
   display: flex;
   align-items: center;
@@ -542,67 +546,98 @@
   height: 65px;
   width: 100%;
 }
-
-.summary.current {
+.now .summary.current {
   left: 0;
 }
-.summary.current li {
+.now .summary.current li {
   float: left;
 }
-.summary.current dl {
+.now .summary.current dl {
   display: flex;
 }
-.summary.current dt {
+.now .summary.current dt {
   color: rgba(110, 110, 110, 0.991);
 }
-.summary.current dd {
+.now .summary.current dd {
   margin: 0 10px;
   font-weight: bolder;
 }
-
-.summary.tomorrow {
+.now .summary.tomorrow {
   left: 100%;
 }
-.summary.tomorrow td, .summary.tomorrow dl {
+.now .summary.tomorrow .summary_inner {
+  width: 90%;
+}
+.now .summary.tomorrow tbody {
+  box-sizing: border-box;
+}
+.now .summary.tomorrow td, .now .summary.tomorrow dl {
   display: flex;
 }
-.summary.tomorrow tr {
+.now .summary.tomorrow tr {
   display: flex;
   align-items: center;
 }
-.summary.tomorrow th, .summary.tomorrow td {
-  height: 1.8rem;
+.now .summary.tomorrow tr, .now .summary.tomorrow th, .now .summary.tomorrow td, .now .summary.tomorrow .term, .now .summary.tomorrow .skyIcon .weatherIcon {
+  height: 30.8px;
 }
-.summary.tomorrow .skyIcon, .summary.tomorrow .weatherIcon {
-  width: 1.5rem;
-  height: 1.5rem;
+.now .summary.tomorrow .skyIcon, .now .summary.tomorrow .weatherIcon, .now .summary.tomorrow .dl_number {
+  width: 21px;
 }
-.summary.tomorrow td dl {
+.now .summary.tomorrow th, .now .summary.tomorrow td {
+  padding: 0;
+}
+.now .summary.tomorrow td dl {
   margin-left: 8px;
+  text-align: center;
 }
-.summary.tomorrow dd {
-  width: 3rem;
+.now .summary.tomorrow dd {
   font-weight: bolder;
   text-align: center;
 }
-
-.summary_table {
+.now .summary.tomorrow th span {
+  display: inline-block;
+}
+.now .summary.tomorrow .term {
+  width: 40px;
+}
+.now .summary.tomorrow .term span {
+  height: 48%;
+  text-align: center;
+}
+.now .summary.tomorrow .dl_number {
+  display: inline-flex;
+  align-items: center;
+}
+.now .summary.tomorrow .dl_grade {
+  display: inline-flex;
+  align-items: center;
+}
+.now .summary.tomorrow .dl_grade dt, .now .summary.tomorrow .dl_grade dd {
+  display: inline-block;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+.now .summary.tomorrow .dl_grade dd {
+  margin-left: 8px;
+}
+.now .summary_table {
   width: 100%;
   padding: 0;
   display: flex;
-  font-size: 1rem;
+  font-size: 14px;
 }
-.summary_table .unit {
+.now .summary_table tbody, .now .summary_table tr {
+  width: 100%;
+}
+.now .summary_table .unit {
   font-size: 12px;
 }
-
-.summary_table .iconWrap svg {
-  width: 1.5rem;
-  height: 1.5rem;
+.now .summary_table .iconWrap svg {
   font-size: 100%;
 }
-
-.tabList {
+.now .tabList {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -612,8 +647,7 @@
   top: calc(100% + 14px);
   left: 0;
 }
-
-.tabBtn {
+.now .tabBtn {
   width: 8px;
   height: 8px;
   padding: 0;
@@ -622,10 +656,43 @@
   background-color: rgb(218, 218, 218);
   border: none;
 }
-.tabBtn.on {
+.now .tabBtn.on {
   background-color: rgb(88, 88, 88);
 }
 
+@media screen and (min-width: 400px) {
+  .now .summary.tomorrow .summary_inner {
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+  }
+  .now .summary.tomorrow .term {
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+  }
+  .now .summary.tomorrow .term span {
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
+  }
+}
+@media screen and (min-width: 500px) {
+  .now .scrollControl {
+    width: calc(100% - 72px - 20px);
+  }
+  .now .summary.tomorrow dd {
+    width: 3rem;
+  }
+  .now .summary.tomorrow .skyIcon, .now .summary.tomorrow .weatherIcon, .now .summary.tomorrow .dl_number {
+    width: 32.5px;
+  }
+}
+@media screen and (min-width: 768px) {
+  .now .summary_table {
+    font-size: 1rem;
+  }
+}
 @media screen and (min-width: 1025px) {
   .now {
     margin-top: 10px;
@@ -977,7 +1044,6 @@
 
 @media screen and (min-width: 1025px) {
   .sun {
-    width: 358px;
     border-radius: 10px;
     margin-top: 40px;
   }
@@ -1135,6 +1201,8 @@
 body {
   margin: 0;
   color: #424242;
+  width: 100vw;
+  overflow-x: hidden;
 }
 
 #topbar {
@@ -1179,7 +1247,8 @@ body {
 .blind {
   display: inline-block;
   position: absolute;
-  top: -100%;
+  top: -100vh;
+  left: -100vw;
 }
 
 ul, dl, dd {
@@ -1214,27 +1283,36 @@ li {
     max-width: 1160px;
   }
   #content {
-    width: 1160px;
+    width: 1000px;
   }
   .section_wrap {
     width: 100%;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
     margin-top: 0;
   }
   .section_center {
-    width: 751px;
+    width: 70%;
     border-right: 1px solid #d8d8d8;
   }
   .hourly, .week {
     padding: 0;
   }
   .section_right {
-    width: calc(100% - 751px);
+    width: 30%;
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+  .nation, .sun {
+    width: 95%;
+  }
+}
+@media screen and (min-width: 1160px) {
+  #content {
+    width: 1160px;
+  }
+  .nation, .sun {
+    width: 90%;
   }
 }/*# sourceMappingURL=main.css.map */

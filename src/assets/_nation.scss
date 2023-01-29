@@ -4,7 +4,7 @@ $onColor :#38a2f8;
   user-select: none;
   box-sizing:border-box;
   .title{
-    padding-left: 20px;
+    padding-left: 30px;
   }
   .weekly_list, .map_wrap{
     width: 100%;
@@ -59,7 +59,7 @@ $onColor :#38a2f8;
   .time_area{
     position: absolute;
     top:2rem;
-    left: -3rem;
+    left: 1rem;
     .timeBtn{
       background-color: #ffff;
       border: none;
@@ -189,11 +189,19 @@ $onColor :#38a2f8;
 
   
 }
+@media screen and (min-width:480px) {
+  .nation{
+    .time_area{
+      left:-80px;
+    }
+  }
 
+}
 @media screen and (min-width:1025px) {
   .nation{
-    width: 358px;
-    
+    .title{
+      padding-left: 20px;
+    }
     .time_area{
       top:18px;
       left: 14px;

@@ -12,6 +12,8 @@ $font_basic_color: #424242;
 body{
   margin: 0;
   color:$font_basic_color;
+  width: 100vw;
+  overflow-x: hidden;
 }
 #topbar{
   position: relative;
@@ -52,7 +54,8 @@ body{
 .blind{
   display: inline-block;
   position: absolute;
-  top:-100%;
+  top:-100vh;
+  left: -100vw;
 }
 ul , dl , dd{
   margin :0;
@@ -87,27 +90,36 @@ li {
     }
   }
   #content{
-    width:1160px;
+    width:1000px;
   }
   .section_wrap{
     width: 100%;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
     margin-top: 0;
   }
   .section_center{
-    width: 751px ;
+    width: 70% ;
     border-right: 1px solid #d8d8d8;
   }
   .hourly,.week{
     padding:0;
   }
   .section_right{
-    width: calc(100% - 751px);
+    width: 30%;
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+  .nation , .sun{
+    width: 95%;
+  }
+}
+@media screen and (min-width:1160px) {
+  #content{
+    width: 1160px;
+  }
+  .nation , .sun {
+    width: 90%;
   }
 }

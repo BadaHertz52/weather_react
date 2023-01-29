@@ -47,14 +47,14 @@
 }
 .now{
   .scrollControl{
-    width: calc(100% - (36px)*2  - 20px);
+    width: 100%;
     position: relative;
   }
   .scrollArea {
     width: 100%;
     position: relative;
     height: 65px;
-    overflow-x: hidden;
+    overflow: hidden;
   }
   .summary_wrap {
     width: 100%;
@@ -62,97 +62,174 @@
     left: 0;
     height: 100%;
   }
-}
-
-.summary.current , .summary.tomorrow {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 65px;
-  width: 100%;
-}
-.summary.current{
-  left: 0;
-  li {
-    float: left;
-  }
-  dl{
-    display: flex;
-  }
-  dt {
-    color:rgba(110, 110, 110, 0.991);
-  }
-  dd{
-    margin : 0 10px;
-    font-weight: bolder;
-  }
-}
-
-.summary.tomorrow{
-  left: 100%;
-  td , dl{
-    display: flex;
-  }
-  tr{
+  .summary.current , .summary.tomorrow {
+    position: absolute;
     display: flex;
     align-items: center;
+    justify-content: center;
+    height: 65px;
+    width: 100%;
   }
-  th , td{
-    height: 1.8rem
+  .summary.current{
+    left: 0;
+    li {
+      float: left;
+    }
+    dl{
+      display: flex;
+    }
+    dt {
+      color:rgba(110, 110, 110, 0.991);
+    }
+    dd{
+      margin : 0 10px;
+      font-weight: bolder;
+    }
   }
-  .skyIcon , .weatherIcon {
-    width: 1.5rem;
-    height: 1.5rem;
+  
+  .summary.tomorrow{
+    left: 100%;
+    .summary_inner{
+      width: 90%;
+    }
+    tbody{
+      box-sizing: border-box;
+    }
+    td , dl{
+      display: flex;
+    }
+    tr{
+      display: flex;
+      align-items: center;
+      
+    }
+    tr, th , td ,.term ,.skyIcon .weatherIcon{
+      height: calc(14px * 2.2)
+    }
+    
+    .skyIcon , .weatherIcon ,.dl_number {
+      width:calc(14px * 1.5)
+    }
+    th, td{
+      padding:0
+    }
+    td dl {
+      margin-left: 8px;
+      text-align: center;
+    }
+    dd{
+      font-weight: bolder;
+      text-align: center;
+    }
+    th span{
+      display: inline-block;
+    }
+    .term{
+      width: 40px;
+      span{
+        height: 48%;
+        text-align: center;
+      }
+    }
+    .dl_number{
+      display: inline-flex;
+      align-items: center;
+    }
+    .dl_grade{
+      display: inline-flex;
+      align-items: center;
+      dt , dd{
+        display: inline-block;
+        height: fit-content;
+      }
+      dd{
+        margin-left: 8px;
+        
+      }
+    }
   }
-  td dl {
-    margin-left: 8px;
-  }
-  dd{
-    width: 3rem;
-    font-weight: bolder;
-    text-align: center;
-  }
-}
+  
+  .summary_table  {
+    width: 100%;
+    padding:0;
+    display: flex;
+    font-size: 14px;
+    tbody, tr{
+      width: 100%;
+    }
 
-.summary_table  {
-  width: 100%;
-  padding:0;
-  display: flex;
-  font-size: 1rem;
-  .unit{
-    font-size: 12px;
+    .unit{
+      font-size: 12px;
+    }
+  }
+  
+  .summary_table .iconWrap svg{
+    font-size: 100%;
+  }
+  .tabList{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top:calc(100% + 14px);
+    left:0;
+  }
+  .tabBtn{
+    width: 8px;
+    height: 8px;
+    padding:0;
+    margin-right: 10px;
+    border-radius: 50%;
+    background-color: rgb(218, 218, 218);
+    border: none;
+    &.on{
+      background-color: rgb(88, 88, 88);
+    }
   }
 }
+@media screen and (min-width:400px) {
+  .now {
+    .summary.tomorrow{
+      .summary_inner{
+        width: fit-content;
+      }
+      .term{
+        width: auto;
+        display: inline-flex;
+        align-items: center;
+        span{
+          height: fit-content;
+        }
+      }
+    }
+  }
+  
+}
+@media screen and (min-width:500px) {
+  .now{
+    .scrollControl{
+      width: calc(100% - (36px)*2  - 20px);
+    }
+    .summary.tomorrow { 
+      dd{
+        width: 3rem;
+      }
+      .skyIcon ,.weatherIcon , .dl_number{
+        width: 32.5px;
+      }
 
-.summary_table .iconWrap svg{
-  width: 1.5rem;
-  height: 1.5rem;
-  font-size: 100%;
-}
-.tabList{
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top:calc(100% + 14px);
-  left:0;
-}
-.tabBtn{
-  width: 8px;
-  height: 8px;
-  padding:0;
-  margin-right: 10px;
-  border-radius: 50%;
-  background-color: rgb(218, 218, 218);
-  border: none;
-  &.on{
-    background-color: rgb(88, 88, 88);
+    }
   }
 }
-
+@media screen and (min-width:768px) {
+  .now{
+    .summary_table{
+      font-size: 1rem;
+    }
+  }
+}
 @media screen and (min-width:1025px) {
   .now{
     margin-top: 10px;

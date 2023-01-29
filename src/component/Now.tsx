@@ -49,8 +49,11 @@ const AmPmTr =({am ,tomrrowWeather, daytime}:AmPmTrProperty)=>{
     <tr>
       <th scope='row'>
         <span className='term'>
-          내일
-          {am? "오전":"오후" }
+          <span>내일</span>
+          <span>
+            {am? "오전":"오후" }
+          </span>
+          
         </span>
       </th>
       {/* sky  , tmo*/}
@@ -59,10 +62,12 @@ const AmPmTr =({am ,tomrrowWeather, daytime}:AmPmTrProperty)=>{
           daytime ={daytime}
           skyType ={weatherData.sky}
         />
-        <dl>
+        <dl className='dl_number'>
           <dt className='blind'>기온</dt>
           <dd>
-            {am ? tomrrowWeather.tmn : tomrrowWeather.tmx}
+            <span>
+              {am ? tomrrowWeather.tmn : tomrrowWeather.tmx}
+            </span>
             <span className='degree'>°</span>
           </dd>
         </dl>
@@ -70,7 +75,7 @@ const AmPmTr =({am ,tomrrowWeather, daytime}:AmPmTrProperty)=>{
       {/* 강수량 */}
       <td>
         <PopIcon pop ={weatherData.pop} />
-        <dl>
+        <dl className='dl_number'>
           <dt className='blind'>강수 확률</dt>
           <dd>
             {Math.round(weatherData.pop)}
@@ -80,13 +85,13 @@ const AmPmTr =({am ,tomrrowWeather, daytime}:AmPmTrProperty)=>{
       </td>
       {/*미세*/}
       <td>
-        <dl>
+        <dl className='dl_grade'>
           <dt>미세</dt>
           <PmDd className={tomrrowWeather.pm10Grade} >
             {tomrrowWeather.pm10Grade}
           </PmDd>
         </dl>
-        <dl>
+        <dl className='dl_grade' >
           <dt>초미세</dt>
           <PmDd className={tomrrowWeather.pm25Grade} >
             {tomrrowWeather.pm25Grade}
