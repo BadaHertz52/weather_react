@@ -16,6 +16,7 @@ import {   SunRiseAndSet, WeatherAction, WeatherState } from './modules/weather'
 import { weatherSlice } from './modules/weather/reducer';
 import { getWeatherThunk, toolkitWeather } from './modules/weather/thunk';
 import None from './component/None';
+import { BsGithub } from 'react-icons/bs';
 /**
  * hours 가 일몰,일출 시간을 기준을 낮 시간인지 밤 시간인지 확인하는 함수
  * @param hours 
@@ -114,7 +115,6 @@ function App () {
             toolkitDispatch={toolkitDispatch}
           />
         </div>
-
       </div>
       <div id='container' role="main">
         <div id="content">
@@ -175,9 +175,36 @@ function App () {
           {(weather.state ==="failure" || weather.state ==="none")&&
             <None target ={"현재 위치에 대한 날씨"} />
           } 
-      </div>
-      </div>
 
+        </div>
+      </div>
+      <div id="footer" role="contentinfo">
+        <span aria-details='the year of production'>
+          <span className='blind'>
+          the year of production
+          </span>
+          2023
+        </span>
+        <a
+          href="https://github.com/BadaHertz52"
+          rel="autor"
+          title="autor github profile link"
+        >
+          <span className='blind'>
+          autor's github profile link
+          </span>
+          ⓒbadahertz52
+        </a>
+        <a 
+          href="https://github.com/BadaHertz52/weather_react"
+          title='github 바로가기'
+        >
+          <span className='blind'>
+            해당 페이지에 대한 github 페이지 바로가기
+          </span>
+          <BsGithub/>
+        </a>
+      </div>
     </div>
   );
 }

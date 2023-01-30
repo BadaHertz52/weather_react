@@ -77,7 +77,22 @@ li {
     font-size: 1.2rem;
   }
 }
-
+a{
+  text-decoration: none;
+  color:initial;
+}
+#footer{
+  margin: 2rem 0;
+  text-align: center;
+  font-size: 14px;
+  color:#808080;
+  span ,a{
+    margin-left: 10px;
+  }
+  a{
+    color:inherit
+  }
+}
 @media screen and (min-width:780px) {
   .hourly , .week {
     padding: 30px 65px;
