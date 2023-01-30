@@ -22,7 +22,6 @@ const StyledBtn =styled.button`
 	display:inline-block;
 	cursor:pointer;
 	font-size:14px;
-	padding:6px 24px;
 	text-decoration:none;
   &:hover {
     background:linear-gradient(to bottom, #c6c5c5e9 ,25%,  #ebebeb 100%);

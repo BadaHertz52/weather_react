@@ -42,11 +42,37 @@
   .header{
     font-size: 14px;
     text-align: center;
+    word-break: break-word;
   }
   .btns{
     display: flex;
     justify-content: space-around;
     margin-top: 8px;
     width: 100%;
+  }
+}
+.toolkitBtn{
+  padding:6px 24px;
+}
+
+@media screen and (max-width:768px) {
+  .location_dropdown {
+    &:hover .dropdown-content{
+      width: 235px;
+      left: -120px ;
+    }
+  }
+  .dropdown-content .header {
+    font-size: 12px;
+  }
+  .toolkitBtn{
+    padding:5px
+  }
+}
+@media screen and (max-width:320px) {
+  .location_dropdown{
+    &:hover .dropdown-content{
+      left: -145px
+    }
   }
 }
