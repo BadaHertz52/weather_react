@@ -1305,13 +1305,10 @@ a {
   }
 }
 @media screen and (min-width: 1025px) {
-  #topbar .inner {
-    max-width: 1160px;
-  }
   #container {
     border-bottom: 1px solid rgba(227, 227, 227, 0.9764705882);
   }
-  #content {
+  #topbar .inner, #content {
     width: 1000px;
   }
   .section_wrap {
@@ -1346,8 +1343,13 @@ a {
   }
 }
 @media screen and (min-width: 1160px) {
-  #content {
+  #topbar .inner, #content {
     width: 1160px;
+  }
+  #topbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .nation .inner, .sun .inner {
     width: 90%;
