@@ -17,7 +17,8 @@ import { weatherSlice } from './modules/weather/reducer';
 import { getWeatherThunk, toolkitWeather } from './modules/weather/thunk';
 import None from './component/None';
 import { BsGithub } from 'react-icons/bs';
-import {RiEmotionSadLine} from 'react-icons/ri';
+import {RiEmotionSadLine} from 'react-icons/ri'
+import Loading from './component/Loading';
 /**
  * hours 가 일몰,일출 시간을 기준을 낮 시간인지 밤 시간인지 확인하는 함수
  * @param hours 
@@ -120,7 +121,10 @@ function App () {
       <div id='container' role="main">
         <div id="content">
           {weather.state === "pending" &&
-            "loading"
+            <Loading
+              positionState={position.state}
+              weatherState ={weather.state}
+            />
           }
           {weather.state === "success" &&
           <div className ="section_wrap">

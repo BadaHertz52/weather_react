@@ -257,6 +257,117 @@
   width: 100%;
 }
 
+#loading {
+  width: 100%;
+}
+#loading .inner, #loading .state_area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#loading .loading_state {
+  display: flex;
+  align-items: center;
+  width: 250px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  height: 1.2rem;
+  text-align: center;
+}
+#loading .loading_state > div {
+  margin-right: 1rem;
+}
+#loading .loading_state.state_none {
+  color: rgb(135, 135, 135);
+}
+#loading .loading_state.pending {
+  color: rgb(10, 104, 10);
+}
+#loading .loading_state.pending .pendingIcon {
+  position: relative;
+  width: 90%;
+  height: 90%;
+}
+#loading .loading_state.pending .icon_wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#loading .loading_state.pending .icon_wrap svg {
+  fill: inherit;
+  -webkit-animation: pendingRotate 3s ease-in infinite;
+          animation: pendingRotate 3s ease-in infinite;
+}
+@-webkit-keyframes pendingRotate {
+  0% {
+    transform: rotate(0);
+  }
+  13% {
+    transform: rotate(46.8deg);
+  }
+  25% {
+    transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+  }
+  80% {
+    transform: rotate(288deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes pendingRotate {
+  0% {
+    transform: rotate(0);
+  }
+  13% {
+    transform: rotate(46.8deg);
+  }
+  25% {
+    transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+  }
+  80% {
+    transform: rotate(288deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+#loading .loading_state.success {
+  color: rgb(0, 99, 180);
+}
+#loading .loading_state.failure {
+  color: rgb(203, 57, 8);
+}
+#loading .loading_state .icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  display: flex;
+  justify-content: center;
+}
+#loading .loading_state .icon div, #loading .loading_state .icon svg {
+  width: 100%;
+  height: 100%;
+}
+#loading .loading_state .data span:first-child {
+  margin-right: 10px;
+}
+#loading .loading_state .data span {
+  color: #424242;
+}
+
 .nation {
   -webkit-user-select: none;
      -moz-user-select: none;
