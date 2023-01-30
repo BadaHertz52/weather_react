@@ -1,5 +1,5 @@
 import { ApFcstAreaCode, ApiAreaCode, MidLandAreaCode, midLandAreaCodeZip, midTaArea, midTaAreaCode, MidTaAreaCode, west } from "./areaCodeType";
-import {  Area, areaArry, AreaInform, DailyWeather, Day, getSkyCode, getSkyType, getWsd, gradeArry, HourWeather, PmType, SkyCodeType, SkyType, SunRiseAndSet, WeatherState } from "./weather/types";
+import {  Area, areaArry, AreaInform, AreaNow, DailyWeather, Day, getSkyCode, getSkyType, getWsd, gradeArry, HourWeather, NationType, PmType, SkyCodeType, SkyType, SunRiseAndSet, WeatherState } from "./weather/types";
 import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApNowItem, SVFBaseTime,  KakaoDoumentType, MidFcstDay, ApFcstItem}from "./apiType";
 import { sfGrid} from './sfGrid'; 
 import { SFGridItem } from "./position/types";
@@ -843,33 +843,62 @@ const findLandTaCode =(sfGrid:SFGridItem)=>{
  * @param threeDays 
  * @returns  Promise<Error | Area[]>
  */
-const  getNationData =(baseDate_skyCode:string,baseDate_svf: string, baseDate_today:string,baseDate_yesterday: string,  baseTime_skyCode:string, fcstTime:string, preFcstTime:string,  minutes:number, hours:number, baseTime_svf: SVFBaseTime, timeArry: string[], todayTimeArry: string[], threeDays: string[])=>{
+const  getNationData =(baseDate_skyCode:string,baseDate_svf: string, baseDate_today:string,baseDate_yesterday: string,  baseTime_skyCode:string, fcstTime:string, preFcstTime:string,  minutes:number, hours:number, baseTime_svf: SVFBaseTime, timeArry: string[], todayTimeArry: string[], threeDays: string[], searchSvf:boolean, searchOther:boolean, nationData:NationType|null)=>{
   const data =Promise
   .all(areaArry.map(async(item:AreaInform)=>{
     const {nX, nY}= changeNType
     (item.sfGrid);
     const {landRegId, taRegId} =item ;
-    const sVFcst =  await getSVFcast(nX,nY,baseDate_svf,baseTime_svf ,baseDate_yesterday,timeArry,todayTimeArry, threeDays);
+    const index= areaArry.indexOf(item);
+    const targetArea =nationData !==null?  nationData.areas[index] :null
+    const nation_day = targetArea !==null? targetArea?.day as Day[]  : null;
+    const nation_now = targetArea !==null?  targetArea.now : null ;
 
-    const midFcst =landRegId !==undefined && taRegId !==undefined? await getMidFcast(landRegId, taRegId,baseDate_today,baseDate_yesterday, hours ): (
-      landRegId === undefined?
-      (
-        taRegId ===undefined?
-        new Error('[Error] landRegId and taRegId are undefined')
-        :
-        new Error('[Error] landRegId is undefined')
-      ):
-      new Error('[Error] taRegId is undefined')
-    );
-    const skyCode = await getUSSkyCode(nX, nY, baseDate_skyCode,baseTime_skyCode, fcstTime)
-    const nowWeather = await getUSNcast(nX,nY,baseDate_yesterday, baseDate_today, fcstTime, preFcstTime, minutes, hours);
+    const sVFcst = (!searchSvf && nation_day !== null)?  
+                    nation_day.slice(0,3)
+                    :
+                    await getSVFcast(nX,nY,baseDate_svf,baseTime_svf ,baseDate_yesterday,timeArry,todayTimeArry, threeDays) 
+
+    const midFcst =(!searchOther && nation_day !== null)
+                    ?
+                    nation_day.slice(3)
+                    :
+                    (
+                      landRegId !==undefined && taRegId !==undefined 
+                      ? 
+                      await getMidFcast(landRegId, taRegId,baseDate_today,baseDate_yesterday, hours )
+                      : 
+                      (
+                        landRegId === undefined?
+                        (
+                          taRegId ===undefined?
+                          new Error('[Error] landRegId and taRegId are undefined')
+                          :
+                          new Error('[Error] landRegId is undefined')
+                        ):
+                        new Error('[Error] taRegId is undefined')
+                      )
+                    ) ;
+
+    const skyCode = (!searchOther && nation_now !==null)
+                      ?
+                      nation_now.sky
+                    :
+                      await getUSSkyCode(nX, nY, baseDate_skyCode,baseTime_skyCode, fcstTime)
+
+    const nowWeather = (!searchOther&& nation_now !==null) 
+                      ?
+                        {t1h:nation_now.temp}
+                      :
+                        await getUSNcast(nX,nY,baseDate_yesterday, baseDate_today, fcstTime, preFcstTime, minutes, hours);
+
     if( !(sVFcst instanceof Error) && 
         !(midFcst instanceof Error) &&
         !(skyCode instanceof Error) &&
         !(nowWeather instanceof Error) 
     ){
-      const svfDay :Day[] =changeSvfToDay(sVFcst);
-      const midDay: Day[] = changeMidToDay(midFcst);
+      const svfDay :Day[] = searchSvf? changeSvfToDay(sVFcst as SVFcst) : sVFcst as Day[];
+      const midDay: Day[] = searchOther? changeMidToDay(midFcst as MidFcst) : midFcst as Day[];
       
       const area : Area ={
         areaInform:{
@@ -991,7 +1020,24 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     ):
     new Error('[Error] taRegId is undefined')
   );
-  const nationData = await getNationData(baseDate_skyCode,baseDate_svf, baseDate_today,baseDate_yesterday,  baseTime_skyCode, fcstTime, preFcstTime,  minutes, hours, baseTime_svf, timeArry, todayTimeArry, threeDays);
+  const nationDataItem = sessionStorage.getItem("nation_data");
+  
+  let areaData:Error | Area[]|undefined =undefined ;
+  if(nationDataItem !==null){
+    const item:NationType = JSON.parse(nationDataItem);
+    const searchTime =item.searchTime;
+    const searchSvf = searchTime.baseTime_svf !== baseDate_svf;
+    const searchOther = searchTime.hours !== hours;
+    if(!searchSvf && !searchOther){
+      areaData = {
+        ...item.areas
+      }
+    }else{
+      areaData =await getNationData(baseDate_skyCode,baseDate_svf, baseDate_today,baseDate_yesterday,  baseTime_skyCode, fcstTime, preFcstTime,  minutes, hours, baseTime_svf, timeArry, todayTimeArry, threeDays ,searchSvf, searchOther, item );
+    }
+  }else{
+    areaData = await getNationData(baseDate_skyCode,baseDate_svf, baseDate_today,baseDate_yesterday,  baseTime_skyCode, fcstTime, preFcstTime,  minutes, hours, baseTime_svf, timeArry, todayTimeArry, threeDays ,true, true, null );
+  }
   const nowApGrade = await getApNow(sidoName,stationName);
   const tommorowApGrade =await getApFcst(baseDate_today,threeDays[1], sidoName ,sfGrid);
   const sunInform =await getSunInform(longitude,latitude,threeDays);
@@ -1013,17 +1059,23 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     },
     reh:t.reh
   });
-
-
-
   if( !(skyCode instanceof Error)  &&   
       !(sVFcst instanceof Error ) && 
       !(uSNcst instanceof Error )&&
       !(midFcst instanceof Error)  && 
       !(nowApGrade instanceof Error ) && 
       !(tommorowApGrade instanceof Error ) && 
-      !(nationData instanceof Error)){
-        
+      (areaData !== undefined)&&
+      !(areaData instanceof Error)){
+
+    const nationData:NationType ={
+      searchTime:{
+        hours:hours,
+        baseTime_svf:baseTime_svf
+      },
+      areas:areaData
+    };
+    sessionStorage.setItem("nation_data", JSON.stringify(nationData));
     const targetSVFcst = sVFcst.map((i:SVFDay)=>{
       if(sVFcst.indexOf(i)===0){
         return sVFcst[0].filter((t:SVFTime)=> todayTimeArry.includes(t.fcstTime))
@@ -1077,7 +1129,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     midFcst  instanceof Error  && string.concat(`skyCode error: ${midFcst}`);
     nowApGrade  instanceof Error  &&  string.concat(`skyCode error: ${nowApGrade}`);
     sunInform instanceof Error && string.concat(`skyCode error: ${sunInform}`);
-    nationData instanceof Error && string.concat(`nationData error: ${nationData}`)
+    areaData instanceof Error && string.concat(`nation_areaData error: ${areaData}`)
     return string
   }
 };
