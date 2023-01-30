@@ -11,12 +11,13 @@ $unit_value_color:#218be8;
   position: relative;
   .weather_graph{
     width: 100%;
-    height: fit-content;
+    min-height: fit-content;
     border-bottom: 1px solid rgba(0,0,0,.04);
-    margin-left: 16px;
+    margin-left: 5px;
   }
   .scrollArea{
-    height: 361px;
+    height: fit-content;
+    min-height: 370px;
     overflow: hidden;
     position: relative;
     &.afterOn::after ,

@@ -10,14 +10,17 @@
 }
 .hourly .weather_graph {
   width: 100%;
+  min-height: -webkit-fit-content;
+  min-height: -moz-fit-content;
+  min-height: fit-content;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  margin-left: 5px;
+}
+.hourly .scrollArea {
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-  margin-left: 16px;
-}
-.hourly .scrollArea {
-  height: 361px;
+  min-height: 370px;
   overflow: hidden;
   position: relative;
 }
@@ -249,6 +252,7 @@
 .dropdown-content .header {
   font-size: 14px;
   text-align: center;
+  word-break: break-word;
 }
 .dropdown-content .btns {
   display: flex;
@@ -257,6 +261,27 @@
   width: 100%;
 }
 
+.toolkitBtn {
+  padding: 6px 24px;
+}
+
+@media screen and (max-width: 768px) {
+  .location_dropdown:hover .dropdown-content {
+    width: 235px;
+    left: -120px;
+  }
+  .dropdown-content .header {
+    font-size: 12px;
+  }
+  .toolkitBtn {
+    padding: 5px;
+  }
+}
+@media screen and (max-width: 320px) {
+  .location_dropdown:hover .dropdown-content {
+    left: -145px;
+  }
+}
 #loading {
   width: 100%;
   display: flex;
@@ -862,6 +887,9 @@
 .now .summary_table tbody, .now .summary_table tr {
   width: 100%;
 }
+.now .summary_table tr {
+  justify-content: space-between;
+}
 .now .summary_table .unit {
   font-size: 12px;
 }
@@ -891,21 +919,35 @@
   background-color: rgb(88, 88, 88);
 }
 
-@media screen and (min-width: 400px) {
+@media screen and (max-width: 370px) {
   .now .summary.tomorrow .summary_inner {
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
-    width: fit-content;
+    width: 90%;
+    margin-left: 10px;
+    margin-right: calc(10% - 6px);
+  }
+  .now .summary.tomorrow .summary_table {
+    font-size: 12px;
+  }
+  .now .summary.tomorrow .skyIcon, .now .summary.tomorrow .weatherIcon, .now .summary.tomorrow .dl_number {
+    width: 1rem;
+  }
+  .now .summary.tomorrow td dl, .now .summary.tomorrow .dl_grade dd {
+    margin-left: 4px;
+  }
+}
+@media screen and (max-width: 435px) {
+  .now .now_now {
+    height: 50px;
+  }
+  .now .now_now .summaryImg .skyIcon {
+    height: 50px;
+    width: 50px;
+  }
+  .now .now_now .summary .temp {
+    font-size: 2rem;
   }
   .now .summary.tomorrow .term {
-    width: auto;
-    display: inline-flex;
-    align-items: center;
-  }
-  .now .summary.tomorrow .term span {
-    height: -webkit-fit-content;
-    height: -moz-fit-content;
-    height: fit-content;
+    font-size: 12px;
   }
 }
 @media screen and (min-width: 500px) {
@@ -1273,6 +1315,30 @@
   margin-left: 5px;
 }
 
+@media screen and (max-width: 375px) {
+  .sun .inner {
+    padding-left: 10px;
+    padding-right: 18px;
+  }
+  .sun .btn_wrap {
+    right: 30px;
+  }
+  .sun .sun_chart, .sun .current_bar {
+    width: 240px;
+  }
+  .sun .sun_chart {
+    height: 123px;
+  }
+  .sun .move_sun, .sun .current_bar .bar {
+    width: 240px;
+    height: 240px;
+  }
+  .sun .move_sun::after {
+    width: 24px;
+    height: 24px;
+    left: -8px;
+  }
+}
 @media screen and (min-width: 1025px) {
   .sun {
     margin-top: 40px;
@@ -1282,10 +1348,10 @@
     padding: 15px 5%;
     box-sizing: border-box;
   }
-  .sun .sun_chart .chart_bar {
+  .sun .sun_chart, .sun .current_bar {
     width: 100%;
   }
-  .sun .move_sun, .sun .chart_bar .bar {
+  .sun .move_sun, .sun .current_bar .bar {
     width: 100%;
     height: 100%;
   }
@@ -1351,6 +1417,7 @@
   color: inherit;
 }
 .week .cell_weather .skyIcon, .week .cell_weather svg {
+  display: inline-block;
   width: 34px;
   height: 34px;
 }
@@ -1367,6 +1434,22 @@
   color: #8f8f8f;
 }
 
+@media screen and (max-width: 375px) {
+  .week .item {
+    padding: 5px 10px;
+  }
+  .week .cell_weather .inner_text,
+.week .cell_date .day {
+    font-size: 13px;
+  }
+  .week .cell_weather .skyIcon, .week .cell_weather svg {
+    width: 28px;
+    height: 28px;
+  }
+  .week .cell_temperature {
+    font-size: 14px;
+  }
+}
 @media screen and (min-width: 768px) {
   .week .box {
     display: flex;
@@ -1565,6 +1648,19 @@ a {
   }
   .hourly, .week {
     padding: 30px 65px;
+  }
+}
+@media screen and (max-width: 375px) {
+  .week {
+    padding: 20px 20px;
+  }
+  .section_right {
+    width: 100%;
+  }
+  .nation .weekly_list, .nation .map_wrap {
+    padding: 0;
+    padding-right: 5%;
+    width: 95%;
   }
 }
 @media screen and (min-width: 1025px) {

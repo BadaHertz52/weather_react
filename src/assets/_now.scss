@@ -157,7 +157,9 @@
     tbody, tr{
       width: 100%;
     }
-
+    tr{
+      justify-content:space-between;
+    }
     .unit{
       font-size: 12px;
     }
@@ -189,23 +191,48 @@
     }
   }
 }
-@media screen and (min-width:400px) {
-  .now {
+@media screen and (max-width:370px) {
+  .now{
     .summary.tomorrow{
       .summary_inner{
-        width: fit-content;
+        width: 90%;
+        margin-left: 10px;
+        margin-right:calc(10% - 6px);
       }
-      .term{
-        width: auto;
-        display: inline-flex;
-        align-items: center;
-        span{
-          height: fit-content;
-        }
+      .summary_table{
+        font-size: 12px;
+      }
+      .skyIcon , .weatherIcon , .dl_number{
+        width: 1rem;
+      }
+      td dl, .dl_grade dd{
+        margin-left: 4px;
       }
     }
   }
-  
+}
+@media  screen and (max-width:435px) {
+  .now{
+    .now_now{
+      height: 50px;
+      .summaryImg {
+        .skyIcon{
+          height: 50px;
+          width: 50px;
+        }
+      }
+      .summary{
+        .temp{
+          font-size: 2rem;
+        }
+      }
+    }
+    .summary.tomorrow{
+      .term{
+        font-size: 12px;
+      }
+    }
+  }
 }
 @media screen and (min-width:500px) {
   .now{

@@ -67,6 +67,7 @@ $grey:#8f8f8f;
       color: inherit
     }
     .skyIcon , svg{
+      display: inline-block;
       width: 34px;
       height: 34px;
     }
@@ -84,7 +85,26 @@ $grey:#8f8f8f;
     color:$grey
   }
 }
-
+@media screen and (max-width:375px) {
+  .week {
+    .item{
+      padding: 5px 10px;
+    }
+    .cell_weather .inner_text ,
+    .cell_date .day{
+        font-size: 13px;
+      }
+    .cell_weather{
+      .skyIcon, svg{
+        width: 28px ;
+        height: 28px;
+      }
+    }
+    .cell_temperature{
+      font-size: 14px;
+    }
+  }
+}
 @media screen and (min-width:768px) {
   .week{
 

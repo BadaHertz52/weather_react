@@ -126,6 +126,21 @@ a{
     padding: 30px 65px;
   }
 }
+@media  screen and (max-width:375px) {
+  .week{
+    padding: 20px 20px;
+  }
+  .section_right{
+    width: 100%;
+  }
+  .nation {
+    .weekly_list , .map_wrap{
+      padding: 0;
+      padding-right: 5%;
+      width: 95%;
+    }
+  }
+}
 @media screen and (min-width:1025px) {
   #container{
     border-bottom: 1px solid  #e3e3e3f9;

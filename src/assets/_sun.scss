@@ -247,7 +247,33 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
     }
   }
 }
+@media screen and (max-width:375px) {
 
+  .sun{
+    .inner{
+      padding-left: 10px;
+      padding-right: 18px;
+    }
+    .btn_wrap{
+      right: 30px;
+    }
+    .sun_chart,  .current_bar{
+      width:240px;
+    }
+    .sun_chart{
+      height: 123px;
+    }
+    .move_sun, .current_bar .bar{
+      width:240px;
+      height:240px;
+    }
+    .move_sun::after{
+      width: 24px;
+      height: 24px;
+      left:-8px;
+    }
+  }
+}
 
 @media screen and (min-width:1025px) {
   .sun{
@@ -257,11 +283,11 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
       padding:15px 5%;
       box-sizing: border-box;
     }
-    .sun_chart  .chart_bar{
+    .sun_chart , .current_bar{
       width: $sun_chart_width_large;
     }
     
-    .move_sun, .chart_bar .bar{
+    .move_sun, .current_bar .bar{
       width: $sun_chart_width_large;
       height: $sun_chart_width_large;
     }
