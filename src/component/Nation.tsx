@@ -1,5 +1,5 @@
 import React ,{Dispatch, SetStateAction, useState} from 'react';
-import { Area , AreaInform, AreaNow, Day, SkyType, SunRiseAndSet} from '../modules/weather';
+import { Area , AreaNow, Day, NationType, SkyType, SunRiseAndSet} from '../modules/weather';
 import {weekArry} from './Week';
 import mapImg from '../assets/map.jpg';
 import SkyIcon from './SkyIcon';
@@ -110,7 +110,7 @@ const NWItem =({daylater, today_date, targetDaylater, setTargetDaylater, targetI
   )
 };
 type NationProperty ={
-  nation:Area[],
+  nation:NationType,
   todaySunInform: Error | SunRiseAndSet
 };
 const Nation =({nation, todaySunInform}:NationProperty)=>{
@@ -119,7 +119,7 @@ const Nation =({nation, todaySunInform}:NationProperty)=>{
   const todya_date = today.getDate();
   const [targetDaylater, setTargetDaylater] =useState<number>(0);
   const [targetTime, setTargetTime]=useState<TargetTime>(now);
-  const weeklyList = nation[0].day?.map((d:Day)=>d.dayslater) as number[];
+  const weeklyList = nation.areas[0].day?.map((d:Day)=>d.dayslater) as number[];
   const daytime =checkDayOrNight(hours, todaySunInform)
   return (
     <div className="nation">
@@ -179,7 +179,7 @@ const Nation =({nation, todaySunInform}:NationProperty)=>{
               src ={mapImg}
               alt="mapImg"
             />
-            {nation.map((area:Area)=>
+            {nation.areas.map((area:Area)=>
               area.day !==null ?
               <Zone
                 daytime={daytime}

@@ -453,7 +453,13 @@ export type Area ={
   day:Day[]|null,
   now:AreaNow|null
 };
-
+export type NationType ={
+  searchTime :{
+    hours:number,
+    baseTime_svf :string,
+  },
+  areas:Area[]
+};
 export type SunRiseAndSet ={
   date:string,
   sunRise :string|null|undefined ,
@@ -476,7 +482,7 @@ export type WeatherState ={
   tomrrowWeather : TomorrowWeather|null,
   threeDay:DailyWeather[]|null,
   week:Day[]|null,
-  nation:Area[]|null,
+  nation:NationType|null,
   sunRiseAndSet :(SunRiseAndSet|Error)[]|null
 };
 
