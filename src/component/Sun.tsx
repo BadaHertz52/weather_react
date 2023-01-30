@@ -156,7 +156,7 @@ const Sun =({sunRiseAndSet}:SunProperty)=>{
               </div>
               <div className="sun_info">
                     <SunIconArea
-                      sunrise={true}
+                      sunrise={false}
                     />
                 <dl className='time_list'>
                   <dt className='time_title'>
