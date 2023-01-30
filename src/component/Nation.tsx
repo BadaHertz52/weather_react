@@ -123,72 +123,74 @@ const Nation =({nation, todaySunInform}:NationProperty)=>{
   const daytime =checkDayOrNight(hours, todaySunInform)
   return (
     <div className="nation">
-      <h2 className='title'>
-        전국날씨
-      </h2>
-      <ul className='weekly_list'>
-        {weeklyList.map((i:number)=>
-        <NWItem
-          daylater={i}
-          today_date={todya_date}
-          targetDaylater={targetDaylater}
-          setTargetDaylater={setTargetDaylater}
-          targetItem={targetTime}
-          setTargetItem={setTargetTime}
-        />)}
-      </ul>
-      <div className="map_wrap">
-        <div className="map">
-          <div className="time_area">
-            {targetDaylater===0&&
+      <div className="inner">
+        <h2 className='title'>
+          전국날씨
+        </h2>
+        <ul className='weekly_list'>
+          {weeklyList.map((i:number)=>
+          <NWItem
+            daylater={i}
+            today_date={todya_date}
+            targetDaylater={targetDaylater}
+            setTargetDaylater={setTargetDaylater}
+            targetItem={targetTime}
+            setTargetItem={setTargetTime}
+          />)}
+        </ul>
+        <div className="map_wrap">
+          <div className="map">
+            <div className="time_area">
+              {targetDaylater===0&&
+                <button
+                  onClick={()=>{setTargetTime(now)}}
+                  name='timeBtn_now'
+                  className={`timeBtn ${targetTime === now?'on':''}`}
+                >
+                  현재
+                </button>
+              }
               <button
-                onClick={()=>{setTargetTime(now)}}
-                name='timeBtn_now'
-                className={`timeBtn ${targetTime === now?'on':''}`}
+                onClick={()=>{setTargetTime(am)}}
+                name='timeBtn_am'
+                className={`timeBtn 
+                ${((targetTime === now && targetDaylater!== 0) || 
+                    targetTime === am
+                  )
+                  ?
+                  'on'
+                  :
+                  ''
+              }`}
               >
-                현재
+                오전
               </button>
-            }
-            <button
-              onClick={()=>{setTargetTime(am)}}
-              name='timeBtn_am'
-              className={`timeBtn 
-              ${((targetTime === now && targetDaylater!== 0) || 
-                  targetTime === am
-                )
-                ?
-                'on'
-                :
-                ''
-            }`}
-            >
-              오전
-            </button>
-            <button
-              onClick={()=>{setTargetTime(pm)}}
-              name='timeBtn_pm'
-              className={`timeBtn ${targetTime === pm?'on':''}`}
-            >
-              오후
-            </button>
+              <button
+                onClick={()=>{setTargetTime(pm)}}
+                name='timeBtn_pm'
+                className={`timeBtn ${targetTime === pm?'on':''}`}
+              >
+                오후
+              </button>
 
-          </div>
-          <img
-            className='map_img'
-            src ={mapImg}
-            alt="mapImg"
-          />
-          {nation.map((area:Area)=>
-            area.day !==null ?
-            <Zone
-              daytime={daytime}
-              area={area}
-              targetTime={targetTime}
-              targetDaylater={targetDaylater}
+            </div>
+            <img
+              className='map_img'
+              src ={mapImg}
+              alt="mapImg"
             />
-            :
-            "no data"
-          )}
+            {nation.map((area:Area)=>
+              area.day !==null ?
+              <Zone
+                daytime={daytime}
+                area={area}
+                targetTime={targetTime}
+                targetDaylater={targetDaylater}
+              />
+              :
+              "no data"
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -119,93 +119,95 @@ const Sun =({sunRiseAndSet}:SunProperty)=>{
   
   return (
     <div className="sun">
-      <h2 className="title">
-        일출일몰
-      </h2>
-      <div className="btn_wrap">
-        <button
-          className={`btn_sun ${targetDay === today? 'on':''}`}
-          onClick={()=>setTargetDay(today)}
-        >
-          오늘
-        </button>
-        <button
-          className={`btn_sun ${targetDay === tomorrow? 'on':''}`}
-          onClick={()=>setTargetDay(tomorrow)}
-        >
-          내일
-        </button>
-      </div>
-      {targetDay === today?
-        <div className="sun_panel">
-          <div className="sun_chart">
-            <div 
-              className="move_sun"
-              style={moveSunStyle}
-            >
-            </div>
-            <div className="progress_bar">
-              <div className="current_bar">
-                <span 
-                  className='bar'
-                  style={barStyle}
-                >
-                </span>
+      <div className="inner">
+        <h2 className="title">
+          일출일몰
+        </h2>
+        <div className="btn_wrap">
+          <button
+            className={`btn_sun ${targetDay === today? 'on':''}`}
+            onClick={()=>setTargetDay(today)}
+          >
+            오늘
+          </button>
+          <button
+            className={`btn_sun ${targetDay === tomorrow? 'on':''}`}
+            onClick={()=>setTargetDay(tomorrow)}
+          >
+            내일
+          </button>
+        </div>
+        {targetDay === today?
+          <div className="sun_panel">
+            <div className="sun_chart">
+              <div 
+                className="move_sun"
+                style={moveSunStyle}
+              >
+              </div>
+              <div className="progress_bar">
+                <div className="current_bar">
+                  <span 
+                    className='bar'
+                    style={barStyle}
+                  >
+                  </span>
+                </div>
+              </div>
+              <div className="sun_info">
+                    <SunIconArea
+                      sunrise={true}
+                    />
+                <dl className='time_list'>
+                  <dt className='time_title'>
+                    일출
+                  </dt>
+                  <dd className='time_sun'>
+                    {sunRiseAndSet[0].sunRise}
+                  </dd>
+                  <dt className='time_title set'>
+                    일몰
+                  </dt>
+                  <dd className='time_sun'>
+                    {sunRiseAndSet[0].sunSet}
+                  </dd>
+                </dl>
               </div>
             </div>
-            <div className="sun_info">
-                  <SunIconArea
-                    sunrise={true}
-                  />
-              <dl className='time_list'>
-                <dt className='time_title'>
-                  일출
-                </dt>
-                <dd className='time_sun'>
-                  {sunRiseAndSet[0].sunRise}
-                </dd>
-                <dt className='time_title set'>
-                  일몰
-                </dt>
-                <dd className='time_sun'>
-                  {sunRiseAndSet[0].sunSet}
-                </dd>
-              </dl>
-            </div>
           </div>
-        </div>
-      :
-      <div className="sun_panel">
-        <table className='sun_table'>
-          <caption className='blind'>
-              <span>
-                  오늘부터 모레까지 일출 일몰 시간 정보
-              </span>
-          </caption>
-          <thead>
-            <tr>
-              <th scope='col' className='blind'>
-                날짜
-              </th>
-              {["일출 시간", "일몰 시간"].map((t:string)=>
-                <th scope='col'>
-                  <SunIconArea
-                    sunrise={t ==="일출 시간"}
-                  />
+        :
+        <div className="sun_panel">
+          <table className='sun_table'>
+            <caption className='blind'>
+                <span>
+                    오늘부터 모레까지 일출 일몰 시간 정보
+                </span>
+            </caption>
+            <thead>
+              <tr>
+                <th scope='col' className='blind'>
+                  날짜
                 </th>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {sunRiseAndSet.map((i:SunRiseAndSet)=>
-            <SunTr
-              index ={sunRiseAndSet.indexOf(i)}
-              daySunInfo={i}
-            />)}
-          </tbody>
-        </table>
+                {["일출 시간", "일몰 시간"].map((t:string)=>
+                  <th scope='col'>
+                    <SunIconArea
+                      sunrise={t ==="일출 시간"}
+                    />
+                  </th>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {sunRiseAndSet.map((i:SunRiseAndSet)=>
+              <SunTr
+                index ={sunRiseAndSet.indexOf(i)}
+                daySunInfo={i}
+              />)}
+            </tbody>
+          </table>
+        </div>
+        }
       </div>
-      }
     </div>
   )
 };

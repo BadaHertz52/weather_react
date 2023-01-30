@@ -14,10 +14,11 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
 }
 .sun{
   margin-top: 32px;
-  background-color: $backgroundColor;
-  padding:15px 24px 30px;
-  box-sizing: border-box;
-  position: relative;
+  .inner{
+    background-color: $backgroundColor;
+    padding:15px 24px 30px;
+    position: relative;
+  }
   .title{
     color:#ffff;
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.196);
@@ -236,8 +237,6 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
     }
     .sun_th{
       font-weight: initial;
-      text-align: left;
-      padding-left: 14px;
     }
     .sun_day , strong{
       margin-left: 5px;
@@ -248,7 +247,20 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
 
 @media screen and (min-width:1025px) {
   .sun{
-    border-radius: 10px;
     margin-top:  40px ;
+    .inner{
+      border-radius: 10px;
+      padding:15px 2.5%;
+      box-sizing: border-box;
+    }
+
+  }
+}
+
+@media screen and (min-width:1160px) {
+  .sun{
+    .inner{
+      padding: 15px 5%
+    }
   }
 }

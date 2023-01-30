@@ -126,15 +126,23 @@ a{
     flex-direction: column;
     align-items: center;
   }
-  .nation , .sun{
-    width: 95%;
+  .nation , .sun {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    .inner{
+      width: 95%;
+    }
   }
 }
 @media screen and (min-width:1160px) {
   #content{
     width: 1160px;
   }
-  .nation , .sun {
-    width: 90%;
+  .nation, .sun {
+    .inner{
+      width: 90%;
+    } 
+    
   }
 }
