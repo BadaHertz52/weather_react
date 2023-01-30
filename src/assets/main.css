@@ -193,11 +193,9 @@
 }
 
 @media screen and (min-width: 1025px) {
-  .hourly {
-    width: calc(100% - 50px);
-  }
   .hourly .weather_graph {
     margin-left: 0;
+    width: calc(100% - 50px);
   }
 }
 .location {
@@ -803,9 +801,10 @@
 
 .sun {
   margin-top: 32px;
+}
+.sun .inner {
   background-color: #fab411;
   padding: 15px 24px 30px;
-  box-sizing: border-box;
   position: relative;
 }
 .sun .title {
@@ -1035,8 +1034,6 @@
 }
 .sun .sun_table .sun_th {
   font-weight: initial;
-  text-align: left;
-  padding-left: 14px;
 }
 .sun .sun_table .sun_day, .sun .sun_table strong {
   margin-left: 5px;
@@ -1044,8 +1041,17 @@
 
 @media screen and (min-width: 1025px) {
   .sun {
-    border-radius: 10px;
     margin-top: 40px;
+  }
+  .sun .inner {
+    border-radius: 10px;
+    padding: 15px 2.5%;
+    box-sizing: border-box;
+  }
+}
+@media screen and (min-width: 1160px) {
+  .sun .inner {
+    padding: 15px 5%;
   }
 }
 .week {
@@ -1146,12 +1152,14 @@
     width: 100%;
     border: initial;
     border-radius: initial;
-    box-shadow: initial;
+    box-shadow: none;
     display: flex;
   }
   .week .scrollArea .item {
     width: 14.2857142857%;
     height: auto;
+    border-right: 1px solid rgba(221, 226, 228, 0.5882352941);
+    border-bottom: none;
   }
   .week .scrollArea .day0, .week .scrollArea .day1 {
     display: none;
@@ -1194,7 +1202,7 @@
   }
 }
 @media screen and (min-width: 1025px) {
-  .week {
+  .week .box, .week .scrollControl {
     width: calc(100% - 50px);
   }
 }
@@ -1209,7 +1217,7 @@ body {
   position: relative;
   height: 4rem;
   width: 100%;
-  padding: 1rem;
+  padding: 1rem 3rem;
   box-sizing: border-box;
 }
 #topbar .inner {
@@ -1273,6 +1281,24 @@ li {
   font-size: 1.2rem;
 }
 
+a {
+  text-decoration: none;
+  color: initial;
+}
+
+#footer {
+  margin: 2rem 0;
+  text-align: center;
+  font-size: 14px;
+  color: #808080;
+}
+#footer span, #footer a {
+  margin-left: 10px;
+}
+#footer a {
+  color: inherit;
+}
+
 @media screen and (min-width: 780px) {
   .hourly, .week {
     padding: 30px 65px;
@@ -1281,6 +1307,9 @@ li {
 @media screen and (min-width: 1025px) {
   #topbar .inner {
     max-width: 1160px;
+  }
+  #container {
+    border-bottom: 1px solid rgba(227, 227, 227, 0.9764705882);
   }
   #content {
     width: 1000px;
@@ -1295,8 +1324,11 @@ li {
     width: 70%;
     border-right: 1px solid #d8d8d8;
   }
-  .hourly, .week {
+  .hourly, .nation {
     padding: 0;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(227, 227, 227, 0.9764705882);
+    width: 100%;
   }
   .section_right {
     width: 30%;
@@ -1305,6 +1337,11 @@ li {
     align-items: center;
   }
   .nation, .sun {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .nation .inner, .sun .inner {
     width: 95%;
   }
 }
@@ -1312,7 +1349,7 @@ li {
   #content {
     width: 1160px;
   }
-  .nation, .sun {
+  .nation .inner, .sun .inner {
     width: 90%;
   }
 }/*# sourceMappingURL=main.css.map */

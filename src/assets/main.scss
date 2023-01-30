@@ -19,7 +19,7 @@ body{
   position: relative;
   height: 4rem;
   width: 100%;
-  padding: 1rem;
+  padding: 1rem 3rem;
   box-sizing: border-box;
   .inner{
     display: flex;
@@ -104,6 +104,9 @@ a{
       max-width:1160px;
     }
   }
+  #container{
+    border-bottom: 1px solid  #e3e3e3f9;
+  }
   #content{
     width:1000px;
   }
@@ -117,8 +120,11 @@ a{
     width: 70% ;
     border-right: 1px solid #d8d8d8;
   }
-  .hourly,.week{
+  .hourly, .nation{
     padding:0;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid  #e3e3e3f9;
+    width: 100%;
   }
   .section_right{
     width: 30%;
