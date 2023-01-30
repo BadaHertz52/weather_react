@@ -1,20 +1,8 @@
 import { createSlice  ,PayloadAction} from "@reduxjs/toolkit";
-import { PositionState, PositionSuccessData } from "../position";
-import { weatherSample } from "../sample";
+import {  PositionSuccessData } from "../position";
 import { toolkitWeather } from "./thunk";
 import { WeatherState } from "./types";
 
-
-// const initialState :WeatherState ={
-//   state:"none",
-//   error:null,
-//   nowWeather:null,
-//   threeDay:null,
-//   week:null,
-//   nation:null,
-//   sunRiseAndSet:null
-// };
-const initialState = weatherSample 
 export const noneState :WeatherState ={
   state:"none",
   error:null,
@@ -25,7 +13,7 @@ export const noneState :WeatherState ={
   nation:null,
   sunRiseAndSet:null
 };
-
+const initialState = noneState;
 export const weatherSlice =createSlice({
   name:"weather",
   initialState,

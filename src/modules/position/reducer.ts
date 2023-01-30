@@ -1,16 +1,23 @@
 import { PositionState } from "./types";
 import {  createSlice , PayloadAction } from "@reduxjs/toolkit";
 import { CurrentPosition, toolkitPosition} from "./thunk";
-import { positionSample } from "../sample";
 
-// const initialState:PositionState ={
-//   state:"none",
-//   error:null,
-//   longitude: null,
-//   latitude:null,
-//   sfGrid: null
-// };
-const initialState = positionSample;
+const initialState :PositionState ={
+  state:"success",
+  error:null,
+  latitude: "37.6462313",
+  longitude: "127.0132763",
+  sfGrid:{
+    areaCode: "1111000000",
+    arePt1: "서울특별시",
+    arePt2: "종로구",
+    arePt3: null,
+    nX: "60",
+    nY: "127",
+    longitude: "126.98164166666668",
+    latitude: "37.57037777777778"
+  },
+};
 const noneState:PositionState ={
   state:"none",
   error:null,
