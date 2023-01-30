@@ -1,7 +1,8 @@
 $backgroundColor:#fab411;
 $sunInnerColor:rgb(250, 240, 182);
 $sunOuterColor:rgb(253, 228, 148);
-$sun_chart_width: 264px;
+$sun_chart_width_samll: 264px;
+$sun_chart_width_large:100%;
 $bar_precent_bg:rgb(246, 230, 142);
 $bar_bg:#f1a10b;
 $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
@@ -98,17 +99,23 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
     @include sunImg;
   }
   //today
+  .sun_chart  .current_bar{
+    width: $sun_chart_width_small;
+  }
+  
+  .move_sun, .current_bar .bar{
+    width: $sun_chart_width_small;
+    height: $sun_chart_width_small;
+  }
   .sun_chart{
     position: relative;
-    width: $sun_chart_width;
     height: 136px;
     margin: 0 auto;
     transform-origin: 50% 100% ;
   }
+  
   .move_sun{
     position: absolute;
-    width: $sun_chart_width;
-    height: $sun_chart_width;
     z-index: 10;
     &::after{
       width: 36px;
@@ -142,13 +149,10 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
     }
   }
   .current_bar{
-    width: $sun_chart_width;
     height: inherit;
     position: absolute;
     overflow: hidden;
     .bar{
-      width: $sun_chart_width;
-      height: $sun_chart_width;
       position: absolute;
       top:0;
       left: 0;
@@ -250,17 +254,16 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
     margin-top:  40px ;
     .inner{
       border-radius: 10px;
-      padding:15px 2.5%;
+      padding:15px 5%;
       box-sizing: border-box;
     }
-
-  }
-}
-
-@media screen and (min-width:1160px) {
-  .sun{
-    .inner{
-      padding: 15px 5%
+    .sun_chart  .chart_bar{
+      width: $sun_chart_width_large;
+    }
+    
+    .move_sun, .chart_bar .bar{
+      width: $sun_chart_width_large;
+      height: $sun_chart_width_large;
     }
   }
 }

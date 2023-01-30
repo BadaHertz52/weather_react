@@ -1045,13 +1045,8 @@
   }
   .sun .inner {
     border-radius: 10px;
-    padding: 15px 2.5%;
-    box-sizing: border-box;
-  }
-}
-@media screen and (min-width: 1160px) {
-  .sun .inner {
     padding: 15px 5%;
+    box-sizing: border-box;
   }
 }
 .week {
@@ -1333,13 +1328,16 @@ a {
     flex-direction: column;
     align-items: center;
   }
+  .week {
+    padding: 0;
+  }
   .nation, .sun {
     width: 100%;
     display: flex;
     justify-content: center;
   }
   .nation .inner, .sun .inner {
-    width: 95%;
+    width: 90%;
   }
 }
 @media screen and (min-width: 1160px) {

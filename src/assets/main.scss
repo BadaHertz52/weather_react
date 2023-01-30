@@ -127,12 +127,15 @@ a{
     flex-direction: column;
     align-items: center;
   }
+  .week{
+    padding: 0;
+  }
   .nation , .sun {
     width: 100%;
     display: flex;
     justify-content: center;
     .inner{
-      width: 95%;
+      width: 90%;
     }
   }
 }
