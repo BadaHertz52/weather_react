@@ -49,8 +49,10 @@ body{
   display: flex;
   justify-content: center;
 }
-#none_weather{
+#loading , #none_weather{
   height: calc(100vh - 7rem );
+}
+#none_weather{
   display: flex;
   align-items: center;
   justify-content: center;

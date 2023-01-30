@@ -1,15 +1,20 @@
 #loading{
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   .inner , .state_area{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
   }
-  .loading_state{
+  .loading_state , .loading_area{
+    width: 200px;
     display: flex;
     align-items: center;
-    width: 250px;
+  }
+  .loading_state{
     margin-bottom: 10px;
     font-size: 1rem;
     height: 1.2rem;
@@ -84,5 +89,99 @@
         color:#424242;
       }
     }
+  }
+  .loading_area{
+    .bar_wrap , .bar , .bar_state{
+      height: 1.5rem;
+      border-radius: 15px;
+    }
+    .bar_state{
+      position: absolute;
+      top:0;
+      left:0;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      z-index: 5;
+      color: rgb(255, 255, 255);
+      text-shadow: 1px 1px 4px #1616168f;
+    }
+    .bar_wrap{
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid #424242;
+    }
+    .bar{
+      position: absolute;
+      top:0;
+      left:0;
+      width: 100%;
+      transition: transform 1s  ;
+      background-color: #b5b5b5;
+    }
+    .progress_0 , .progress_25 , .progress_50{
+      .bar_state{
+        color:rgb(14, 14, 14);
+        text-shadow: none;
+      }
+    }
+    @keyframes progress25 {
+      0%{
+        transform: translateX(-100%);
+      }
+      100%{
+        transform: translateX(-75%);
+      }
+    };
+    @keyframes progress50 {
+      0%{
+        transform: translateX(-100%);
+      }
+      100%{
+        transform: translateX(-50%);
+      }
+    };
+    @keyframes progress75 {
+      0%{
+        transform: translateX(-100%);
+      }
+      100%{
+        transform: translateX(-25%);
+      }
+    };
+    @keyframes progress100 {
+      0%{
+        transform: translateX(-100%);
+      }
+      100%{
+        transform: translate(-0%);
+      }
+    }
+    .progress_0 {
+      .bar{
+      transform: translateX(-100%);
+    }
+    }
+    .progress_25 {
+      .bar {
+        animation: progress25 infinite ease-out 6s;
+      }
+    }
+    .progress_50   {
+      .bar{
+        animation: progress50 infinite ease-out 6s;
+    }
+    }
+    .progress_75  {
+      .bar{
+        animation: progress75 infinite ease-out 6s;
+    }
+    } 
+    .progress_100 {
+      .bar {
+        animation: progress1050 3s ease-in 3s;
+      }
+    } 
   }
 }
