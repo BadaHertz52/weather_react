@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useState} from 'react';
 import { DataState } from '../modules/weather';
 
 import {BiError} from 'react-icons/bi';
@@ -80,6 +80,7 @@ const Loading =({positionState
         return 0;
     }
   };
+
   const progress = getProgress(positionState)  + getProgress(weatherState);
 
   return(
@@ -94,20 +95,23 @@ const Loading =({positionState
           data={weather}
           state ={weatherState}
         />
-        <LoadingState
-          data={weather}
-          state ={"failure"}
-        />
-        <LoadingState
-          data={weather}
-          state ={"none"}
-        />
       </div>
       <div className="loading_area">
-        <div className="loadingbar">
-          <div className="bar_wrap">
-            <div className={`bar progress_${progress}`}>
-            </div>
+        <div className={`bar_wrap progress_${progress}`}>
+          <div className="bar_state">
+            {progress === 100? 
+              (positionState === "failure" ||
+              weatherState ==="failure")
+              ?
+              "failure..."
+              :
+              "success!!"
+              :
+              "loading..."
+            }
+          </div>
+          <div className="bar">
+              
           </div>
         </div>
       </div>
