@@ -17,6 +17,7 @@ import { weatherSlice } from './modules/weather/reducer';
 import { getWeatherThunk, toolkitWeather } from './modules/weather/thunk';
 import None from './component/None';
 import { BsGithub } from 'react-icons/bs';
+import {RiEmotionSadLine} from 'react-icons/ri';
 /**
  * hours 가 일몰,일출 시간을 기준을 낮 시간인지 밤 시간인지 확인하는 함수
  * @param hours 
@@ -173,7 +174,10 @@ function App () {
           </div>
           }
           {(weather.state ==="failure" || weather.state ==="none")&&
+          <div id="none_weather">
+            <RiEmotionSadLine/>
             <None target ={"현재 위치에 대한 날씨"} />
+          </div>
           } 
 
         </div>
