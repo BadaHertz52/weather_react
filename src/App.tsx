@@ -77,7 +77,7 @@ function App () {
   };
   useEffect(()=>{
     if(position.state === "success" &&
-    weather.state !=="success"&&
+      weather.state !=="success"&&
     (
       position.longitude !==null &&
       position.latitude !==null &&
