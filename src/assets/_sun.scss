@@ -1,7 +1,7 @@
 $backgroundColor:#fab411;
 $sunInnerColor:rgb(250, 240, 182);
 $sunOuterColor:rgb(253, 228, 148);
-$sun_chart_width_samll: 264px;
+$sun_chart_width_small: 264px;
 $sun_chart_width_large:100%;
 $bar_precent_bg:rgb(246, 230, 142);
 $bar_bg:#f1a10b;
@@ -99,7 +99,7 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
     @include sunImg;
   }
   //today
-  .sun_chart  .current_bar{
+  .sun_chart  , .current_bar{
     width: $sun_chart_width_small;
   }
   
