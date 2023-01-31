@@ -12,6 +12,7 @@ jobs:
        node-version: '16'
      
    - name: Setting .env
+     run: npm start
      env: 
       REACT_APP_PUBLICK_KEY: ${{secrets.REACT_APP_PUBLICK_KEY}}
       REACT_APP_KAKAO_KEY: ${{secrets.REACT_APP_KAKAO_KEY}}
