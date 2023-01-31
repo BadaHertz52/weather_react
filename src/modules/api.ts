@@ -140,8 +140,8 @@ const getUSSkyCode =async(nx:string, ny:string, baseDate:string, baseTime:string
   }else{
     const skyItems= items.item.filter((i:SFcstItem)=>
     i.category ==="SKY");
-    const targetItem= skyItems.filter((i:SFcstItem)=> i.fcstTime =fcstTime)[0];
-    const skyCode = getSkyCode(targetItem.fcstValue);
+    const targetItem  :SFcstItem= skyItems.filter((i:SFcstItem)=> i.fcstTime =fcstTime)[0];
+    const skyCode = getSkyCode( Number(targetItem.fcstValue));
     return skyCode
   }
 
@@ -185,7 +185,6 @@ const getUSNcast =async(nx:string, ny:string, baseDate_yesterday:string, baseDat
 const getDaySvf =(arry:string[], targetDaySVF :SFcstItem[], fcstData:string ,tmn:SFcstItem ,tmx:SFcstItem):SVFTime[]=>{
     return arry.map((t:string)=>{
       const timeSVF = targetDaySVF.filter((i:SFcstItem)=> i.fcstTime=== t);
-      
       const fcast :SVFTime ={
         fcstDate:fcstData,
         fcstTime:t,
@@ -229,7 +228,7 @@ const getSVFcast =async(nx:string, ny:string, baseDate:string, baseTime:SVFBaseT
     const tmn = items2.item.filter((i:SFcstItem)=>i.category === "TMN")[0];
     const tmx = items2.item.filter((i:SFcstItem)=>i.category === "TMX")[0];
     const fiteredItem1:SFcstItem[] =items1.item.filter((i:SFcstItem)=> i.fcstDate === baseDate &&  previousTime.includes(i.fcstTime));
-    const preSVDay :SVFDay = getDaySvf(previousTime,fiteredItem1,baseDate,tmn,tmx);
+    const preSVDay :SVFDay |undefined = fiteredItem1[0] !== undefined ? getDaySvf(previousTime,fiteredItem1,baseDate,tmn,tmx) : undefined;
     const sVFcst: SVFcst= threeDays.map((d:string)=>{
       /**
        * items2 중에 오늘, 1일 후,2일 후 ,3일 후 중 타켓이 되는 날에 대한 단기 예보
@@ -239,7 +238,7 @@ const getSVFcast =async(nx:string, ny:string, baseDate:string, baseTime:SVFBaseT
 
       if(d === baseDate) {
         const daySVFcst :SVFDay = getDaySvf(todayTimeArry,targetDaySVF,d,tmn,tmx);
-        return [...preSVDay, ...daySVFcst]
+        return preSVDay !== undefined ?  [...preSVDay, ...daySVFcst] : daySVFcst
       }else{
         const daySVFcst :SVFDay = getDaySvf(timeArry,targetDaySVF,d,tmn,tmx);
         return daySVFcst
@@ -1037,7 +1036,9 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
                                       :
                                       {pm10Grade:"좋음", pm25Grade: "좋음"};
 
-  const tomorrowApGrade : PmGrade | Error= local ? 
+  const tomorrowApGrade : PmGrade | Error= (local && 
+                                            (hours >5 || (hours === 5 && minutes >10)) 
+                                          ) ? 
                                           await getApFcst(baseDate_today,threeDays[1], sidoName ,sfGrid) 
                                           :
                                           {pm10Grade:"보통", pm25Grade: "나쁨"} ; 
