@@ -13,8 +13,8 @@ jobs:
      
    - name: Setting .env
      run: |
-        echo "REACT_APP_PUBLIC_KEY = $REACT_APP_PUBLIC_KEY" >> .env
-        echo "REACT_APP_KAKAO_KEY = $REACT_APP_KAKAO_KEY" >> .env
+        echo "REACT_APP_PUBLIC_KEY =${{secrets.REACT_APP_PUBLIC_KEY}}" >> .env
+        echo "REACT_APP_KAKAO_KEY = ${{secrets.REACT_APP_KAKAO_KEY}}" >> .env
         cat .env
 
       
