@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/http//badahertz52.github.io/weather_react/static/css/main.ad573ad6.css",
+    "main.js": "/http//badahertz52.github.io/weather_react/static/js/main.a2ad8490.js",
+    "static/media/map.jpg": "/http//badahertz52.github.io/weather_react/static/media/map.57e5fac3b8091a6bb01e.jpg",
+    "index.html": "/http//badahertz52.github.io/weather_react/index.html",
+    "main.ad573ad6.css.map": "/http//badahertz52.github.io/weather_react/static/css/main.ad573ad6.css.map",
+    "main.a2ad8490.js.map": "/http//badahertz52.github.io/weather_react/static/js/main.a2ad8490.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ad573ad6.css",
+    "static/js/main.a2ad8490.js"
+  ]
+}
