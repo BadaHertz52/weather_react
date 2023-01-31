@@ -101,7 +101,7 @@ function App () {
         toolkitDispatch(toolkitWeather(positionSuccessDate))
       }
     }
-  },[position.state]);
+  },[position.state ,weather.state]);
   return (
     <div className="App">
       <div id='topbar' role="banner">
