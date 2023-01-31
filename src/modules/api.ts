@@ -1227,6 +1227,11 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     if(errorSentence === ""){
         return errorSentence
     }else{
-      return data
+      const weatherData :WeatherState ={
+        ...data,
+        state :"success",
+        error: null
+      };
+      return weatherData
     }
   };
