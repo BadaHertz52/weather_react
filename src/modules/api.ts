@@ -1,6 +1,5 @@
 import { ApFcstAreaCode, ApiAreaCode, MidLandAreaCode, midLandAreaCodeZip, midTaArea, midTaAreaCode, MidTaAreaCode, west } from "./areaCodeType";
 import {  Area, areaArry, AreaInform,  DailyWeather, Day, getSkyCode, getSkyType, getWsd, gradeArry, HourWeather, NationType, PmType, SkyCodeType, SkyType, SunRiseAndSet, WeatherState } from "./weather/types";
-import {noneState_weather} from './weather/reducer';
 import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApNowItem, SVFBaseTime,  KakaoDoumentType, MidFcstDay, ApFcstItem}from "./apiType";
 import { sfGrid} from './sfGrid'; 
 import { SFGridItem } from "./position/types";
@@ -430,7 +429,7 @@ function findApFcstArea (sidoName:ApiAreaCode ,sfGrid:SFGridItem):ApFcstAreaCode
  * @param tBaseDate 내일 날짜 (형식:yyyymmdd)
  * @param sidoName 시도 이름 
  */
-const getApFcst =async(baseDate:string,tBaseDate:string, sidoName:ApiAreaCode, sfGrid:SFGridItem)=>{
+const getApFcst =async(baseDate:string,tBaseDate:string, sidoName:ApiAreaCode, sfGrid:SFGridItem):Promise<PmGrade | Error>=>{
   const searchDate = changeSearchDate(baseDate);
   const tSearchDate = changeSearchDate(tBaseDate);
   const apFcstArea = findApFcstArea(sidoName,sfGrid);
@@ -853,7 +852,7 @@ const  getNationArea =async(baseDate_skyCode:string,baseDate_svf: string, baseDa
     const targetArea =nationData !==null?  nationData.areas[index] :null
     const nation_day = targetArea !==null? targetArea?.day as Day[]  : null;
     const nation_now = targetArea !==null?  targetArea.now : null ;
-      const skyCode = (!searchOther && nation_now !==null)
+    const skyCode = (!searchOther && nation_now !==null)
       ?
       nation_now.sky
     :
@@ -940,112 +939,6 @@ const  getNationArea =async(baseDate_skyCode:string,baseDate_svf: string, baseDa
     }
   };
   return areaData
-  // const data =Promise
-  // .all(areaArry.map(async(item:AreaInform)=>{
-  //   const {nX, nY}= changeNType
-  //   (item.sfGrid);
-  //   const {landRegId, taRegId} =item ;
-  //   const index= areaArry.indexOf(item);
-  //   const targetArea =nationData !==null?  nationData.areas[index] :null
-  //   const nation_day = targetArea !==null? targetArea?.day as Day[]  : null;
-  //   const nation_now = targetArea !==null?  targetArea.now : null ;
-  //   const getSkyAndNow =async()=>{
-  //     const skyCode = (!searchOther && nation_now !==null)
-  //     ?
-  //     nation_now.sky
-  //   :
-  //     await getUSSkyCode(nX, nY, baseDate_skyCode,baseTime_skyCode, fcstTime)
-
-  //   const nowWeather = (!searchOther&& nation_now !==null) 
-  //     ?
-  //       {t1h:nation_now.temp}
-  //     :
-  //       await getUSNcast(nX,nY,baseDate_yesterday, baseDate_today, fcstTime, preFcstTime, minutes, hours);  
-        
-  //   return {skyCode :skyCode , nowWeather:nowWeather}
-  //   };
-
-  // const data = await getSkyAndNow()
-  //   .then(async (result)=>{
-  //     const sVFcst = (!searchSvf && nation_day !== null)?  
-  //                   nation_day.slice(0,3)
-  //                   :
-  //                   await getSVFcast(nX,nY,baseDate_svf,baseTime_svf ,baseDate_yesterday,timeArry,todayTimeArry, threeDays) 
-  //     const value = {
-  //       ...result,
-  //       sVFcst: sVFcst
-  //     };
-  //     return value
-  //   })
-  //   .then(async(result)=>{
-  //     const midFcst =(!searchOther && nation_day !== null)
-  //                   ?
-  //                   nation_day.slice(3)
-  //                   :
-  //                   (
-  //                     landRegId !==undefined && taRegId !==undefined 
-  //                     ? 
-  //                     await getMidFcast(landRegId, taRegId,baseDate_today,baseDate_yesterday, hours )
-  //                     : 
-  //                     (
-  //                       landRegId === undefined?
-  //                       (
-  //                         taRegId ===undefined?
-  //                         new Error('[Error] landRegId and taRegId are undefined')
-  //                         :
-  //                         new Error('[Error] landRegId is undefined')
-  //                       ):
-  //                       new Error('[Error] taRegId is undefined')
-  //                     )
-  //                   ) ;
-  //       const value = {
-  //         ...result,
-  //         midFcst:midFcst
-  //       };
-  //       return value
-  //   }) ;
-
-  // const {skyCode, nowWeather , sVFcst ,midFcst} =data ; 
-
-  //   if( !(sVFcst instanceof Error) && 
-  //       !(midFcst instanceof Error) &&
-  //       !(skyCode instanceof Error) &&
-  //       !(nowWeather instanceof Error) 
-  //   ){
-  //     const svfDay :Day[] = searchSvf? changeSvfToDay(sVFcst as SVFcst) : sVFcst as Day[];
-  //     const midDay: Day[] = searchOther? changeMidToDay(midFcst as MidFcst) : midFcst as Day[];
-      
-  //     const area : Area ={
-  //       areaInform:{
-  //         ...item
-  //       },
-  //       day:[...svfDay, ...midDay],
-  //       now:{
-  //         temp:nowWeather.t1h,
-  //         sky:skyCode
-  //       }
-  //     };
-  //     return area
-  //   }else{
-  //     const area : Area ={
-  //       areaInform:{
-  //         ...item
-  //       },
-  //       day:null,
-  //       now:null
-  //     };
-  //     return area
-  //   }
-
-  // }
-  // ))
-  // .then((result)=> result)
-  // .catch((err)=>{
-  //   const error =new Error( err);
-  //   return error
-  // })
-  // ;
-  //return data
 };
 /**
  * 현 위치에 대한  현재 날씨, 앞으로의 기상 전망, 일몰,전국 날씨를 반환하거나 error 메시지가 담긴 글을 반환
@@ -1213,19 +1106,22 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
       }else{
           areaData = await operateGetNationArea(true, true, null );
       };
-      
-    if( areaData instanceof Error){
-      areaData instanceof Error && errorSentence.concat(`nation_areaData error: ${areaData}`)
-    }else{
-      const nationData:NationType ={
-        searchTime:{
-          hours:hours,
-          baseTime_svf:baseTime_svf
-        },
-        areas:areaData
-      };
-      sessionStorage.setItem("nation_data", JSON.stringify(nationData));
 
+      const nationData:NationType |null = areaData instanceof Error ? 
+                                          null
+                                          : 
+                                          {
+                                            searchTime:{
+                                              hours:hours,
+                                              baseTime_svf:baseTime_svf
+                                            },
+                                            areas:areaData
+                                          };
+      if(areaData instanceof Error){
+        errorSentence.concat(`nation_areaData error: ${areaData}`)
+      }else{
+        sessionStorage.setItem("nation_data", JSON.stringify(nationData));
+      }
       const targetSVFcst = sVFcst.map((i:SVFDay)=>{
         if(sVFcst.indexOf(i)===0){
           return sVFcst[0].filter((t:SVFTime)=> todayTimeArry.includes(t.fcstTime))
@@ -1237,7 +1133,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
   
       const midDay: Day[] = changeMidToDay(midFcst);
       
-      weather ={
+      const weather : WeatherState ={
         state:"success",
         error:null,
         nowWeather : {
@@ -1270,9 +1166,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
         nation:nationData,
         sunRiseAndSet : [...sunInform]
       };
-      
-    };
-    return weather;
+      return weather
   }else{
     skyCode instanceof Error  &&   errorSentence.concat(`skyCode error: ${skyCode}`);
     sVFcst instanceof Error  && errorSentence.concat(`svFcst error: ${sVFcst}`);
