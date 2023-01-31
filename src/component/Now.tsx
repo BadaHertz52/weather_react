@@ -2,10 +2,11 @@ import React , {useRef ,useState } from 'react';
 import { GiWaterDrop } from 'react-icons/gi';
 import styled, { CSSProperties } from 'styled-components';
 import { checkDayOrNight } from '../App';
-import { gradeArry, NowWeather, SunRiseAndSet, TomorrowWeather } from '../modules/weather';
+import { gradeArry, NowWeather, PmType, SunRiseAndSet, TomorrowWeather } from '../modules/weather';
 import ScrollBtn from './ScrollBtn';
 import SkyIcon from './SkyIcon';
-const PmDd = styled.dd`
+import {BiDotsHorizontalRounded} from 'react-icons/bi';
+const Dd = styled.dd`
 color: ${
 props =>
   props.className === gradeArry[0]?
@@ -16,10 +17,26 @@ props =>
   :
   props.className === gradeArry[2]?
   "#ff7b00"
-  :
+  :props.className === gradeArry[3]?
   "#ef5350"
+  :
+  "#6d6d6d"
 };
 `;
+type PmDdProperty ={
+  grade:PmType
+};
+const PmDd =({grade}:PmDdProperty)=>{
+  return (
+    <Dd className={grade === null? "notYet": grade}>
+      {grade === null? 
+        <BiDotsHorizontalRounded/>
+        :
+        grade
+      }
+    </Dd>
+  )
+};
 type PopIconProperty ={
   pop:number
 }
@@ -87,15 +104,11 @@ const AmPmTr =({am ,tomorrowWeather, daytime}:AmPmTrProperty)=>{
       <td>
         <dl className='dl_grade'>
           <dt>미세</dt>
-          <PmDd className={tomorrowWeather.pm10Grade} >
-            {tomorrowWeather.pm10Grade}
-          </PmDd>
+          <PmDd grade={tomorrowWeather.pm10Grade} />
         </dl>
         <dl className='dl_grade' >
           <dt>초미세</dt>
-          <PmDd className={tomorrowWeather.pm25Grade} >
-            {tomorrowWeather.pm25Grade}
-          </PmDd>
+          <PmDd grade={tomorrowWeather.pm25Grade} />
         </dl>
       </td>
     </tr>
@@ -258,17 +271,14 @@ const Now =({nowWeather ,tomorrowWeather , todaySunInform}:NowProperty)=>{
                         <li>
                           <dl>
                             <dt>미세</dt>
-                            <PmDd className={nowWeather.pm10Grade}>
-                              {nowWeather.pm10Grade}
-                            </PmDd>
+                            <PmDd grade={nowWeather.pm10Grade}/>
+
                           </dl>
                         </li>
                         <li>
                           <dl>
                             <dt> 초미세</dt>
-                            <PmDd className={nowWeather.pm25Grade}>
-                              {nowWeather.pm25Grade}
-                            </PmDd>
+                            <PmDd grade={nowWeather.pm25Grade}/>
                           </dl>
                         </li>
                         <li>

@@ -448,13 +448,13 @@ const getApFcst =async(baseDate:string,tBaseDate:string, sidoName:ApiAreaCode, s
       const sliced2 = sliced1.slice(0,indexOfComma);
       const grade = gradeArry
                       .map((g:PmType)=> {
-                        if(sliced2.includes(g)){
+                        if(g !==null && sliced2.includes(g)){
                           return g
                         }else{
                           return null
                         }
                       })
-                      .filter((i: PmType|null)=> i !==null)[0] as PmType;
+                      .filter((i: PmType)=> i !==null)[0];
       return grade
     };
     const pm10Grade = getPmGrde(pm10Fcst);
@@ -1036,10 +1036,14 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
                                       :
                                       {pm10Grade:"좋음", pm25Grade: "좋음"};
 
-  const tomorrowApGrade : PmGrade | Error= (local && 
-                                            (hours >5 || (hours === 5 && minutes >10)) 
-                                          ) ? 
-                                          await getApFcst(baseDate_today,threeDays[1], sidoName ,sfGrid) 
+  const tomorrowApGrade : PmGrade | Error= local  ? 
+                                          ((hours >5 || (hours === 5 && minutes >10)) ?
+                                          await getApFcst(baseDate_today,threeDays[1], 
+                                          sidoName ,sfGrid) 
+                                          :{
+                                            pm10Grade:null, pm25Grade: null
+                                          }
+                                          )
                                           :
                                           {pm10Grade:"보통", pm25Grade: "나쁨"} ; 
 

@@ -834,8 +834,11 @@
   display: flex;
   align-items: center;
 }
+.now .summary.tomorrow tr:first-child {
+  margin-bottom: 5px;
+}
 .now .summary.tomorrow tr, .now .summary.tomorrow th, .now .summary.tomorrow td, .now .summary.tomorrow .term, .now .summary.tomorrow .skyIcon .weatherIcon {
-  height: 30.8px;
+  height: 21px;
 }
 .now .summary.tomorrow .skyIcon, .now .summary.tomorrow .weatherIcon, .now .summary.tomorrow .dl_number {
   width: 21px;
@@ -854,9 +857,6 @@
 .now .summary.tomorrow th span {
   display: inline-block;
 }
-.now .summary.tomorrow .term {
-  width: 40px;
-}
 .now .summary.tomorrow .term span {
   height: 48%;
   text-align: center;
@@ -871,12 +871,16 @@
 }
 .now .summary.tomorrow .dl_grade dt, .now .summary.tomorrow .dl_grade dd {
   display: inline-block;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
+}
+.now .summary.tomorrow .dl_grade dt {
+  min-width: 42px;
 }
 .now .summary.tomorrow .dl_grade dd {
   margin-left: 8px;
+}
+.now .summary.tomorrow .notYet {
+  width: 100%;
+  height: 100%;
 }
 .now .summary_table {
   width: 100%;
@@ -934,6 +938,9 @@
   .now .summary.tomorrow td dl, .now .summary.tomorrow .dl_grade dd {
     margin-left: 4px;
   }
+  .now .summary.tomorrow .dl_grade dt {
+    min-width: 36px;
+  }
 }
 @media screen and (max-width: 435px) {
   .now .now_now {
@@ -960,10 +967,17 @@
   .now .summary.tomorrow .skyIcon, .now .summary.tomorrow .weatherIcon, .now .summary.tomorrow .dl_number {
     width: 32.5px;
   }
+  .now .summary.tomorrow .notYet {
+    font-size: 1rem;
+    width: 1.5rem;
+  }
 }
 @media screen and (min-width: 768px) {
   .now .summary_table {
     font-size: 1rem;
+  }
+  .now .summary.tomorrow .summary_inner {
+    width: 500px;
   }
 }
 @media screen and (min-width: 1025px) {

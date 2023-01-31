@@ -93,7 +93,8 @@ const veryBad ="매우 나쁨";
 export type PmType = typeof good| 
               typeof common|
               typeof bad | 
-              typeof veryBad;
+              typeof veryBad|
+              null;
 
 export const gradeArry : PmType[]=["좋음","보통","나쁨","매우 나쁨"];
 
