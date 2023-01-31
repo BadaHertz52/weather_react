@@ -479,7 +479,7 @@ export type WeatherState ={
   state:DataState,
   error:Error|null,
   nowWeather:NowWeather |null,
-  tomrrowWeather : TomorrowWeather|null,
+  tomorrowWeather : TomorrowWeather|null,
   threeDay:DailyWeather[]|null,
   week:Day[]|null,
   nation:NationType|null,

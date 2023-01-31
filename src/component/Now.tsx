@@ -40,11 +40,11 @@ const PopIcon =({pop}:PopIconProperty)=>{
 }
 type AmPmTrProperty ={
   am:boolean,
-  tomrrowWeather: TomorrowWeather,
+  tomorrowWeather: TomorrowWeather,
   daytime:boolean
 }
-const AmPmTr =({am ,tomrrowWeather, daytime}:AmPmTrProperty)=>{
-  const weatherData = am? tomrrowWeather.am : tomrrowWeather.pm; 
+const AmPmTr =({am ,tomorrowWeather, daytime}:AmPmTrProperty)=>{
+  const weatherData = am? tomorrowWeather.am : tomorrowWeather.pm; 
   return (
     <tr>
       <th scope='row'>
@@ -66,7 +66,7 @@ const AmPmTr =({am ,tomrrowWeather, daytime}:AmPmTrProperty)=>{
           <dt className='blind'>기온</dt>
           <dd>
             <span>
-              {am ? tomrrowWeather.tmn : tomrrowWeather.tmx}
+              {am ? tomorrowWeather.tmn : tomorrowWeather.tmx}
             </span>
             <span className='degree'>°</span>
           </dd>
@@ -87,14 +87,14 @@ const AmPmTr =({am ,tomrrowWeather, daytime}:AmPmTrProperty)=>{
       <td>
         <dl className='dl_grade'>
           <dt>미세</dt>
-          <PmDd className={tomrrowWeather.pm10Grade} >
-            {tomrrowWeather.pm10Grade}
+          <PmDd className={tomorrowWeather.pm10Grade} >
+            {tomorrowWeather.pm10Grade}
           </PmDd>
         </dl>
         <dl className='dl_grade' >
           <dt>초미세</dt>
-          <PmDd className={tomrrowWeather.pm25Grade} >
-            {tomrrowWeather.pm25Grade}
+          <PmDd className={tomorrowWeather.pm25Grade} >
+            {tomorrowWeather.pm25Grade}
           </PmDd>
         </dl>
       </td>
@@ -104,10 +104,10 @@ const AmPmTr =({am ,tomrrowWeather, daytime}:AmPmTrProperty)=>{
 
 type NowProperty ={
   nowWeather : NowWeather,
-  tomrrowWeather: TomorrowWeather,
+  tomorrowWeather: TomorrowWeather,
   todaySunInform: Error | SunRiseAndSet
 };
-const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
+const Now =({nowWeather ,tomorrowWeather , todaySunInform}:NowProperty)=>{
     const now = new Date();
     const hours = now.getHours();
     const sunInformError =todaySunInform instanceof Error ;
@@ -292,12 +292,12 @@ const Now =({nowWeather ,tomrrowWeather , todaySunInform}:NowProperty)=>{
                         <tbody>
                           <AmPmTr
                             am={true}
-                            tomrrowWeather={tomrrowWeather}
+                            tomorrowWeather={tomorrowWeather}
                             daytime={daytime}
                           />
                           <AmPmTr
                             am={false}
-                            tomrrowWeather={tomrrowWeather}
+                            tomorrowWeather={tomorrowWeather}
                             daytime={daytime}
                           />
                         </tbody>

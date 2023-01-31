@@ -238,8 +238,8 @@ export type ApFcstInformGrade ={
 };
 
 export type PmGrade ={
-  pm10Grade1h:PmType,
-  pm25Grade1h:PmType
+  pm10Grade:PmType,
+  pm25Grade:PmType
 };
 
 export type KakaoDoumentType ={

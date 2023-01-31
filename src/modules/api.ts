@@ -367,8 +367,8 @@ const getApNow =async(sidoName:ApiAreaCode, stationName:string[]):Promise<PmGrad
     const targetItem:ApNowItem = items.filter((i:ApNowItem)=> stationName.includes(i.stationName))[0];
     
     const pm :PmGrade = {
-      pm10Grade1h:gradeArry[Number(targetItem.pm10Grade1h) -1],
-      pm25Grade1h:gradeArry[Number(targetItem.pm25Grade1h)-1]
+      pm10Grade:gradeArry[Number(targetItem.pm10Grade) -1],
+      pm25Grade:gradeArry[Number(targetItem.pm25Grade)-1]
     };
     return pm
   }else{
@@ -1221,12 +1221,12 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
             vec: getWsd(uSNcst.wsd ,uSNcst.vec),
             wsd: uSNcst.wsd
           },
-          pm10Grade: nowApGrade.pm10Grade1h,
-          pm25Grade: nowApGrade.pm25Grade1h
+          pm10Grade:  nowApGrade.pm10Grade,
+          pm25Grade:  nowApGrade.pm25Grade
         },
-        tomrrowWeather :{
-          pm10Grade:tommorowApGrade.pm10Grade,
-          pm25Grade:tommorowApGrade.pm25Grade,
+        tomorrowWeather :{
+          pm10Grade: tomorrowApGrade.pm10Grade,
+          pm25Grade: tomorrowApGrade.pm25Grade,
           am:svfDay[1].am,
           pm:svfDay[1].pm ,
           tmn:svfDay[1].tmn,

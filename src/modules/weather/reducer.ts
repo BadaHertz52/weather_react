@@ -7,7 +7,7 @@ export const noneState_weather :WeatherState ={
   state:"none",
   error:null,
   nowWeather:null,
-  tomrrowWeather:null,
+  tomorrowWeather:null,
   threeDay:null,
   week:null,
   nation:null,

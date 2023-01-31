@@ -129,12 +129,12 @@ function App () {
           {weather.state === "success" &&
           <div className ="section_wrap">
             <div className="section_center">
-              {(weather.nowWeather !==null && weather.tomrrowWeather !==null  &&
+              {(weather.nowWeather !==null && weather.tomorrowWeather !==null  &&
               weather.sunRiseAndSet !==null 
               ) ?
                 <Now 
                   nowWeather={weather.nowWeather}
-                  tomrrowWeather ={weather.tomrrowWeather}
+                  tomorrowWeather ={weather.tomorrowWeather}
                   todaySunInform ={weather.sunRiseAndSet[0]}
                 />
                 : 
