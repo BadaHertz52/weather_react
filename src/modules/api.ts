@@ -1055,7 +1055,7 @@ const  getNationArea =async(baseDate_skyCode:string,baseDate_svf: string, baseDa
  * @returns 
  */
 export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitude:string):Promise<string | WeatherState>=>{
-  let string ="[Error]";
+  let errorSentence ="[Error]";
   const {nX, nY}= changeNType(sfGrid);
   const stationName: string[] =(sfGrid.arePt3 !==null && sfGrid.arePt2 !==null )?  [sfGrid.arePt1, sfGrid.arePt2, sfGrid.arePt3] : sfGrid.arePt2!==null? [sfGrid.arePt1, sfGrid.arePt2] :[sfGrid.arePt1];
   const {landRegId, taRegId} = findLandTaCode(sfGrid);
@@ -1188,7 +1188,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
       };
       
     if( areaData instanceof Error){
-      areaData instanceof Error && string.concat(`nation_areaData error: ${areaData}`)
+      areaData instanceof Error && errorSentence.concat(`nation_areaData error: ${areaData}`)
     }else{
       const nationData:NationType ={
         searchTime:{
@@ -1247,14 +1247,14 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     };
     return weather;
   }else{
-    
-    skyCode instanceof Error  &&   string.concat(`skyCode error: ${skyCode}`);
-    sVFcst instanceof Error  && string.concat(`skyCode error: ${sVFcst}`);
-    uSNcst instanceof Error && string.concat(`skyCode error: ${uSNcst}`);
-    midFcst  instanceof Error  && string.concat(`skyCode error: ${midFcst}`);
-    nowApGrade  instanceof Error  &&  string.concat(`skyCode error: ${nowApGrade}`);
-    sunInform instanceof Error && string.concat(`skyCode error: ${sunInform}`);
-   
-    return string
+    skyCode instanceof Error  &&   errorSentence.concat(`skyCode error: ${skyCode}`);
+    sVFcst instanceof Error  && errorSentence.concat(`svFcst error: ${sVFcst}`);
+    uSNcst instanceof Error && errorSentence.concat(`uSNcst error: ${uSNcst}`);
+    midFcst  instanceof Error  && errorSentence.concat(`midFcst error: ${midFcst}`);
+    nowApGrade  instanceof Error  &&  errorSentence.concat(`nowApGrade error: ${nowApGrade}`);
+    tomorrowApGrade  instanceof Error  &&  errorSentence.concat(`tomorrowApGrade error: ${tomorrowApGrade}`);
+    sunInformHasError && errorSentence.concat(`sunInform error: ${sunInform}`);
+
+    return errorSentence
   }
 };
