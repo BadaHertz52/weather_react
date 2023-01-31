@@ -83,7 +83,12 @@ const Sun =({sunRiseAndSet}:SunProperty)=>{
 
   const changeRotate =(part:number)=>{
     setMoveSunStyle({
-      transform:part === 16? 'rotate(181deg)':`rotate(${ms_ra * part}deg)`
+      transform:part === 16? 
+      'rotate(181deg)':
+      part === 0?
+      'rotate(10deg)'
+      :
+      `rotate(${ms_ra * part}deg)`
     });
     setBarStyle({
       transform: part !==0 ? 
