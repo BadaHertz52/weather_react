@@ -6,12 +6,16 @@ jobs:
  build:
   runs-on: ubuntu-latest
   steps:
-   -uses: actions/checkout@v2
-   -name: Setting .env
-    run: |
+   - uses: actions/checkout@v2
+   - uses: action/setup-node@v2
+     with:
+       node-version:'16.x'
+     
+   - name: Setting .env
+     run: |
         echo "REACT_APP_PUBLIC_KEY = $REACT_APP_PUBLIC_KEY" >> .env
         echo "REACT_APP_KAKAO_KEY = $REACT_APP_KAKAO_KEY" >> .env
-    env: 
+     env: 
       REACT_APP_PUBLICK_KEY: ${{secrets.REACT_APP_PUBLICK_KEY}}
       REACT_APP_KAKAO_KEY: ${{secrets.REACT_APP_KAKAO_KEY}}
       
