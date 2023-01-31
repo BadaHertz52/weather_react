@@ -1045,113 +1045,44 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
   const baseTimeIndex= timeArry.indexOf(fcstTime);
   const todayTimeArry = timeArry.slice(baseTimeIndex+1);
   //get api data
-  const data = await Promise.all(
-    [getUSSkyCode(nX, nY, baseDate_skyCode,baseTime_skyCode,fcstTime),
-    getUSNcast(nX,nY,baseDate_yesterday,baseDate_today,fcstTime,preFcstTime,minutes,hours),
-    getApNow(sidoName,stationName),
-    getSunInform(longitude,latitude,threeDays)
-  ]
-  )
-  .then((result)=>{
-    const skyCode = result[0];
-    const uSNcst = result[1];
-    const nowApGrade =result[2];
-    const sunInform=result[3];
-    
-    skyCode instanceof Error && errorSentence.concat(`skyCode error: ${skyCode}`);
-    
-    uSNcst instanceof Error  && errorSentence.concat(`uSNcst error: ${uSNcst}`);
-    
-    nowApGrade  instanceof Error  &&  errorSentence.concat(`nowApGrade error: ${nowApGrade}`);
-    
-    sunInform instanceof Error && errorSentence.concat(`sunInform error: ${sunInform}`);
+  const changeHourItem =(t:SVFTime):HourWeather=>({
+    date:t.fcstDate,
+    hour:t.fcstTime,
+    sky:t.sky,
+    temp:t.tmp,
+    //강수확률(%)
+    pop:t.pop,
+    //강수량(mm)
+    pcp:t.pcp,
+    sno:t.sno,
+    wind:{
+      vec :getWsd(t.wsd,t.vec),
+      wsd:t.wsd
+    },
+    reh:t.reh
+  });
 
-    const weahter1: WeatherState ={
-      state:'pending',
-      error:null,
-      nowWeather : 
-        (!(uSNcst instanceof Error) &&  
-        !(nowApGrade instanceof Error) &&
-        !(skyCode instanceof Error)
-        ) 
-        ?
-        {
-        tmp:uSNcst.t1h,
-        sky:skyCode,
-        reh:uSNcst.reh,
-        wind: {
-          vec: getWsd(uSNcst.wsd ,uSNcst.vec),
-          wsd: uSNcst.wsd
-        },
-        pm10Grade: nowApGrade.pm10Grade1h,
-        pm25Grade: nowApGrade.pm25Grade1h
-      } 
-      : 
-      null,
-      sunRiseAndSet : sunInform instanceof Error? null : [...sunInform],
-      threeDay:null,
-      week:null,
-      tomrrowWeather :null,
-      nation:null
-    };
-    return weahter1
-  })
+  const data = await((async()=>{
+    const skyCode = await getUSSkyCode(nX, nY, baseDate_skyCode,baseTime_skyCode,fcstTime);
+    const uSNcst = await getUSNcast(nX,nY,baseDate_yesterday,baseDate_today,fcstTime,preFcstTime,minutes,hours);
+    const nowApGrade = await getApNow(sidoName,stationName);
+    const sunInform = await getSunInform(longitude,latitude,threeDays);
+    return {
+      skyCode :skyCode,
+      uSNcst :uSNcst,
+      nowApGrade :nowApGrade,
+      sunInform :sunInform
+    }
+  })())
   .then(async(result)=>{
     const tommorowApGrade = await getApFcst(baseDate_today,threeDays[1], sidoName ,sfGrid) ;
     const sVFcst = await getSVFcast(nX,nY,baseDate_svf,baseTime_svf ,baseDate_yesterday,timeArry,todayTimeArry, threeDays);
-
-    const changeHourItem =(t:SVFTime):HourWeather=>({
-      date:t.fcstDate,
-      hour:t.fcstTime,
-      sky:t.sky,
-      temp:t.tmp,
-      //강수확률(%)
-      pop:t.pop,
-      //강수량(mm)
-      pcp:t.pcp,
-      sno:t.sno,
-      wind:{
-        vec :getWsd(t.wsd,t.vec),
-        wsd:t.wsd
-      },
-      reh:t.reh
-    });
-
-    if( !(sVFcst instanceof Error) && !(tommorowApGrade instanceof Error) ){
-      const targetSVFcst = sVFcst.map((i:SVFDay)=>{
-        if(sVFcst.indexOf(i)===0){
-          return sVFcst[0].filter((t:SVFTime)=> todayTimeArry.includes(t.fcstTime))
-        }else{
-          return i
-        }
-      });
-      const svfDay :Day[] =changeSvfToDay(sVFcst);
-      const weather2 :WeatherState ={
-        ...result ,
-        threeDay : targetSVFcst.map((d:SVFDay)=> {
-          const daily :DailyWeather ={
-            date: threeDays[targetSVFcst.indexOf(d)],
-            hourly:d.map((t:SVFTime)=> changeHourItem(t))
-          };
-          return daily
-        }),
-        tomrrowWeather : {
-          pm10Grade:tommorowApGrade.pm10Grade,
-          pm25Grade:tommorowApGrade.pm25Grade,
-          am:svfDay[1].am,
-          pm:svfDay[1].pm ,
-          tmn:svfDay[1].tmn,
-          tmx:svfDay[1].tmx
-        }
-      };
-      return {weather:weather2, svfDay:svfDay }
-    }else{
-      sVFcst instanceof Error && errorSentence.concat(`sVFcst error: ${sVFcst}`);
-      tommorowApGrade instanceof Error && errorSentence.concat(`tomorrowApGrade error: ${tommorowApGrade}`);
-    return {weather:result ,svfDay :null}
-    };
-  })
-  .then(async(result)=>{
+    return {
+      ...result,
+      tomorrowApGrade: tommorowApGrade,
+      sVFcst: sVFcst
+    }
+  }).then(async(result)=>{
     const midFcst  = (landRegId !==undefined && taRegId !==undefined)
     ? 
     await getMidFcast(landRegId, taRegId,baseDate_today,baseDate_yesterday, hours )
@@ -1166,20 +1097,11 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
       ):
       new Error('[Error] taRegId is undefined')
     );
-    
-    if(!(midFcst instanceof Error) && result.svfDay !==null){
-      const midDay: Day[] = changeMidToDay(midFcst);
-      const weather3: WeatherState ={
-        ...result.weather,
-        week:[...result.svfDay, ...midDay],
-      };
-      return weather3
-    }else{
-      midFcst  instanceof Error  && errorSentence.concat(`midFcst error: ${midFcst}`);
-      return result.weather
+    return {
+      ...result,
+      midFcst :midFcst
     }
-  })
-  .then(async(result)=>{
+  }).then(async(result)=>{
     const nationDataItem = sessionStorage.getItem("nation_data");
 
     let areaData:Error | Area[]|undefined =undefined ;
@@ -1203,35 +1125,107 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     }else{
         areaData = await operateGetNationArea(true, true, null );
     };
-
+    const nationData:NationType ={
+      searchTime:{
+        hours:hours,
+        baseTime_svf:baseTime_svf
+      },
+      areas:areaData
+    };
     if(areaData !== undefined && !(areaData instanceof Error)){
-      const nationData:NationType ={
-        searchTime:{
-          hours:hours,
-          baseTime_svf:baseTime_svf
-        },
-        areas:areaData
-      };
       sessionStorage.setItem("nation_data", JSON.stringify(nationData));
-      const weather4 :WeatherState ={
-        ...result,
-        nation: nationData
-      };
-      return weather4
-    }else{
-      errorSentence.concat(`areaData error: ${areaData}`);
-      return result
+    };
+    return {
+      ...result,
+      nationData: areaData instanceof Error 
+                  ? 
+                  areaData 
+                  :
+                  (areaData === undefined 
+                  ?
+                  new Error("areaData is undefined")
+                  :
+                  nationData
+                )
     }
-  });
+  })
+  const {skyCode, uSNcst ,nowApGrade, sunInform ,tomorrowApGrade , sVFcst ,midFcst, nationData} =data ;
+
+  (skyCode instanceof Error) && errorSentence.concat(`skyCode error: ${skyCode}`);
+  (uSNcst instanceof Error) && errorSentence.concat(`uSNcst error: ${uSNcst}`);
+  (nowApGrade instanceof Error) && errorSentence.concat(`nowApGrade error: ${nowApGrade}`);
+  (sunInform instanceof Error) && errorSentence.concat(`sunInform error: ${sunInform}`);
+  (tomorrowApGrade instanceof Error) && errorSentence.concat(`tomorrowApGrade error: ${tomorrowApGrade}`);
+  (sVFcst instanceof Error) && errorSentence.concat(`sVFcst error: ${sVFcst}`);
+  (midFcst instanceof Error) && errorSentence.concat(`midFcst error: ${midFcst}`);
+  (nationData instanceof Error) && errorSentence.concat(`nationData error: ${nationData}`);
+    console.log("api data", data);
 
     if(errorSentence === ""){
         return errorSentence
     }else{
-      const weatherData :WeatherState ={
-        ...data,
+      let weatherData :WeatherState ={
         state :"success",
-        error: null
+        error:null,
+        nowWeather: (!(uSNcst instanceof Error) &&  
+                      !(nowApGrade instanceof Error) &&
+                      !(skyCode instanceof Error)
+                    ) 
+                    ?
+                      {
+                        tmp:uSNcst.t1h,
+                        sky:skyCode,
+                        reh:uSNcst.reh,
+                        wind: {
+                          vec: getWsd(uSNcst.wsd ,uSNcst.vec),
+                          wsd: uSNcst.wsd
+                        },
+                        pm10Grade: nowApGrade.pm10Grade1h,
+                        pm25Grade: nowApGrade.pm25Grade1h
+                      } 
+                    : 
+                      null,
+        tomrrowWeather: null,
+        threeDay:  null,
+        week:  null,
+        nation: nationData instanceof Error ? null : nationData,
+        sunRiseAndSet: sunInform instanceof Error? null : [...sunInform],
       };
+      if(!(sVFcst instanceof Error) &&
+        !(tomorrowApGrade instanceof Error)&&
+        !(midFcst instanceof Error)
+      ){
+        const targetSVFcst = sVFcst.map((i:SVFDay)=>{
+          if(sVFcst.indexOf(i)===0){
+            return sVFcst[0].filter((t:SVFTime)=> todayTimeArry.includes(t.fcstTime))
+          }else{
+            return i
+          }
+        });
+        const svfDay :Day[] =changeSvfToDay(sVFcst);
+        const midDay: Day[] = changeMidToDay(midFcst);
+
+        weatherData ={
+          ...weatherData,
+          threeDay : targetSVFcst.map((d:SVFDay)=> {
+            const daily :DailyWeather ={
+              date: threeDays[targetSVFcst.indexOf(d)],
+              hourly:d.map((t:SVFTime)=> changeHourItem(t))
+            };
+            return daily
+          }),
+          tomrrowWeather : {
+            pm10Grade:tomorrowApGrade.pm10Grade,
+            pm25Grade:tomorrowApGrade.pm25Grade,
+            am:svfDay[1].am,
+            pm:svfDay[1].pm ,
+            tmn:svfDay[1].tmn,
+            tmx:svfDay[1].tmx
+          },
+          week:[...svfDay, ...midDay]
+        };
+      }
+      console.log("api weatherdata", weatherData);
       return weatherData
     }
   };
