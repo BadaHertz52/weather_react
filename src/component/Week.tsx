@@ -1,6 +1,5 @@
-import React, { CSSProperties, useState } from 'react';
+import React from 'react';
 import { AmPmType, Day } from '../modules/weather';
-import ScrollBtn from './ScrollBtn';
 import SkyIcon from './SkyIcon';
 type AmPmProperty ={
   data:AmPmType,

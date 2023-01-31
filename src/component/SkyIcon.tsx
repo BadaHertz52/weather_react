@@ -1,6 +1,6 @@
 import React from 'react';
 import { SkyType } from '../modules/weather';
-import {BsCloudyFill, BsFillCloudRainFill,  BsMoonStarsFill, BsSnow2 ,BsFillSunFill, BsSunFill} from 'react-icons/bs';
+import {BsCloudyFill, BsFillCloudRainFill,  BsMoonStarsFill, BsSnow2 , BsSunFill} from 'react-icons/bs';
 import {FaCloudShowersHeavy} from 'react-icons/fa';
 type SkyIconProperty ={
   skyType:SkyType,

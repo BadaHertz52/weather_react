@@ -1,4 +1,4 @@
-import React , {useState} from 'react';
+import React from 'react';
 import { DataState } from '../modules/weather';
 
 import {BiError} from 'react-icons/bi';

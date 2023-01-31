@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { positionSaga, SFGridItem } from "./position";
+import { positionSaga } from "./position";
 import { weatherSaga } from "./weather";
 import {all} from 'redux-saga/effects';
 import positionReducer from './position/reducer';
