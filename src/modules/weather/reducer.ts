@@ -3,7 +3,7 @@ import {  PositionSuccessData } from "../position";
 import { toolkitWeather } from "./thunk";
 import { WeatherState } from "./types";
 
-export const noneState :WeatherState ={
+export const noneState_weather :WeatherState ={
   state:"none",
   error:null,
   nowWeather:null,
@@ -13,16 +13,16 @@ export const noneState :WeatherState ={
   nation:null,
   sunRiseAndSet:null
 };
-const initialState = noneState;
+const initialState = noneState_weather;
 export const weatherSlice =createSlice({
   name:"weather",
   initialState,
   reducers :{
     reset :(state)=>({
-      ...noneState
+      ...noneState_weather
     }),
     request :(state , action:PayloadAction<PositionSuccessData>)=>({
-        ...noneState,
+        ...noneState_weather,
         state:"pending"
       }),
     success :(state, action:PayloadAction<WeatherState>) =>({
@@ -30,7 +30,7 @@ export const weatherSlice =createSlice({
       state:"success"
     }),
     failure : (state, action:PayloadAction< Error>)=>({
-      ...noneState,
+      ...noneState_weather,
       state:"failure",
       error:action.payload
     })
@@ -39,7 +39,7 @@ export const weatherSlice =createSlice({
     builder
     .addCase( toolkitWeather.pending , (state, action)=>{
       return {
-        ...noneState,
+        ...noneState_weather,
         state:"pending"
       }
     })
@@ -50,7 +50,7 @@ export const weatherSlice =createSlice({
     })
     .addCase(toolkitWeather.rejected, (state, action)=>{
       return {
-        ...noneState,
+        ...noneState_weather,
         state:"failure",
         error:action.error as Error
       }

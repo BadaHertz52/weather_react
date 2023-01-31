@@ -18,7 +18,7 @@ const initialState :PositionState ={
     latitude: "37.57037777777778"
   },
 };
-const noneState:PositionState ={
+const noneState_position:PositionState ={
   state:"none",
   error:null,
   longitude: null,
@@ -31,7 +31,7 @@ export const positionSlice =createSlice({
   initialState,
   reducers :{
     reset :(state)=>({
-      ...noneState
+      ...noneState_position
     }),
     request :(state ,action:PayloadAction<CurrentPosition> )=>({
       state:"pending",

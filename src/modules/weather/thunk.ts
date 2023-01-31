@@ -2,7 +2,7 @@ import { ThunkAction } from "redux-thunk";
 import { getWeatherData } from "../api";
 import { PositionSuccessData } from "../position/types";
 import { WeatherAction, WeatherState } from "./types";
-import { request, success, failure, noneState } from "./reducer";
+import { request, success, failure, noneState_weather } from "./reducer";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getWeatherThunk =(positionSuccessData:PositionSuccessData):ThunkAction<void,WeatherState, unknown,WeatherAction>=>async(dispatch)=>{
@@ -34,7 +34,7 @@ export const toolkitWeather = createAsyncThunk (
         const weatherState : WeatherState =
         (typeof data === "string")?
         {
-          ...noneState,
+          ...noneState_weather,
           state:"failure",
           error:error,
         }
