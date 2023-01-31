@@ -852,7 +852,7 @@ const  getNationArea =async(baseDate_skyCode:string,baseDate_svf: string, baseDa
     const targetArea =nationData !==null?  nationData.areas[index] :null
     const nation_day = targetArea !==null? targetArea?.day as Day[]  : null;
     const nation_now = targetArea !==null?  targetArea.now : null ;
-    const skyCode = (!searchOther && nation_now !==null)
+      const skyCode = (!searchOther && nation_now !==null)
       ?
       nation_now.sky
     :
@@ -929,6 +929,7 @@ const  getNationArea =async(baseDate_skyCode:string,baseDate_svf: string, baseDa
       now:  null
     }
   ];
+
   for (let i = 0; i < areaArry.length; i++) {
     const item = areaArry[i];
     const data = await getData(item);
