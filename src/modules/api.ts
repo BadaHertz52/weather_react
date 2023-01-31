@@ -1136,9 +1136,35 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     ):
     new Error('[Error] taRegId is undefined')
   );
-  const nowApGrade = await getApNow(sidoName,stationName);
-  const tommorowApGrade =await getApFcst(baseDate_today,threeDays[1], sidoName ,sfGrid);
-  const sunInform =await getSunInform(longitude,latitude,threeDays);
+  const local = window.location.host === "localhost:3000";
+
+  const nowApGrade :PmGrade | Error = local?  
+                                      await getApNow(sidoName,stationName) 
+                                      :
+                                      {pm10Grade:"좋음", pm25Grade: "좋음"};
+
+  const tomorrowApGrade : PmGrade | Error= local ? 
+                                          await getApFcst(baseDate_today,threeDays[1], sidoName ,sfGrid) 
+                                          :
+                                          {pm10Grade:"보통", pm25Grade: "나쁨"} ; 
+
+  const sunInform :(Error | SunRiseAndSet)[] = local?  
+                                              await getSunInform(longitude,latitude,threeDays) 
+                                              : 
+                                              [{
+                                                date: threeDays[0].slice(4),
+                                                sunSet:"06:00",
+                                                sunRise:"18:00"
+                                              },{
+                                                date: threeDays[1].slice(4),
+                                                sunSet:"06:14",
+                                                sunRise:"18:10"
+                                              },{
+                                                date: threeDays[2].slice(4),
+                                                sunSet:"05:50",
+                                                sunRise:"18:20"
+                                              }];
+
   // state로 변경 
   const changeHourItem =(t:SVFTime):HourWeather=>({
     date:t.fcstDate,
