@@ -1182,17 +1182,18 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     },
     reh:t.reh
   });
+  const sunInformHasError = sunInform.map(i => i instanceof Error).includes(true);
   if( !(skyCode instanceof Error)  &&   
       !(sVFcst instanceof Error ) && 
       !(uSNcst instanceof Error )&&
-      !(midFcst instanceof Error)  && 
+      !(midFcst instanceof Error) &&
       !(nowApGrade instanceof Error ) && 
-      !(tommorowApGrade instanceof Error ) ){
-        
+      !(tomorrowApGrade instanceof Error ) &&
+      ! sunInformHasError
+      ){
       const nationDataItem = sessionStorage.getItem("nation_data");
 
       let areaData:Error | Area[]|undefined =undefined ;
-      let weather :WeatherState = noneState_weather;
       const operateGetNationArea =async(searchSvf:boolean, searchOther:boolean, nationData: NationType | null)=>{
         return await getNationArea(baseDate_skyCode,baseDate_svf, baseDate_today,baseDate_yesterday,  baseTime_skyCode, fcstTime, preFcstTime,  minutes, hours, baseTime_svf, timeArry, todayTimeArry, threeDays ,searchSvf, searchOther,nationData );
       };
