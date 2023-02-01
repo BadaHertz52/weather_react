@@ -10,11 +10,10 @@ import Now from './component/Now';
 import Sun from './component/Sun';
 import Week from './component/Week';
 import { RootState } from './modules';
-import { PositionAction, PositionState, PositionSuccessData } from './modules/position';
-import { CurrentPosition} from './modules/position/thunk';
-import {   SunRiseAndSet, WeatherAction, WeatherState } from './modules/weather';
+import { PositionAction, PositionState, PositionSuccessData ,CurrentPosition } from './modules/position';
+import {   SunRiseAndSet, WeatherAction, WeatherState ,toolkitWeather } from './modules/weather';
 import { weatherSlice } from './modules/weather/reducer';
-import { getWeatherThunk, toolkitWeather } from './modules/weather/thunk';
+import { getWeatherThunk } from './modules/weather/thunk';
 import None from './component/None';
 import { BsGithub } from 'react-icons/bs';
 import {RiEmotionSadLine} from 'react-icons/ri'

@@ -1,6 +1,6 @@
 import { createSlice  ,PayloadAction} from "@reduxjs/toolkit";
 import {  PositionSuccessData } from "../position";
-import { toolkitWeather } from "./thunk";
+import { toolkitWeather } from "./toolkit";
 import { WeatherState } from "./types";
 
 export const noneState_weather :WeatherState ={

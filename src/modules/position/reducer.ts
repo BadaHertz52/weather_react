@@ -1,6 +1,6 @@
 import { PositionState } from "./types";
 import {  createSlice , PayloadAction } from "@reduxjs/toolkit";
-import { CurrentPosition, toolkitPosition} from "./thunk";
+import { CurrentPosition, toolkitPosition} from "./toolkit";
 
 const initialState :PositionState ={
   state:"success",
