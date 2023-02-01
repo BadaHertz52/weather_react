@@ -4,6 +4,7 @@ import { DailyWeather, directionArry, HourWeather, SunRiseAndSet, WindType } fro
 import SkyIcon from './SkyIcon';
 import {TiLocationArrow} from 'react-icons/ti';
 import { CSSProperties } from 'styled-components';
+import ScrollBtn from './ScrollBtn';
 import { Chart } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -15,10 +16,11 @@ import {
   Tooltip,
   Legend,
   ChartData,
-  ChartOptions
-} from 'chart.js'
-import ScrollBtn from './ScrollBtn';
+  ChartOptions,
+  registerables as registerablesJS
+} from 'chart.js';
 
+ChartJS.register(...registerablesJS)
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -27,7 +29,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-)
+);
 type CnItemDayProperty ={
   todaySunInform: Error | SunRiseAndSet,
   dailyWeather:DailyWeather,
