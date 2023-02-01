@@ -1363,11 +1363,19 @@
     box-sizing: border-box;
   }
   .sun .sun_chart, .sun .current_bar {
-    width: 100%;
+    width: 230px;
+  }
+  .sun .sun_chart {
+    height: 115px;
   }
   .sun .move_sun, .sun .current_bar .bar {
-    width: 100%;
-    height: 100%;
+    width: 230px;
+    height: 230px;
+  }
+  .sun .move_sun::after {
+    width: 30px;
+    height: 30px;
+    left: -12px;
   }
 }
 .week {
