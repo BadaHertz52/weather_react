@@ -1024,6 +1024,10 @@
   left: calc(100% + 5px);
 }
 
+.hourly .scrollBtn.next {
+  left: calc(100% - 45px);
+}
+
 @media screen and (min-width: 1025px) {
   .scrollBtn.on {
     display: flex;
