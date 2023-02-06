@@ -152,7 +152,13 @@ Screen when fetching data failed
 -----------------
 ##  <div id="other">6. Other</div>
 
+### 1) 프로젝트 진행하면서 배운 것들 
 
-<a target="_blank" href="https://icons8.com/icon/QLN0wP83VFpj/sunny">파비콘 출처</a> 
+* 👩‍💻[API Key 설정, 보안](https://velog.io/@badahertz52/ReactCRA-개발-시-API-Key-설정보안)
+
+* 👩‍💻[redux-thunk 와 redux-saga](https://velog.io/@badahertz52/redux-thunk-와-redux-saga)
+
+### 2) 자료 
+* <a target="_blank" href="https://icons8.com/icon/QLN0wP83VFpj/sunny">파비콘 출처</a> 
 icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 
