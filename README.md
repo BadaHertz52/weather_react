@@ -15,7 +15,7 @@
 
 ##  <div id="introduce">1. Introduce</div>
 ## 1) weather 소개 
-  weather 는 kakao REST API와 공공 데이터 포털에서 제공받은 데이터를 통해 사용자에게 사용자의 현재 위치에 따른 국내의 날씨 정보를 알려주는 날씨 정보 사이트입니다. 
+  weather 는 kakao local REST API와 공공 데이터 포털에서 제공받은 데이터를 통해 사용자에게 사용자의 현재 위치에 따른 국내의 날씨 정보를 알려주는 날씨 정보 사이트입니다. 
   사용자는 현재의 자신의 위치에 따른 현 시점의 날씨, 앞으로 3일 이내의 시간별 날씨, 일주일간의 전국 날씨, 일출 일몰 시각을 제공받을 수 있습니다. 
   웹프론트, 웹디자인으로 [네이버 날씨](https://weather.naver.com)를 참고해 만들었습니다.
 
@@ -43,7 +43,7 @@
 
 ## API
 * [공공 데이터 포털](https://www.data.go.kr/index.do)
-* [kakao REST API](https://developers.kakao.com/docs/latest/ko/local/dev-guide)
+* [kakao local REST API](https://developers.kakao.com/docs/latest/ko/local/dev-guide)
   
 --------------
 ##  <div id="start">3. Getting Start</div>
@@ -97,13 +97,45 @@ Screen when fetching data failed
 
 -------------
 ##  <div id="description">5.Description </div>
-
-### 1) State
+#### 1) Structure
+#### A. Modules
+```
+  src/modules
+    -positoin
+      -index
+      -reducer
+      -saga
+      -thunk
+      -toolkit
+      -types
+    -weather
+      -index
+      -reducer
+      -saga
+      -thunk
+      -toolkit
+      -types
+```
+#### B. Components
+|name|description|
+|----|-----------|
+|Hourly|오늘로부터 3일간의 시간별 날씨 정보를 보여줌|
+|Location|사용자의 위치정보를 찾고, 이를 보여줌|
+|Loading|위치 정보와 날씨 정보를 불어올 때 화면에 나타나 현재 진행상황을 표시|
+|Nation|오늘로부터 일주일간의 전국 날씨를 보여줌|
+|None|날씨 정보가 없을 때 정보가 없음을 알려줌|
+|Now|현재 사용자가 있는 장소의 실시간 날씨 정보를 알려줌|
+|ScrollBtn|터치나 마우스로 스크롤이 가능한 요소를 왼쪽이나 오른쪽으로 넘겨주는 버튼|
+|SkyIcon|하늘 상태를 아이콘을 표시|
+|Sun|한국의 일출,일몰 시각을 표시|
+|Week|사용자의 현재 위치에서 일주일 간의 날씨 정보를 알려줌 |
+### 2) State
 ```
   rootState
     -positoin
     -weather
 ```
+
 * position  state type
   ``` typescript
 
@@ -129,7 +161,7 @@ Screen when fetching data failed
       sunRiseAndSet: (SunRiseAndSet | Error)[] | null;
     } 
   ```
-### 2) Dispatch and Function
+### 3) Dispatch and Function
 
 <img 
   src="./readmeImg/fn.jpg"
@@ -158,6 +190,7 @@ Screen when fetching data failed
 
 * 👩‍💻[redux-thunk 와 redux-saga](https://velog.io/@badahertz52/redux-thunk-와-redux-saga)
 
+* 👩‍💻[weather 프로젝트 후기](https://velog.io/@badahertz52/Weather-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%ED%9B%84%EA%B8%B0)
 ### 2) 자료 
 * <a target="_blank" href="https://icons8.com/icon/QLN0wP83VFpj/sunny">파비콘 출처</a> 
 icon by <a target="_blank" href="https://icons8.com">Icons8</a>
