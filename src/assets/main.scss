@@ -96,6 +96,7 @@ li {
   .title{
     width: 100%;
     font-size: 1.2rem;
+    margin: 10px 0 14px 0;
   }
 }
 a{
@@ -180,6 +181,9 @@ a{
     .inner{
       width: 90%;
     }
+  }
+  .nation {
+    margin-top: 1.5rem;
   }
 }
 @media screen and (min-width:1160px) {

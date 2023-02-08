@@ -1,3 +1,4 @@
+import './assets/reset.css';
 import './assets/main.css';
 import { AnyAction} from '@reduxjs/toolkit';
 import React, { useEffect, useRef} from 'react';

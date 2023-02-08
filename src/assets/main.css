@@ -3,21 +3,18 @@
   margin-top: 36px;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   box-sizing: border-box;
   position: relative;
 }
 .hourly .weather_graph {
   width: 100%;
-  min-height: -webkit-fit-content;
   min-height: -moz-fit-content;
   min-height: fit-content;
   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   margin-left: 5px;
 }
 .hourly .scrollArea {
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   min-height: 370px;
@@ -81,7 +78,6 @@
 }
 .hourly .thead_cnTimeTable span {
   padding: 1px 5px;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
@@ -212,10 +208,8 @@
 }
 
 .dropBtn {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   display: flex;
@@ -228,7 +222,6 @@
 }
 
 .location_dropdown {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   position: relative;
@@ -326,31 +319,7 @@
 }
 #loading .loading_state.pending .icon_wrap svg {
   fill: inherit;
-  -webkit-animation: pendingRotate 3s ease-in infinite;
-          animation: pendingRotate 3s ease-in infinite;
-}
-@-webkit-keyframes pendingRotate {
-  0% {
-    transform: rotate(0);
-  }
-  13% {
-    transform: rotate(46.8deg);
-  }
-  25% {
-    transform: rotate(90deg);
-  }
-  50% {
-    transform: rotate(180deg);
-  }
-  75% {
-    transform: rotate(270deg);
-  }
-  80% {
-    transform: rotate(288deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  animation: pendingRotate 3s ease-in infinite;
 }
 @keyframes pendingRotate {
   0% {
@@ -430,28 +399,12 @@
   color: rgb(14, 14, 14);
   text-shadow: none;
 }
-@-webkit-keyframes progress25 {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(-75%);
-  }
-}
 @keyframes progress25 {
   0% {
     transform: translateX(-100%);
   }
   100% {
     transform: translateX(-75%);
-  }
-}
-@-webkit-keyframes progress50 {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(-50%);
   }
 }
 @keyframes progress50 {
@@ -462,28 +415,12 @@
     transform: translateX(-50%);
   }
 }
-@-webkit-keyframes progress75 {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(-25%);
-  }
-}
 @keyframes progress75 {
   0% {
     transform: translateX(-100%);
   }
   100% {
     transform: translateX(-25%);
-  }
-}
-@-webkit-keyframes progress100 {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translate(0%);
   }
 }
 @keyframes progress100 {
@@ -498,26 +435,21 @@
   transform: translateX(-100%);
 }
 #loading .loading_area .progress_25 .bar {
-  -webkit-animation: progress25 infinite ease-out 6s;
-          animation: progress25 infinite ease-out 6s;
+  animation: progress25 infinite ease-out 6s;
 }
 #loading .loading_area .progress_50 .bar {
-  -webkit-animation: progress50 infinite ease-out 6s;
-          animation: progress50 infinite ease-out 6s;
+  animation: progress50 infinite ease-out 6s;
 }
 #loading .loading_area .progress_75 .bar {
-  -webkit-animation: progress75 infinite ease-out 6s;
-          animation: progress75 infinite ease-out 6s;
+  animation: progress75 infinite ease-out 6s;
 }
 #loading .loading_area .progress_100 .bar {
-  -webkit-animation: progress1050 3s ease-in 3s;
-          animation: progress1050 3s ease-in 3s;
+  animation: progress1050 3s ease-in 3s;
 }
 
 .nation {
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   box-sizing: border-box;
 }
@@ -730,7 +662,6 @@
   flex-direction: column;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   box-sizing: border-box;
 }
@@ -744,7 +675,6 @@
 .now_now {
   justify-content: center;
   height: 75px;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
@@ -817,6 +747,9 @@
 .now .summary.current dd {
   margin: 0 10px;
   font-weight: bolder;
+}
+.now .summary.current .summary_table:first-child {
+  margin-bottom: 10px;
 }
 .now .summary.tomorrow {
   left: 100%;
@@ -1006,10 +939,8 @@
 }
 .scrollBtn svg {
   font-size: inherit;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   fill: inherit;
@@ -1154,19 +1085,10 @@
   color: rgb(250, 240, 182);
 }
 .sun .sunIcon_arrow .up {
-  -webkit-animation: moveArrow 2s ease-in infinite;
-          animation: moveArrow 2s ease-in infinite;
+  animation: moveArrow 2s ease-in infinite;
 }
 .sun .sunIcon_arrow .down {
   animation: moveArrow 2s ease-out infinite reverse;
-}
-@-webkit-keyframes moveArrow {
-  from {
-    transform: translateY(5px);
-  }
-  to {
-    transform: translateY(0px);
-  }
 }
 @keyframes moveArrow {
   from {
@@ -1465,7 +1387,7 @@
     padding: 5px 10px;
   }
   .week .cell_weather .inner_text,
-.week .cell_date .day {
+  .week .cell_date .day {
     font-size: 13px;
   }
   .week .cell_weather .skyIcon, .week .cell_weather svg {
@@ -1510,7 +1432,6 @@
     display: none;
   }
   .week .scrollArea .day_data {
-    width: -webkit-fit-content;
     width: -moz-fit-content;
     width: fit-content;
     flex-direction: column;
@@ -1518,8 +1439,8 @@
     width: 100%;
   }
   .week .scrollArea .cell_date,
-.week .scrollArea .cell_weather,
-.week .scrollArea .cell_temperature {
+  .week .scrollArea .cell_weather,
+  .week .scrollArea .cell_temperature {
     width: 100%;
     text-align: center;
     justify-content: space-around;
@@ -1646,6 +1567,7 @@ li {
 .week .title, .nation .title {
   width: 100%;
   font-size: 1.2rem;
+  margin: 10px 0 14px 0;
 }
 
 a {
@@ -1728,6 +1650,9 @@ a {
   }
   .nation .inner, .sun .inner {
     width: 90%;
+  }
+  .nation {
+    margin-top: 1.5rem;
   }
 }
 @media screen and (min-width: 1160px) {
