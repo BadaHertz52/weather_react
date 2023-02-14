@@ -542,8 +542,12 @@ const findAreaGrid =(doc:KakaoDoumentType)=>{
  * @returns 
  */
 export const  getAreaData =async(latitude:string, longitude:string):Promise<SFGridItem | Error>=>{
-  return await fetch('/position',{
-    method:'GET'
+  const url =`https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${longitude}&y=${latitude}`;
+  return await fetch(url,{
+    method:'GET',
+    headers: {
+      'Authorization': `KakaoAK ${kakaoKey}`,
+    }
   })
   .then(re => re.json())
   .then(data =>{
