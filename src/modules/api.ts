@@ -92,23 +92,18 @@ const sunApi:Api ={
  * @returns Promise<any>
  */
 const getApiItems =async(url:string , where:string):Promise<any|Error>=>{
-  const data = await fetch(url )
-  .then((response)=> { 
-    return response.json()})
-  .then((response)=> { 
-    if(response.response.body !==undefined){
-      const items =response.response.body.items;
-      return items
+  try {
+    const result = await (await fetch(url)).json();
+    const body = result.response.body; 
+    if(body !==undefined){
+      return body.items
     }else{
-      const error = new Error( `[${where}_ getApiItems]: response.body is undefined // response: ${response}`);
+      const error = new Error( `[${where}_ getApiItems]: response.body is undefined`);
       return error
     }
-
-    })
-  .catch((e:Error)=> {
-    return e;
-  });
-  return data
+  } catch (error) {
+    return error 
+  }
 };
 /**
  * 초단기 실황, 초단기 예보, 단기 예보 api를 요청할 때 사용할 url을 반환하는 함수
@@ -478,27 +473,29 @@ Promise<(Error | SunRiseAndSet)[]>=>{
   };
   const getUrl =(date:string)=>`${sunApi.url}/${sunApi.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${date}&dnYn=Y&ServiceKey=${publicApiKey}`;
   const arry :Item[] =threeDays.map((d:string)=> ({url:getUrl(d), date:d}))
-  const fetchSunApi =async(url:string, date:string)=>await fetch(url)
-                .then(response => {
-                  return response.text()
-                })
-                .then((data)=>{
-                  const xml = new DOMParser().parseFromString(data, "text/xml");
-                  const sunrise = xml.querySelector("sunrise")?.textContent as string;
-                  const sunset =xml.querySelector("sunset")?.textContent as string;
-                  const changeTimeString =(string:string)=>{
-                    const time = string.slice(0,2);
-                    const min = string.slice(2);
-                    return `${time}:${min}`;
-                  }
-                  const inform :SunRiseAndSet ={
-                    date:date.slice(4),
-                    sunRise :changeTimeString(sunrise),
-                    sunSet:changeTimeString(sunset),
-                  };
-                  return inform
-                })
-                .catch((e:Error)=> {return e});
+  const fetchSunApi =async(url:string, date:string)=> {
+    try {
+      const result = await fetch(url);
+      const data =  await(result).text();
+      const xml = new DOMParser().parseFromString(data, "text/xml");
+      const sunrise = xml.querySelector("sunrise")?.textContent as string;
+      const sunset =xml.querySelector("sunset")?.textContent as string;
+      const changeTimeString =(string:string)=>{
+        const time = string.slice(0,2);
+        const min = string.slice(2);
+        return `${time}:${min}`;
+      }
+      const inform :SunRiseAndSet ={
+        date:date.slice(4),
+        sunRise :changeTimeString(sunrise),
+        sunSet:changeTimeString(sunset),
+      };
+      return inform
+    } catch (error) {
+        const e = new Error(`${error}`);
+        return e
+    }
+  };
       
   return Promise.all(arry.map(async({url, date})=>{
                 const inform = await fetchSunApi(url ,date);
@@ -543,14 +540,14 @@ const findAreaGrid =(doc:KakaoDoumentType)=>{
  */
 export const  getAreaData =async(latitude:string, longitude:string):Promise<SFGridItem | Error>=>{
   const url =`https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${longitude}&y=${latitude}`;
-  return await fetch(url,{
-    method:'GET',
-    headers: {
-      'Authorization': `KakaoAK ${kakaoKey}`,
-    }
-  })
-  .then(re => re.json())
-  .then(data =>{
+  try {
+    const data =await ( await fetch(url,{
+      method:'GET',
+      headers: {
+        'Authorization': `KakaoAK ${kakaoKey}`,
+      }
+    })).json();
+
     const gridDataArry :SFGridItem[] =data.documents.map((doc:KakaoDoumentType)=>findAreaGrid(doc)).filter((i:SFGridItem|undefined)=> i !==undefined)
     ;
     const arePt3IsNotNull = gridDataArry.filter((i:SFGridItem)=> i.arePt3 !==null);
@@ -565,9 +562,11 @@ export const  getAreaData =async(latitude:string, longitude:string):Promise<SFGr
         return gridDataArry[0]
       }
     }
-
-  })
-  .catch((e:Error) => e);
+    
+  } catch (error) {
+      const e = new Error(`${error}`);
+      return e
+  };
 };
 
 /**
