@@ -377,6 +377,7 @@
   width: 100%;
   text-align: center;
   font-size: 14px;
+  line-height: 1.5rem;
   z-index: 5;
   color: rgb(255, 255, 255);
   text-shadow: 1px 1px 4px rgba(22, 22, 22, 0.5607843137);
