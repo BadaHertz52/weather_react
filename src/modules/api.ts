@@ -355,19 +355,32 @@ const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode, today
  */
 const getApNow =async(sidoName:ApiAreaCode, stationName:string[]):Promise<PmGrade|Error>=>{
   const url = `${apInformApi.url}/${inqury_air_ctprvnRltmMesureDnsty}?sidoName=${sidoName}&returnType=JSON&serviceKey=${publicApiKey}&numOfRows=100000&ver=1.3`;
-  const items =await getApiItems(url ,"apNow");
-  if(!(items instanceof Error)){
-    const targetItem:ApNowItem = items.filter((i:ApNowItem)=> stationName.includes(i.stationName))[0];
+  try {
+    const result = await(await fetch( '/weather_react/apNow',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({url:url})
+    })).json();
+    console.log("apNow result", result ,result.message);
+    if(result.message !==undefined ){
+      const error = new Error(result.message.error);
+      return error ;
+    }else{
+      const items = result as ApNowItem[];
+      const targetItem:ApNowItem = items.filter((i:ApNowItem)=> stationName.includes(i.stationName))[0];
     
     const pm :PmGrade = {
       pm10Grade:gradeArry[Number(targetItem.pm10Grade) -1],
       pm25Grade:gradeArry[Number(targetItem.pm25Grade)-1]
     };
     return pm
-  }else{
-    return items
+    }
+  } catch (error) {
+    const e = new Error(`[Error] Can't fetch /weather_react/apNow`);
+    return e
   }
-
 };
 /**
  * 'yyymmdd'를 'yyyy-mm-dd'로 변형해 반환하는 함수
@@ -428,36 +441,52 @@ const getApFcst =async(baseDate:string,tBaseDate:string, sidoName:ApiAreaCode, s
   const tSearchDate = changeSearchDate(tBaseDate);
   const apFcstArea = findApFcstArea(sidoName,sfGrid);
   const url=`${apInformApi.url}/${inqury_air_minuDustFrcstDspth}?&returnType=JSON&serviceKey=${publicApiKey}&numOfRows=100000&searchDate=${searchDate}` ;
-  const items =await getApiItems(url ,"apFcst") as ApFcstItem[]|Error;
+  try {
+    const result = await(await fetch( '/weather_react/apFcst',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({url:url})
+    })).json();
 
-  if(items instanceof Error){
-    return items
-  }else{
-    const tomorrowFcst =items.filter((i:ApFcstItem)=> i.informData === tSearchDate)
-    const pm10Fcst = tomorrowFcst.filter((i:ApFcstItem)=> i.informCode ==="PM10")[0].informGrade;
-    const pm25Fcst =tomorrowFcst.filter((i:ApFcstItem)=> i.informCode ==="PM25")[0].informGrade;
-    function getPmGrde (pmData:string){
-      const indexOfSido = pmData.indexOf(apFcstArea);
-      const sliced1 = pmData.slice(indexOfSido + sidoName.length +1);
-      const indexOfComma = sliced1.indexOf(",");
-      const sliced2 = sliced1.slice(0,indexOfComma);
-      const grade = gradeArry
-                      .map((g:PmType)=> {
-                        if(g !==null && sliced2.includes(g)){
-                          return g
-                        }else{
-                          return null
-                        }
-                      })
-                      .filter((i: PmType)=> i !==null)[0];
-      return grade
-    };
-    const pm10Grade = getPmGrde(pm10Fcst);
-    const pm25Grade =getPmGrde(pm25Fcst);
-    return {
-      pm10Grade:pm10Grade,
-      pm25Grade:pm25Grade
+    console.log("apfcst result", result);
+    if(result.message  !==undefined){
+      const error = result.message ;
+      const e = new Error (error);
+      return e
+    }else{
+      const items = result as ApFcstItem[];
+      const tomorrowFcst =items.filter((i:ApFcstItem)=> i.informData === tSearchDate)
+      const pm10Fcst = tomorrowFcst.filter((i:ApFcstItem)=> i.informCode ==="PM10")[0].informGrade;
+      const pm25Fcst =tomorrowFcst.filter((i:ApFcstItem)=> i.informCode ==="PM25")[0].informGrade;
+      function getPmGrde (pmData:string){
+        const indexOfSido = pmData.indexOf(apFcstArea);
+        const sliced1 = pmData.slice(indexOfSido + sidoName.length +1);
+        const indexOfComma = sliced1.indexOf(",");
+        const sliced2 = sliced1.slice(0,indexOfComma);
+        const grade = gradeArry
+                        .map((g:PmType)=> {
+                          if(g !==null && sliced2.includes(g)){
+                            return g
+                          }else{
+                            return null
+                          }
+                        })
+                        .filter((i: PmType)=> i !==null)[0];
+        return grade
+      };
+      const pm10Grade = getPmGrde(pm10Fcst);
+      const pm25Grade =getPmGrde(pm25Fcst);
+      const pmData:PmGrade ={
+                              pm10Grade:pm10Grade,
+                              pm25Grade:pm25Grade
+                            }
+      return pmData
     }
+  } catch (error ) {
+    const e = new Error("[Error] Can't fetch apNow" );
+    return e
   }
 };
 /**
@@ -475,11 +504,21 @@ Promise<(Error | SunRiseAndSet)[]>=>{
   const arry :Item[] =threeDays.map((d:string)=> ({url:getUrl(d), date:d}))
   const fetchSunApi =async(url:string, date:string)=> {
     try {
-      const result = await fetch(url);
-      const data =  await(result).text();
-      const xml = new DOMParser().parseFromString(data, "text/xml");
-      const sunrise = xml.querySelector("sunrise")?.textContent as string;
-      const sunset =xml.querySelector("sunset")?.textContent as string;
+      const body ={
+        url:url
+      };
+      const result = await (await fetch('/weather_react/sunInfo' ,{
+        method:"POST",
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify(body)
+      })).json();
+      console.log("sun result", result);
+      if(result.message !==undefined){
+        const error = new Error(result.message);
+        return error
+      }else{
       const changeTimeString =(string:string)=>{
         const time = string.slice(0,2);
         const min = string.slice(2);
@@ -487,10 +526,11 @@ Promise<(Error | SunRiseAndSet)[]>=>{
       }
       const inform :SunRiseAndSet ={
         date:date.slice(4),
-        sunRise :changeTimeString(sunrise),
-        sunSet:changeTimeString(sunset),
+        sunRise :changeTimeString(result.sunrise),
+        sunSet:changeTimeString(result.sunset),
       };
-      return inform
+      return inform;
+    }
     } catch (error) {
         const e = new Error(`${error}`);
         return e
@@ -1028,42 +1068,18 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     ):
     new Error('[Error] taRegId is undefined')
   );
-  const local = window.location.host === "localhost:3000";
+  const nowApGrade :PmGrade | Error = await getApNow(sidoName,stationName) 
 
-  const nowApGrade :PmGrade | Error = local?  
-                                      await getApNow(sidoName,stationName) 
-                                      :
-                                      {pm10Grade:"좋음", pm25Grade: "좋음"};
-
-  const tomorrowApGrade : PmGrade | Error= local  ? 
-                                          ((hours >5 || (hours === 5 && minutes >10)) ?
+  const tomorrowApGrade : PmGrade | Error= (hours >5 || (hours === 5 && minutes >10)) ?
                                           await getApFcst(baseDate_today,threeDays[1], 
                                           sidoName ,sfGrid) 
                                           :{
                                             pm10Grade:null, pm25Grade: null
                                           }
-                                          )
-                                          :
-                                          {pm10Grade:"보통", pm25Grade: "나쁨"} ; 
+    
 
-  const sunInform :(Error | SunRiseAndSet)[] = local?  
-                                              await getSunInform(longitude,latitude,threeDays) 
-                                              : 
-                                              [{
-                                                date: threeDays[0].slice(4),
-                                                sunSet:"06:00",
-                                                sunRise:"18:00"
-                                              },{
-                                                date: threeDays[1].slice(4),
-                                                sunSet:"06:14",
-                                                sunRise:"18:10"
-                                              },{
-                                                date: threeDays[2].slice(4),
-                                                sunSet:"05:50",
-                                                sunRise:"18:20"
-                                              }];
-
-  // state로 변경 
+  const sunInform :(Error | SunRiseAndSet)[] = await getSunInform(longitude,latitude,threeDays) ;
+  //state로 변경 
   const changeHourItem =(t:SVFTime):HourWeather=>({
     date:t.fcstDate,
     hour:t.fcstTime,
