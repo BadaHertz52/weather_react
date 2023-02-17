@@ -3,12 +3,10 @@ import {  Area, areaArry, AreaInform,  DailyWeather, Day, getSkyCode, getSkyType
 import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApNowItem, SVFBaseTime,  KakaoDoumentType, MidFcstDay, ApFcstItem}from "./apiType";
 import { sfGrid} from './sfGrid'; 
 import { SFGridItem } from "./position/types";
-import dotenv from 'dotenv';
-dotenv.config();
 
 const publicApiKey = process.env.REACT_APP_PUBLIC_KEY ;
 const kakaoKey = process.env.REACT_APP_KAKAO_KEY;
-console.log("key", "public::" , publicApiKey, "kakao", kakaoKey);
+
 const returnApiUrl =(sort:string):string=>{
   const base =`https://apis.data.go.kr/1360000/${sort}`;
   return base
@@ -356,7 +354,7 @@ const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode, today
  * @returns Promise<PmGrade|string>
  */
 const getApNow =async(sidoName:ApiAreaCode, stationName:string[]):Promise<PmGrade|Error>=>{
-  const url = `${apInformApi.url}/${inqury_air_ctprvnRltmMesureDnsty}?sidoName=${sidoName}&returnType=JSON&serviceKey=${publicApiKey}&numOfRows=100000&ver=1.3`;
+  const url = `${apInformApi.url}/${inqury_air_ctprvnRltmMesureDnsty}?sidoName=${sidoName}&returnType=JSON&numOfRows=100000&ver=1.3`;
   try {
     const result = await(await fetch( '/weather_react/apNow',{
       method:"POST",
@@ -502,7 +500,7 @@ Promise<(Error | SunRiseAndSet)[]>=>{
     url:string,
     date: string
   };
-  const getUrl =(date:string)=>`${sunApi.url}/${sunApi.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${date}&dnYn=Y&ServiceKey=${publicApiKey}`;
+  const getUrl =(date:string)=>`${sunApi.url}/${sunApi.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${date}&dnYn=Y`;
   const arry :Item[] =threeDays.map((d:string)=> ({url:getUrl(d), date:d}))
   const fetchSunApi =async(url:string, date:string)=> {
     try {

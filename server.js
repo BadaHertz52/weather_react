@@ -5,7 +5,8 @@ const port = 5000;
 const path = require('path');
 const bodyParser =require('body-parser');
 require('dotenv').config();
-
+const publicApiKey = process.env.REACT_APP_PUBLIC_KEY; 
+const kakaoApiKey = process.env.REACT_APP_KAKAO_KEY;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 
@@ -18,7 +19,7 @@ app.get('/weather_react', function ( _,res) {
 const getAPdata =async(req, res)=>{
   const url = req.body.url;
   try {
-    const result = await axios.get(url);
+    const result = await axios.get(`${url}&serviceKey=${publicApiKey}`);
     const body = result.data.response.body;
     if(body !==undefined){
       const items =body.items;
@@ -30,7 +31,7 @@ const getAPdata =async(req, res)=>{
     }
 
   } catch (error) {
-    res.json({message:error});
+    res.json({message:"Fail fetch"});
   };
 }
 
@@ -43,16 +44,15 @@ app.post('/weather_react/apFcst', async(req, res)=>{
 app.post('/weather_react/sunInfo', async(req, res)=>{
   const url = req.body.url;
   try {
-    const result = await axios.get(url);
+    const result = await axios.get(`${url}&ServiceKey=${publicApiKey}`);
     const response = result.data.response;
     const item =response.body.items.item;
     res.send(item);
   } catch (error) {
-    const e = `[Error]: ${error}`;
+    const e = `[Error]: fail fetch`;
     res.json({message:e});
   }
 })
 app.listen(port, ()=>{
   console.log("hello server", port);
-  console.log("env",  process.env.REACT_APP_PUBLIC_KEY);
 });
