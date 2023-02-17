@@ -3,10 +3,12 @@ import {  Area, areaArry, AreaInform,  DailyWeather, Day, getSkyCode, getSkyType
 import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrade, ApNowItem, SVFBaseTime,  KakaoDoumentType, MidFcstDay, ApFcstItem}from "./apiType";
 import { sfGrid} from './sfGrid'; 
 import { SFGridItem } from "./position/types";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const publicApiKey = process.env.REACT_APP_PUBLIC_KEY ;
 const kakaoKey = process.env.REACT_APP_KAKAO_KEY;
-
+console.log("key", "public::" , publicApiKey, "kakao", kakaoKey);
 const returnApiUrl =(sort:string):string=>{
   const base =`https://apis.data.go.kr/1360000/${sort}`;
   return base
