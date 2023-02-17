@@ -1096,6 +1096,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     },
     reh:t.reh
   });
+  console.log("skycode", skyCode);
   const sunInformHasError = sunInform.map(i => i instanceof Error).includes(true);
   if( !(skyCode instanceof Error)  &&   
       !(sVFcst instanceof Error ) && 

@@ -16,6 +16,7 @@ const getAPdata =async(req, res)=>{
   const url = req.body.url;
   try {
     const result = await axios.get(url);
+    console.log("ap data result", result);
     const body = result.data.response.body;
     if(body !==undefined){
       const items =body.items;
@@ -44,6 +45,7 @@ app.post('/weather_react/sunInfo', async(req, res)=>{
     const response = result.data.response;
     const item =response.body.items.item;
     res.send(item);
+    console.log("suninfo result", result);
   } catch (error) {
     const e = `[Error]: ${error}`;
     res.json({message:e});
