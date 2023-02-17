@@ -1,27 +1,39 @@
-name: Automatically Deployment
-
-on: [push]
-
+name: Deploy to cloudtype
+on:
+  push:
+    branches:
+      - master
 jobs:
- deployment:
-  runs-on: ubuntu-latest
-  steps:
-   - uses: actions/checkout@v3
-   - uses: actions/setup-node@v3
-     with:
-       node-version: '16'
-     
-   - name: Setting .env
-     run: |
-        echo "REACT_APP_PUBLIC_KEY =$REACT_APP_PUBLIC_KEY" >> .env
-        echo "REACT_APP_KAKAO_KEY = $REACT_APP_KAKAO_KEY" >> .env
-        cat .env
-        
-     env:  
-      REACT_APP_PUBLIC_KEY: ${{secrets.REACT_APP_PUBLIC_KEY}}
-      REACT_APP_KAKAO_KEY : ${{secrets.REACT_APP_KAKAO_KEY}}
-      
-      
-      
-  
-  
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Connect deploy key
+        uses: cloudtype-github-actions/connect@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          ghtoken: ${{ secrets.GHP_TOKEN }}
+      - name: Deploy
+        uses: cloudtype-github-actions/deploy@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          project: badahertz52/weather_react_express
+          stage: main
+          yaml: |
+            name: weather-react
+            app: node@16
+            options:
+              env:
+                - name: REACT_APP_PUBLIC_KEY
+                  secret: REACT_APP_PUBLIC_KEY
+                - name: REACT_APP_KAKAO_KEY
+                  secret: REACT_APP_KAKAO_KEY
+              ports: "5000"
+              build: npm  run build
+              start: npm run dev
+            context:
+              git:
+                url: git@github.com:${{ github.repository }}.git
+                ref: ${{ github.ref }}
+              preset: node
