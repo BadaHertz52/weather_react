@@ -32,7 +32,7 @@ app.post('/weather_react/area', async(req, res)=>{
         'Authorization': `KakaoAK ${kakaoApiKey}`
       },
     });
-    res.send(result);
+    res.send(result.data.documents);
   } catch (error) {
     res.json({message:"[Error] Fail get area data"})
   }
