@@ -84,7 +84,7 @@ export type SVFTime ={
   reh:string,
   //1시간 신적설(cm)
   sno:string,
-  sky:SkyType,
+  sky:number,
   //1시간 기온
   tmp:number,
   //일 최저 기온

@@ -195,7 +195,7 @@ const getDaySvf =(arry:string[], targetDaySVF :SFcstItem[], fcstData:string ,tmn
         pcp: timeSVF.filter((i:SFcstItem)=> i.category === "PCP")[0].fcstValue,
         reh: timeSVF.filter((i:SFcstItem)=> i.category === "REH")[0].fcstValue ,
         sno: timeSVF.filter((i:SFcstItem)=> i.category === "SNO")[0].fcstValue,
-        sky: timeSVF.filter((i:SFcstItem)=> i.category === "SKY")[0].fcstValue as SkyType,
+        sky: Number(timeSVF.filter((i:SFcstItem)=> i.category === "SKY")[0].fcstValue),
         tmp:Number(timeSVF.filter((i:SFcstItem)=> i.category === "TMP")[0].fcstValue) ,
         tmn:(tmn.fcstValue) ,
         tmx:(tmx.fcstValue) ,
@@ -582,7 +582,7 @@ export const  getAreaData =async(latitude:string, longitude:string):Promise<SFGr
       body:JSON.stringify(fetchBody)
     })).json();
     if(data.message ===undefined){
-      const gridDataArry :SFGridItem[] =data.documents.map((doc:KakaoDoumentType)=>findAreaGrid(doc)).filter((i:SFGridItem|undefined)=> i !==undefined)
+      const gridDataArry :SFGridItem[] =data.map((doc:KakaoDoumentType)=>findAreaGrid(doc)).filter((i:SFGridItem|undefined)=> i !==undefined)
       ;
       const arePt3IsNotNull = gridDataArry.filter((i:SFGridItem)=> i.arePt3 !==null);
       if(arePt3IsNotNull[0]!==undefined){
@@ -1081,7 +1081,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
   const changeHourItem =(t:SVFTime):HourWeather=>({
     date:t.fcstDate,
     hour:t.fcstTime,
-    sky:t.sky,
+    sky:getSkyCode(t.sky),
     temp:t.tmp,
     //강수확률(%)
     pop:t.pop,
@@ -1149,9 +1149,14 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
         }
       });
       const svfDay :Day[] =changeSvfToDay(sVFcst);
-  
       const midDay: Day[] = changeMidToDay(midFcst);
-      
+      const threeDay =targetSVFcst.map((d:SVFDay)=> {
+        const daily :DailyWeather ={
+          date: threeDays[targetSVFcst.indexOf(d)],
+          hourly:d.map((t:SVFTime)=> changeHourItem(t))
+        };
+        return daily
+      });
       const weather : WeatherState ={
         state:"success",
         error:null,
@@ -1174,13 +1179,7 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
           tmn:svfDay[1].tmn,
           tmx:svfDay[1].tmx
         },
-        threeDay : targetSVFcst.map((d:SVFDay)=> {
-          const daily :DailyWeather ={
-            date: threeDays[targetSVFcst.indexOf(d)],
-            hourly:d.map((t:SVFTime)=> changeHourItem(t))
-          };
-          return daily
-        }),
+        threeDay : threeDay,
         week:[...svfDay, ...midDay],
         nation:nationData,
         sunRiseAndSet : [...sunInform]
