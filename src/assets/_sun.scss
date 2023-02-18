@@ -157,9 +157,9 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
       top:0;
       left: 0;
       border-radius: 50%;
-      border:7px solid $bar_bg;
-      border-bottom: 7px solid $bar_precent_bg;
-      border-right: 7px solid $bar_precent_bg;
+      border-style:solid;
+      border-width: 7px;
+      border-color: $bar_bg $bar_precent_bg $bar_precent_bg $bar_bg;
       box-sizing: border-box;
     }
   }

@@ -1168,9 +1168,9 @@
   top: 0;
   left: 0;
   border-radius: 50%;
-  border: 7px solid #f1a10b;
-  border-bottom: 7px solid rgb(246, 230, 142);
-  border-right: 7px solid rgb(246, 230, 142);
+  border-style: solid;
+  border-width: 7px;
+  border-color: #f1a10b rgb(246, 230, 142) rgb(246, 230, 142) #f1a10b;
   box-sizing: border-box;
 }
 .sun .sun_info {
