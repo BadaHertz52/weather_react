@@ -1,6 +1,6 @@
 # Weather 
 
-[⛅ weather 사이트 바로가기](https://badahertz52.github.io/weather_react/)
+[⛅ weather 사이트 바로가기](https://port-0-weather-react-3a9t2ble8fxyoi.sel3.cloudtype.app/weather_react/)
 
 -------------------------
 ## Index
