@@ -4,8 +4,6 @@ import {USNcstItem, SVFcst,  USNcst, SFcstItem, SVFTime, SVFDay, MidFcst, PmGrad
 import { sfGrid} from './sfGrid'; 
 import { SFGridItem } from "./position/types";
 
-const publicApiKey = process.env.REACT_APP_PUBLIC_KEY ;
-const kakaoKey = process.env.REACT_APP_KAKAO_KEY;
 
 const returnApiUrl =(sort:string):string=>{
   const base =`https://apis.data.go.kr/1360000/${sort}`;
@@ -88,22 +86,31 @@ const sunApi:Api ={
 
 /**
  * url 에 요청을 보내 외부 api에서 data를 가져오는 함수
- * @param url 
+ * @param apiUrl  데이터를 가져올 api 주소
+ * @param fetchUrl 백엔드 서버에 요청 시 주소로 '/weather_react' 뒷 부분 
  * @returns Promise<any>
  */
-const getApiItems =async(url:string , where:string):Promise<any|Error>=>{
+const getApiItems =async(apiUrl:string, fetchUrl:string ):Promise<any|Error>=>{
+  const fetchBody ={
+    url: apiUrl
+  };
   try {
-    const result = await (await fetch(url)).json();
-    const body = result.response.body; 
-    if(body !==undefined){
-      return body.items
+    const result = await (await fetch( `/weather_react/public`,{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify(fetchBody)
+    })).json();
+    if(result.message ===undefined){
+      return result
     }else{
-      const error = new Error( `[${where}_ getApiItems]: response.body is undefined`);
-      return error
+      const error =new Error (result.message);
+      return error 
     }
   } catch (error) {
-    return error 
-  }
+    return new Error(`[Error] Fail fetch ${fetchUrl}`)
+  };
 };
 /**
  * 초단기 실황, 초단기 예보, 단기 예보 api를 요청할 때 사용할 url을 반환하는 함수
@@ -115,7 +122,7 @@ const getApiItems =async(url:string , where:string):Promise<any|Error>=>{
  * @returns url (type string)
  */
 const getSFApiUrl =(inqury:SFInqury,nx:string, ny:string, baseDate:string, baseTime:string  ,numOfRows:string)=> {
-  const url =`${shortFcstApi.url}/${inqury}?serviceKey=${publicApiKey}&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}&numOfRows=${numOfRows}`;
+  const url =`${shortFcstApi.url}/${inqury}?dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}&numOfRows=${numOfRows}`;
   return url
 };
 /**
@@ -129,7 +136,7 @@ const getSFApiUrl =(inqury:SFInqury,nx:string, ny:string, baseDate:string, baseT
 const getUSSkyCode =async(nx:string, ny:string, baseDate:string, baseTime:string, fcstTime:string ):Promise<SkyCodeType| Error>=>{
   const numOfRows = JSON.stringify(10000);
   const url =getSFApiUrl(inqury_short_ultraSrtFcst, nx,ny,baseDate,baseTime , numOfRows);
-  const items = await getApiItems(url, "usskycode");
+  const items = await getApiItems(url, "sky");
   if(items instanceof Error){
     return items ;
   }else{
@@ -213,8 +220,8 @@ const getDaySvf =(arry:string[], targetDaySVF :SFcstItem[], fcstData:string ,tmn
 const getSVFcast =async(nx:string, ny:string, baseDate:string, baseTime:SVFBaseTime , yesterday:string,timeArry:string[], todayTimeArry:string[], threeDays:string[]):Promise<SVFcst|Error>=>{
   const url1 = getSFApiUrl(inqury_short_vilageFcst, nx,ny, yesterday ,"2300", "10000");
   const url2 =getSFApiUrl(inqury_short_vilageFcst, nx,ny, baseDate ,baseTime, "10000");
-  const items1 =await getApiItems(url1 ,"svfcast+_items1");
-  const items2  = await getApiItems(url2 ,"svfcast_items2");
+  const items1 =await getApiItems(url1 ,"svfcast1");
+  const items2  = await getApiItems(url2 ,"svfcast2");
   if(!(items1 instanceof Error) && !(items2 instanceof Error)){
     /**
    * timeArry에서 todayTimeArry를 제한 것으로,예보 발표시각 이전의 예보를 선별하는데 사용함
@@ -271,11 +278,12 @@ const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode, today
    * 중기 육상/기온 예보 요청 메세지를 보낼 때 필요한 예보 발표시각 ( 형태: YYMMDDTTMM) (일 2회(06:00,18:00)회 생성)
    */
   const tmFc =`${tmFcDate}${tmFcTime}`;
-  const common =(tmFc:string)=>`serviceKey=${publicApiKey}&dataType=JSON&tmFc=${tmFc}`
+  const common =(tmFc:string)=>`dataType=JSON&tmFc=${tmFc}`
   const landUrl =(tmFc:string)=>`${midFcstApi.url}/${inqury_mid_midLandFcst}?regId=${landRegId}&${common(tmFc)}`;
   const taUrl =(tmFc:string)=>`${midFcstApi.url}/${inqury_mid_midTa}?regId=${taRegId}&${common(tmFc)}`;
   let landItems = await getApiItems(landUrl(tmFc), "midFcast_landItems");
   let taItems = await getApiItems(taUrl(tmFc) , "midFcast_taItems");
+
   if(!(landItems instanceof Error) && !(taItems instanceof Error)){
     if(tmFcTime ==="1800"){
       const newTmFc = `${tmFcDate}0600`;
@@ -356,17 +364,9 @@ const getMidFcast =async(landRegId:MidLandAreaCode, taRegId:MidTaAreaCode, today
 const getApNow =async(sidoName:ApiAreaCode, stationName:string[]):Promise<PmGrade|Error>=>{
   const url = `${apInformApi.url}/${inqury_air_ctprvnRltmMesureDnsty}?sidoName=${sidoName}&returnType=JSON&numOfRows=100000&ver=1.3`;
   try {
-    const result = await(await fetch( '/weather_react/apNow',{
-      method:"POST",
-      headers:{
-        'Content-Type':'application/json'
-      },
-      body:JSON.stringify({url:url})
-    })).json();
-    console.log("apNow result", result ,result.message);
-    if(result.message !==undefined ){
-      const error = new Error(result.message.error);
-      return error ;
+    const result = await getApiItems(url, "apNow");
+    if(result instanceof Error){
+      return result
     }else{
       const items = result as ApNowItem[];
       const targetItem:ApNowItem = items.filter((i:ApNowItem)=> stationName.includes(i.stationName))[0];
@@ -440,21 +440,11 @@ const getApFcst =async(baseDate:string,tBaseDate:string, sidoName:ApiAreaCode, s
   const searchDate = changeSearchDate(baseDate);
   const tSearchDate = changeSearchDate(tBaseDate);
   const apFcstArea = findApFcstArea(sidoName,sfGrid);
-  const url=`${apInformApi.url}/${inqury_air_minuDustFrcstDspth}?&returnType=JSON&serviceKey=${publicApiKey}&numOfRows=100000&searchDate=${searchDate}` ;
+  const url=`${apInformApi.url}/${inqury_air_minuDustFrcstDspth}?returnType=JSON&numOfRows=100000&searchDate=${searchDate}` ;
   try {
-    const result = await(await fetch( '/weather_react/apFcst',{
-      method:"POST",
-      headers:{
-        'Content-Type':'application/json'
-      },
-      body:JSON.stringify({url:url})
-    })).json();
-
-    console.log("apfcst result", result);
-    if(result.message  !==undefined){
-      const error = result.message ;
-      const e = new Error (error);
-      return e
+    const result = await getApiItems(url,"apfcst");
+    if(result instanceof Error){
+      return result
     }else{
       const items = result as ApFcstItem[];
       const tomorrowFcst =items.filter((i:ApFcstItem)=> i.informData === tSearchDate)
@@ -514,7 +504,6 @@ Promise<(Error | SunRiseAndSet)[]>=>{
         },
         body:JSON.stringify(body)
       })).json();
-      console.log("sun result", result);
       if(result.message !==undefined){
         const error = new Error(result.message);
         return error
@@ -579,28 +568,37 @@ const findAreaGrid =(doc:KakaoDoumentType)=>{
  * @returns 
  */
 export const  getAreaData =async(latitude:string, longitude:string):Promise<SFGridItem | Error>=>{
-  const url =`https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${longitude}&y=${latitude}`;
+
+  const fetchBody ={
+    longitude: longitude,
+    latitude:latitude
+  }
   try {
-    const data =await ( await fetch(url,{
-      method:'GET',
+    const data =await ( await fetch('/weather_react/area',{
+      method:'POST',
       headers: {
-        'Authorization': `KakaoAK ${kakaoKey}`,
-      }
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify(fetchBody)
     })).json();
-
-    const gridDataArry :SFGridItem[] =data.documents.map((doc:KakaoDoumentType)=>findAreaGrid(doc)).filter((i:SFGridItem|undefined)=> i !==undefined)
-    ;
-    const arePt3IsNotNull = gridDataArry.filter((i:SFGridItem)=> i.arePt3 !==null);
-
-    if(arePt3IsNotNull[0]!==undefined){
-      return arePt3IsNotNull[0]
-    }else{
-      const arePt2IsNotNull = gridDataArry.filter((i:SFGridItem)=> i.arePt2 !==null);
-      if(arePt2IsNotNull[0]!==undefined){
-        return arePt2IsNotNull[0]
+    if(data.message ===undefined){
+      const gridDataArry :SFGridItem[] =data.documents.map((doc:KakaoDoumentType)=>findAreaGrid(doc)).filter((i:SFGridItem|undefined)=> i !==undefined)
+      ;
+      const arePt3IsNotNull = gridDataArry.filter((i:SFGridItem)=> i.arePt3 !==null);
+      if(arePt3IsNotNull[0]!==undefined){
+        return arePt3IsNotNull[0]
       }else{
-        return gridDataArry[0]
+        const arePt2IsNotNull = gridDataArry.filter((i:SFGridItem)=> i.arePt2 !==null);
+        if(arePt2IsNotNull[0]!==undefined){
+          return arePt2IsNotNull[0]
+        }else{
+          return gridDataArry[0]
+        }
       }
+
+    }else{
+        const error = new Error(data.message);
+        return error 
     }
     
   } catch (error) {
@@ -1096,7 +1094,6 @@ export const getWeatherData =async(sfGrid:SFGridItem , longitude:string, latitud
     },
     reh:t.reh
   });
-  console.log("skycode", skyCode);
   const sunInformHasError = sunInform.map(i => i instanceof Error).includes(true);
   if( !(skyCode instanceof Error)  &&   
       !(sVFcst instanceof Error ) && 
