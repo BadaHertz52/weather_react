@@ -19,13 +19,14 @@
   사용자는 현재의 자신의 위치에 따른 현 시점의 날씨, 앞으로 3일 이내의 시간별 날씨, 일주일간의 전국 날씨, 일출 일몰 시각을 제공받을 수 있습니다. 
   웹프론트, 웹디자인으로 [네이버 날씨](https://weather.naver.com)를 참고해 만들었습니다.
 
-###  프로젝트 목적
+###  ✨프로젝트 목적
 * CORS 정책을 준수하며 외부에서 제공하는 데이터를 REST FUL하게 받아오기
 * redux-toolkit , redux-middleware인 thunk 와 saga 의 차이점을 경험해보고 각각의 장단점과 언제 사용해야하는지 생각해보기 
 * Github의 action 와 Secret를 사용해 API key 를 깃헙에 올리지 않고도 사용할 수 있게 하기 
 * table,th,td,tr의 태그  사용에 익숙해지기
 * 시간별 날씨를 그래프로 표현해보기 
-
+* Node.js를 사용해 서버를 만들고 React와 연동하기
+* Node 서버에서 외부 API에서 데이터를 Node 서버에서 받아서 프론트에 넘기기
 -----------------
 ##  <div id="skill">2.Tech skill & API</div>
 
@@ -40,7 +41,8 @@
 * redux-saga
 * redux-thunk
 * chart.js
-
+* node.js , express
+  
 ## API
 * [공공 데이터 포털](https://www.data.go.kr/index.do)
 * [kakao local REST API](https://developers.kakao.com/docs/latest/ko/local/dev-guide)
@@ -48,10 +50,7 @@
 --------------
 ##  <div id="start">3. Getting Start</div>
 ```
-npm install react react-dom react-redux  redux redux-thunk
-npm install @types/react-redux redux-saga 
-npm install --save react-icon styled-component 
-npm install chart.js
+npm i
 ```
 --------------
 ##  <div id="view">4. Layout and Operate </div>
@@ -98,7 +97,12 @@ Screen when fetching data failed
 -------------
 ##  <div id="description">5.Description </div>
 #### 1) Structure
-#### A. Modules
+#### A. Server
+  ```
+  server.js
+  ```
+#### B. Client 
+#### a. Modules
 ```
   src/modules
     -positoin
@@ -116,7 +120,7 @@ Screen when fetching data failed
       -toolkit
       -types
 ```
-#### B. Components
+#### b. Components
 |name|description|
 |----|-----------|
 |Hourly|오늘로부터 3일간의 시간별 날씨 정보를 보여줌|
@@ -186,9 +190,13 @@ Screen when fetching data failed
 
 ### 1) 프로젝트 진행하면서 배운 것들 
 
-* 👩‍💻[API Key 설정, 보안](https://velog.io/@badahertz52/ReactCRA-개발-시-API-Key-설정보안)
+* 👩‍💻[React(CRA) 개발 시 API Key 설정,보안 (width Github Actions ,Secerets)](https://velog.io/@badahertz52/ReactCRA-개발-시-API-Key-설정보안)
 
 * 👩‍💻[redux-thunk 와 redux-saga](https://velog.io/@badahertz52/redux-thunk-와-redux-saga)
+  
+* 👩‍💻[React 와 Node(express) 연동](https://velog.io/@badahertz52/React-Nodeexpress-%EC%97%B0%EB%8F%99)
+* 👩‍💻[React와 Node 연동 시 404error ](https://velog.io/@badahertz52/error-note-React-%EC%99%80-Node.js-%EC%97%B0%EB%8F%99%EC%8B%9C-404-error)
+* 👩‍💻[Node.js 를 통한 mixed-content 오류 해결](https://docs.cloudtype.io/guide/references/env)
 
 * 👩‍💻[weather 프로젝트 후기](https://velog.io/@badahertz52/Weather-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%ED%9B%84%EA%B8%B0)
 ### 2) 자료 
