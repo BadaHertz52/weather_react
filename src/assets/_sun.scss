@@ -3,7 +3,7 @@ $sunInnerColor:rgb(250, 240, 182);
 $sunOuterColor:rgb(253, 228, 148);
 $sun_chart_width_small: 264px;
 $sun_chart_width_large: 230px;
-$bar_precent_bg:rgb(246, 230, 142);
+$bar_percent_bg:rgb(246, 230, 142);
 $bar_bg:#f1a10b;
 $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
 
@@ -141,7 +141,7 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
     }
     &::before{
       left: 0;
-      background-color: $bar_precent_bg;
+      background-color: $bar_percent_bg;
     }
     &::after{
       background-color: $bar_bg;
@@ -159,7 +159,7 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
       border-radius: 50%;
       border-style:solid;
       border-width: 7px;
-      border-color: $bar_bg $bar_precent_bg $bar_precent_bg $bar_bg;
+      border-color: $bar_bg $bar_percent_bg $bar_percent_bg $bar_bg;
       box-sizing: border-box;
     }
   }
