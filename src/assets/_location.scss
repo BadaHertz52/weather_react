@@ -1,9 +1,8 @@
 .location {
   display: flex;
   align-items: center;
-
 }
-.location_area{
+.location_area {
   font-size: 1.5rem;
   font-weight: bolder;
 }
@@ -14,15 +13,15 @@
   align-items: center;
   justify-content: center;
   margin-left: 0.7rem;
-  svg{
+  svg {
     font-size: 1.3rem;
   }
 }
-.location_dropdown{
+.location_dropdown {
   width: fit-content;
   position: relative;
-  &:hover{
-    .dropdown-content{
+  &:hover {
+    .dropdown-content {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -36,43 +35,43 @@
   padding: 10px;
   border-radius: 6px;
   background-color: rgb(243, 243, 243);
-  -webkit-box-shadow: 0px 0px 10px 1px #bfbfbfb7; 
+  -webkit-box-shadow: 0px 0px 10px 1px #bfbfbfb7;
   box-shadow: 0px 0px 10px 1px #bfbfbfb7;
   z-index: 30;
-  .header{
+  .header {
     font-size: 14px;
     text-align: center;
     word-break: break-word;
   }
-  .btns{
+  .btn-group {
     display: flex;
     justify-content: space-around;
     margin-top: 8px;
     width: 100%;
   }
 }
-.toolkitBtn{
-  padding:6px 24px;
+.toolkitBtn {
+  padding: 6px 24px;
 }
 
-@media screen and (max-width:768px) {
+@media screen and (max-width: 768px) {
   .location_dropdown {
-    &:hover .dropdown-content{
+    &:hover .dropdown-content {
       width: 235px;
-      left: -120px ;
+      left: -120px;
     }
   }
   .dropdown-content .header {
     font-size: 12px;
   }
-  .toolkitBtn{
-    padding:5px
+  .toolkitBtn {
+    padding: 5px;
   }
 }
-@media screen and (max-width:320px) {
-  .location_dropdown{
-    &:hover .dropdown-content{
-      left: -145px
+@media screen and (max-width: 320px) {
+  .location_dropdown {
+    &:hover .dropdown-content {
+      left: -145px;
     }
   }
 }

@@ -1,29 +1,29 @@
-@import './hourly';
-@import './location';
-@import './loadig';
-@import './nation';
-@import './now';
-@import './scrollBtn';
-@import './skyIcon';
-@import './sun';
-@import './week';
+@import "./hourly";
+@import "./location";
+@import "./loadig";
+@import "./nation";
+@import "./now";
+@import "./scrollBtn";
+@import "./skyIcon";
+@import "./sun";
+@import "./week";
 
 $font_basic_color: #424242;
 
-body{
+body {
   margin: 0;
-  color:$font_basic_color;
+  color: $font_basic_color;
   width: 100vw;
   overflow-x: hidden;
 }
-#topbar{
+#topBar {
   position: relative;
   height: 4rem;
   width: 100%;
   padding: 1rem 3rem;
   box-sizing: border-box;
   z-index: 30;
-  .inner{
+  .inner {
     display: flex;
     align-items: center;
   }
@@ -32,153 +32,165 @@ body{
     font-weight: bolder;
     margin-right: 14px;
   }
-  &::after{
-    position:absolute;
-    bottom:0;
-    left:0;
+  &::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
     height: 1px;
-    background-color: rgba(0,0,0,.1);
-    content:'';
+    background-color: rgba(0, 0, 0, 0.1);
+    content: "";
   }
 }
-#container, #content , .section_wrap{
+#container,
+#content,
+.section_wrap {
   width: 100%;
 }
-#container{
+#container {
   display: flex;
   justify-content: center;
 }
-#loading , #none_weather{
-  height: calc(100vh - 7rem );
+#loading,
+#none_weather {
+  height: calc(100vh - 7rem);
 }
-#none_weather{
+#none_weather {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  svg{
+  svg {
     width: 2rem;
     height: 2rem;
     font-size: 2rem;
   }
-  .none{
+  .none {
     font-size: 14px;
     padding: 1rem;
     word-break: break-word;
   }
 }
-.section_wrap{
+.section_wrap {
   margin-top: 1rem;
 }
 
-.blind{
+.blind {
   display: inline-block;
   position: absolute;
-  top:-100vh;
+  top: -100vh;
   left: -100vw;
 }
-ul , dl , dd{
-  margin :0;
+ul,
+dl,
+dd {
+  margin: 0;
 }
-ul{
-  padding:0
+ul {
+  padding: 0;
 }
 li {
   list-style: none;
 }
 
-.week{
+.week {
   padding: 20px 30px;
   box-sizing: border-box;
 }
-.week , .nation{
-  .title{
+.week,
+.nation {
+  .title {
     width: 100%;
     font-size: 1.2rem;
     margin: 10px 0 14px 0;
   }
 }
-a{
+a {
   text-decoration: none;
-  color:initial;
+  color: initial;
 }
-#footer{
+#footer {
   padding: 1rem 0;
   text-align: center;
   font-size: 14px;
-  color:#808080;
+  color: #808080;
   width: 100%;
   height: 3rem;
-  span ,a{
+  span,
+  a {
     margin-left: 10px;
   }
-  a{
-    color:inherit
+  a {
+    color: inherit;
   }
 }
-@media screen and (min-width:780px) {
-  #none_weahter{
-    .none{
+@media screen and (min-width: 780px) {
+  #none_weahter {
+    .none {
       font-size: 1rem;
     }
   }
-  .hourly , .week {
+  .hourly,
+  .week {
     padding: 30px 65px;
   }
 }
-@media  screen and (max-width:375px) {
-  .week{
+@media screen and (max-width: 375px) {
+  .week {
     padding: 20px 20px;
   }
-  .section_right{
+  .section_right {
     width: 100%;
   }
   .nation {
-    .weekly_list , .map_wrap{
+    .weekly_list,
+    .map_wrap {
       padding: 0;
       padding-right: 5%;
       width: 95%;
     }
   }
 }
-@media screen and (min-width:1025px) {
-  #container{
-    border-bottom: 1px solid  #e3e3e3f9;
+@media screen and (min-width: 1025px) {
+  #container {
+    border-bottom: 1px solid #e3e3e3f9;
   }
-  #topbar .inner,#content{
-    width:1000px;
+  #topBar .inner,
+  #content {
+    width: 1000px;
   }
-  .section_wrap{
+  .section_wrap {
     width: 100%;
     display: flex;
     flex-direction: row;
     margin-top: 0;
   }
-  .section_center{
-    width: 70% ;
+  .section_center {
+    width: 70%;
     border-right: 1px solid #d8d8d8;
   }
-  .hourly, .nation{
-    padding:0;
+  .hourly,
+  .nation {
+    padding: 0;
     padding-bottom: 2rem;
-    border-bottom: 1px solid  #e3e3e3f9;
+    border-bottom: 1px solid #e3e3e3f9;
     width: 100%;
   }
-  .section_right{
+  .section_right {
     width: 30%;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
-  .week{
+  .week {
     padding: 0;
   }
-  .nation , .sun {
+  .nation,
+  .sun {
     width: 100%;
     display: flex;
     justify-content: center;
-    .inner{
+    .inner {
       width: 90%;
     }
   }
@@ -186,19 +198,20 @@ a{
     margin-top: 1.5rem;
   }
 }
-@media screen and (min-width:1160px) {
-  #topbar .inner,#content{
+@media screen and (min-width: 1160px) {
+  #topBar .inner,
+  #content {
     width: 1160px;
   }
-  #topbar{
+  #topBar {
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .nation, .sun {
-    .inner{
+  .nation,
+  .sun {
+    .inner {
       width: 90%;
-    } 
-    
+    }
   }
 }
