@@ -47,7 +47,7 @@ weather 는 kakao local REST API와 공공 데이터 포털에서 제공받은 �
 - js , typescript
 - scss
 - react
-- styled-component
+- styled-components
 - react-icon
 - redux ,redux-toolkit
 - redux-saga
