@@ -235,7 +235,7 @@ server.js
 - 👩‍💻[redux-thunk 와 redux-saga](https://velog.io/@badahertz52/redux-thunk-와-redux-saga)
 - 👩‍💻[React 와 Node(express) 연동](https://velog.io/@badahertz52/React-Nodeexpress-%EC%97%B0%EB%8F%99)
 - 👩‍💻[React와 Node 연동 시 404error ](https://velog.io/@badahertz52/error-note-React-%EC%99%80-Node.js-%EC%97%B0%EB%8F%99%EC%8B%9C-404-error)
-- 👩‍💻[Node.js 를 통한 mixed-content 오류 해결](https://docs.cloudtype.io/guide/references/env)
+- 👩‍💻[Node.js 를 통한 mixed-content 오류 해결](https://velog.io/@badahertz52/Node.js%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-mixed-content-%EC%98%A4%EB%A5%98-%ED%95%B4%EA%B2%B0)
 
 - 👩‍💻[weather 프로젝트 후기](https://velog.io/@badahertz52/Weather-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%ED%9B%84%EA%B8%B0)
 
