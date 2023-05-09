@@ -331,9 +331,13 @@ const Hourly = ({ todaySunInform, threeDay }: HourlyProperty) => {
             onTouchMove={(event) => moveScroll(event.touches[0].clientX)}
             onTouchEnd={endScroll}
           >
-            <table ref={tableRef} style={tableStyle}>
+            <table
+              ref={tableRef}
+              style={tableStyle}
+              summary="시간별 날씨(온도,하늘상태,강수확률, 강수,적설,바람-풍향/풍속, 습도) 정보를 제공합니다."
+            >
               <caption>
-                <span className="blind">시간별 날씨 정보를 제공하는 표</span>
+                <span className="blind">시간별 날씨 표</span>
               </caption>
               <thead>
                 <tr className="thead_cnTimeTable">

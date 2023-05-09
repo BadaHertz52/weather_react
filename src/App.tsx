@@ -130,9 +130,9 @@ function App() {
   }, [position.state]);
   return (
     <div className="App">
-      <div id="topBar" role="banner">
+      <header id="topBar">
         <div className="inner">
-          <div className="logo">날씨</div>
+          <h1 className="logo">날씨</h1>
           <Location
             startSaga={startSaga}
             startThunk={startThunk}
@@ -141,8 +141,8 @@ function App() {
             toolkitDispatch={toolkitDispatch}
           />
         </div>
-      </div>
-      <div id="container" role="main">
+      </header>
+      <main id="container">
         <div id="content">
           {weather.state === "pending" && (
             <Loading
@@ -205,8 +205,8 @@ function App() {
             </div>
           )}
         </div>
-      </div>
-      <div id="footer" role="contentinfo">
+      </main>
+      <footer role="contentinfo">
         <span aria-details="the year of production">
           <span className="blind">the year of production</span>
           2023
@@ -228,7 +228,7 @@ function App() {
           </span>
           <BsGithub />
         </a>
-      </div>
+      </footer>
     </div>
   );
 }

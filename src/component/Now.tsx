@@ -262,7 +262,14 @@ const Now = ({ nowWeather, tomorrowWeather, todaySunInform }: NowProperty) => {
               </div>
               <div className="summary tomorrow">
                 <div className="summary_inner">
-                  <table className="summary_table">
+                  <table
+                    className="summary_table"
+                    summary="내일 오전,오후 날씨(온도,강수량,하늘상태,미세먼지 단계, 초미세먼지 단계)를 제공하는 표"
+                  >
+                    <caption>
+                      <span className="blind">내일 오전,오후 날씨 표</span>
+                    </caption>
+                    <thead className="blind">내일 날씨</thead>
                     <tbody>
                       <AmPmTr
                         am={true}
@@ -287,6 +294,7 @@ const Now = ({ nowWeather, tomorrowWeather, todaySunInform }: NowProperty) => {
               }
               onClick={showCurrent}
               name="현재 날씨"
+              type="button"
             ></button>
             <button
               className={
@@ -294,6 +302,7 @@ const Now = ({ nowWeather, tomorrowWeather, todaySunInform }: NowProperty) => {
               }
               onClick={showTomorrow}
               name="내일 날씨"
+              type="button"
             ></button>
           </div>
         </div>
