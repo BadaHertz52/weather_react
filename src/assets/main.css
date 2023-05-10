@@ -2,8 +2,8 @@
 .hourly {
   margin-top: 36px;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   box-sizing: border-box;
   position: relative;
 }
@@ -21,8 +21,7 @@
   overflow: hidden;
   position: relative;
 }
-.hourly .scrollArea.afterOn::after,
-.hourly .scrollArea.beforeOn::before {
+.hourly .scrollArea.afterOn::after, .hourly .scrollArea.beforeOn::before {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -33,36 +32,19 @@
 .hourly .scrollArea::after {
   right: 0;
   background-image: linear-gradient(to left, #fff, rgba(255, 255, 255, 0));
-  background-image: -webkit-linear-gradient(
-    right,
-    #fff,
-    rgba(255, 255, 255, 0)
-  );
-  background-image: -webkit-gradient(
-    linear,
-    right top,
-    left top,
-    from(#fff),
-    to(rgba(255, 255, 255, 0))
-  );
+  background-image: -webkit-linear-gradient(right, #fff, rgba(255, 255, 255, 0));
+  background-image: -webkit-gradient(linear, right top, left top, from(#fff), to(rgba(255, 255, 255, 0)));
 }
 .hourly .scrollArea::before {
   left: 0;
   background-image: linear-gradient(to right, #fff, rgba(255, 255, 255, 0));
   background-image: -webkit-linear-gradient(left, #fff, rgba(255, 255, 255, 0));
-  background-image: -webkit-gradient(
-    linear,
-    left top,
-    right top,
-    from(#fff),
-    to(rgba(255, 255, 255, 0))
-  );
+  background-image: -webkit-gradient(linear, left top, right top, from(#fff), to(rgba(255, 255, 255, 0)));
 }
 .hourly table {
   font-size: 13px;
 }
-.hourly th,
-.hourly tbody td {
+.hourly th, .hourly tbody td {
   width: 40px;
   padding: 0;
   box-sizing: border-box;
@@ -144,8 +126,7 @@
 .hourly tbody em {
   font-style: initial;
 }
-.hourly tbody .tit,
-.hourly tbody .unit {
+.hourly tbody .tit, .hourly tbody .unit {
   font-size: 10px;
   width: 100%;
   text-align: left;
@@ -167,8 +148,7 @@
 .hourly tbody #tempChart {
   overflow-x: hidden;
 }
-.hourly tbody #tempChart,
-.hourly tbody .chart_area {
+.hourly tbody #tempChart, .hourly tbody .chart_area {
   width: 100%;
   height: 100px;
 }
@@ -301,15 +281,13 @@
   align-items: center;
   justify-content: center;
 }
-#loading .inner,
-#loading .state_area {
+#loading .inner, #loading .state_area {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-#loading .loading_state,
-#loading .loading_area {
+#loading .loading_state, #loading .loading_area {
   width: 200px;
   display: flex;
   align-items: center;
@@ -378,8 +356,7 @@
   display: flex;
   justify-content: center;
 }
-#loading .loading_state .icon div,
-#loading .loading_state .icon svg {
+#loading .loading_state .icon div, #loading .loading_state .icon svg {
   width: 100%;
   height: 100%;
 }
@@ -389,9 +366,7 @@
 #loading .loading_state .data span {
   color: #424242;
 }
-#loading .loading_area .bar_wrap,
-#loading .loading_area .bar,
-#loading .loading_area .bar_state {
+#loading .loading_area .bar_wrap, #loading .loading_area .bar, #loading .loading_area .bar_state {
   height: 1.5rem;
   border-radius: 15px;
 }
@@ -421,9 +396,7 @@
   transition: transform 1s;
   background-color: #b5b5b5;
 }
-#loading .loading_area .progress_0 .bar_state,
-#loading .loading_area .progress_25 .bar_state,
-#loading .loading_area .progress_50 .bar_state {
+#loading .loading_area .progress_0 .bar_state, #loading .loading_area .progress_25 .bar_state, #loading .loading_area .progress_50 .bar_state {
   color: rgb(14, 14, 14);
   text-shadow: none;
 }
@@ -477,15 +450,14 @@
 
 .nation {
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   box-sizing: border-box;
 }
 .nation .title {
   padding-left: 30px;
 }
-.nation .weekly_list,
-.nation .map_wrap {
+.nation .weekly_list, .nation .map_wrap {
   width: 100%;
   margin: 0;
 }
@@ -550,8 +522,7 @@
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
 }
-.nation .time_area .timeBtn:nth-child(2),
-.nation .time_area .timeBtn:last-child {
+.nation .time_area .timeBtn:nth-child(2), .nation .time_area .timeBtn:last-child {
   border-left: 1px solid #dadada;
 }
 .nation .time_area .timeBtn:last-child {
@@ -691,13 +662,12 @@
   align-items: center;
   flex-direction: column;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   box-sizing: border-box;
 }
 
-.now_now,
-.now_quickArea {
+.now_now, .now_quickArea {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -755,8 +725,7 @@
   left: 0;
   height: 100%;
 }
-.now .summary.current,
-.now .summary.tomorrow {
+.now .summary.current, .now .summary.tomorrow {
   position: absolute;
   display: flex;
   align-items: center;
@@ -792,8 +761,7 @@
 .now .summary.tomorrow tbody {
   box-sizing: border-box;
 }
-.now .summary.tomorrow td,
-.now .summary.tomorrow dl {
+.now .summary.tomorrow td, .now .summary.tomorrow dl {
   display: flex;
 }
 .now .summary.tomorrow tr {
@@ -803,20 +771,13 @@
 .now .summary.tomorrow tr:first-child {
   margin-bottom: 5px;
 }
-.now .summary.tomorrow tr,
-.now .summary.tomorrow th,
-.now .summary.tomorrow td,
-.now .summary.tomorrow .term,
-.now .summary.tomorrow .skyIcon .weatherIcon {
+.now .summary.tomorrow tr, .now .summary.tomorrow th, .now .summary.tomorrow td, .now .summary.tomorrow .term, .now .summary.tomorrow .skyIcon .weatherIcon {
   height: 21px;
 }
-.now .summary.tomorrow .skyIcon,
-.now .summary.tomorrow .weatherIcon,
-.now .summary.tomorrow .dl_number {
+.now .summary.tomorrow .skyIcon, .now .summary.tomorrow .weatherIcon, .now .summary.tomorrow .dl_number {
   width: 21px;
 }
-.now .summary.tomorrow th,
-.now .summary.tomorrow td {
+.now .summary.tomorrow th, .now .summary.tomorrow td {
   padding: 0;
 }
 .now .summary.tomorrow td dl {
@@ -842,8 +803,7 @@
   display: inline-flex;
   align-items: center;
 }
-.now .summary.tomorrow .dl_grade dt,
-.now .summary.tomorrow .dl_grade dd {
+.now .summary.tomorrow .dl_grade dt, .now .summary.tomorrow .dl_grade dd {
   display: inline-block;
 }
 .now .summary.tomorrow .dl_grade dt {
@@ -862,8 +822,7 @@
   display: flex;
   font-size: 14px;
 }
-.now .summary_table tbody,
-.now .summary_table tr {
+.now .summary_table tbody, .now .summary_table tr {
   width: 100%;
 }
 .now .summary_table tr {
@@ -907,13 +866,10 @@
   .now .summary.tomorrow .summary_table {
     font-size: 12px;
   }
-  .now .summary.tomorrow .skyIcon,
-  .now .summary.tomorrow .weatherIcon,
-  .now .summary.tomorrow .dl_number {
+  .now .summary.tomorrow .skyIcon, .now .summary.tomorrow .weatherIcon, .now .summary.tomorrow .dl_number {
     width: 1rem;
   }
-  .now .summary.tomorrow td dl,
-  .now .summary.tomorrow .dl_grade dd {
+  .now .summary.tomorrow td dl, .now .summary.tomorrow .dl_grade dd {
     margin-left: 4px;
   }
   .now .summary.tomorrow .dl_grade dt {
@@ -942,9 +898,7 @@
   .now .summary.tomorrow dd {
     width: 3rem;
   }
-  .now .summary.tomorrow .skyIcon,
-  .now .summary.tomorrow .weatherIcon,
-  .now .summary.tomorrow .dl_number {
+  .now .summary.tomorrow .skyIcon, .now .summary.tomorrow .weatherIcon, .now .summary.tomorrow .dl_number {
     width: 32.5px;
   }
   .now .summary.tomorrow .notYet {
@@ -1155,12 +1109,10 @@
   background-color: rgb(250, 240, 182);
   box-shadow: 0px -2px 8px 2px rgb(253, 228, 148);
 }
-.sun .sun_chart,
-.sun .current_bar {
+.sun .sun_chart, .sun .current_bar {
   width: 264px;
 }
-.sun .move_sun,
-.sun .current_bar .bar {
+.sun .move_sun, .sun .current_bar .bar {
   width: 264px;
   height: 264px;
 }
@@ -1189,8 +1141,7 @@
   width: inherit;
   height: inherit;
 }
-.sun .progress_bar::before,
-.sun .progress_bar::after {
+.sun .progress_bar::before, .sun .progress_bar::after {
   position: absolute;
   bottom: 0px;
   width: 7px;
@@ -1243,8 +1194,7 @@
   color: white;
   text-shadow: 0 0 2px rgba(87, 87, 87, 0.196);
 }
-.sun .time_title,
-.sun .time_sun {
+.sun .time_title, .sun .time_sun {
   display: inline-block;
 }
 .sun .time_title {
@@ -1258,10 +1208,7 @@
   font-size: 18px;
   font-weight: 600;
 }
-.sun .sun_table,
-.sun thead,
-.sun tbody,
-.sun tr {
+.sun .sun_table, .sun thead, .sun tbody, .sun tr {
   width: 100%;
 }
 .sun .sun_table {
@@ -1273,8 +1220,7 @@
 .sun .sun_table tr {
   position: relative;
 }
-.sun .sun_table th,
-.sun .sun_table td {
+.sun .sun_table th, .sun .sun_table td {
   width: 33%;
 }
 .sun .sun_table td {
@@ -1300,15 +1246,13 @@
   bottom: 0;
   left: 0;
 }
-.sun .sun_table .sun_th,
-.sun .sun_table .sun_tr td {
+.sun .sun_table .sun_th, .sun .sun_table .sun_tr td {
   padding: 10px 0 17px 0;
 }
 .sun .sun_table .sun_th {
   font-weight: initial;
 }
-.sun .sun_table .sun_day,
-.sun .sun_table strong {
+.sun .sun_table .sun_day, .sun .sun_table strong {
   margin-left: 5px;
 }
 
@@ -1320,15 +1264,13 @@
   .sun .btn_wrap {
     right: 30px;
   }
-  .sun .sun_chart,
-  .sun .current_bar {
+  .sun .sun_chart, .sun .current_bar {
     width: 240px;
   }
   .sun .sun_chart {
     height: 123px;
   }
-  .sun .move_sun,
-  .sun .current_bar .bar {
+  .sun .move_sun, .sun .current_bar .bar {
     width: 240px;
     height: 240px;
   }
@@ -1347,15 +1289,13 @@
     padding: 15px 5%;
     box-sizing: border-box;
   }
-  .sun .sun_chart,
-  .sun .current_bar {
+  .sun .sun_chart, .sun .current_bar {
     width: 230px;
   }
   .sun .sun_chart {
     height: 115px;
   }
-  .sun .move_sun,
-  .sun .current_bar .bar {
+  .sun .move_sun, .sun .current_bar .bar {
     width: 230px;
     height: 230px;
   }
@@ -1649,20 +1589,30 @@ a {
   color: initial;
 }
 
-#footer {
+footer {
   padding: 1rem 0;
   text-align: center;
   font-size: 14px;
-  color: #808080;
+  color: #232323;
   width: 100%;
   height: 3rem;
 }
-#footer span,
-#footer a {
+footer span,
+footer a {
   margin-left: 10px;
 }
-#footer a {
+footer a {
   color: inherit;
+}
+
+.scrn-only {
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 0;
+  border: 0;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
 }
 
 @media screen and (min-width: 780px) {
@@ -1750,4 +1700,4 @@ a {
   .sun .inner {
     width: 90%;
   }
-} /*# sourceMappingURL=main.css.map */
+}/*# sourceMappingURL=main.css.map */
