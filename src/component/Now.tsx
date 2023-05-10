@@ -295,7 +295,9 @@ const Now = ({ nowWeather, tomorrowWeather, todaySunInform }: NowProperty) => {
               onClick={showCurrent}
               name="현재 날씨"
               type="button"
-            ></button>
+            >
+              <span className="scrn-only">현재 날씨</span>
+            </button>
             <button
               className={
                 initialSummary.current === tomorrow ? "tabBtn on" : "tabBtn"
@@ -303,7 +305,9 @@ const Now = ({ nowWeather, tomorrowWeather, todaySunInform }: NowProperty) => {
               onClick={showTomorrow}
               name="내일 날씨"
               type="button"
-            ></button>
+            >
+              <span className="scrn-only">내일 날씨</span>
+            </button>
           </div>
         </div>
         <ScrollBtn

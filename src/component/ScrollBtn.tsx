@@ -27,6 +27,7 @@ const ScrollBtn = ({ clickEvent, className, name, pre }: BtnProperty) => {
       name={name}
       type="button"
     >
+      <span className="scrn-only">{pre ? "pre" : "next"} button</span>
       {pre ? <FcPrevious /> : <FcNext />}
     </BtnStyled>
   );
