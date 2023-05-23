@@ -1,20 +1,22 @@
-#loading{
+#loading {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  .inner , .state_area{
+  .inner,
+  .state_area {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
   }
-  .loading_state , .loading_area{
+  .loading_state,
+  .loading_area {
     width: 200px;
     display: flex;
     align-items: center;
   }
-  .loading_state{
+  .loading_state {
     margin-bottom: 10px;
     font-size: 1rem;
     height: 1.2rem;
@@ -22,167 +24,172 @@
     & > div {
       margin-right: 1rem;
     }
-    &.state_none{
-        color:rgb(135, 135, 135)
-      }
-    &.pending{
-      color:rgb(10, 104, 10) ;
-      .pendingIcon{
+    &.state_none {
+      color: rgb(135, 135, 135);
+    }
+    &.pending {
+      color: rgb(10, 104, 10);
+      .pendingIcon {
         position: relative;
         width: 90%;
         height: 90%;
       }
-      .icon_wrap{
+      .icon_wrap {
         position: absolute;
-        top:0;
-        left:0;
-        svg{
-          fill:inherit;
-          animation: pendingRotate 3s ease-in infinite ;
+        top: 0;
+        left: 0;
+        svg {
+          fill: inherit;
+          animation: pendingRotate 3s ease-in infinite;
         }
         @keyframes pendingRotate {
-          0%{
+          0% {
             transform: rotate(0);
           }
-          13%{
+          13% {
             transform: rotate(calc(360deg * 0.13));
           }
-          25%{
+          25% {
             transform: rotate(90deg);
           }
-          50%{
+          50% {
             transform: rotate(180deg);
           }
-          75%{
+          75% {
             transform: rotate(270deg);
           }
-          80%{
+          80% {
             transform: rotate(calc(360deg * 0.8));
           }
-          100%{
+          100% {
             transform: rotate(360deg);
           }
         }
       }
     }
-    &.success{
-      color:rgb(0, 99, 180)
+    &.success {
+      color: rgb(0, 99, 180);
     }
-    &.failure{
-      color:rgb(203, 57, 8)
+    &.failure {
+      color: rgb(203, 57, 8);
     }
-    .icon{
+    .icon {
       width: 1.2rem;
       height: 1.2rem;
       display: flex;
       justify-content: center;
-      div ,svg{
+      div,
+      svg {
         width: 100%;
         height: 100%;
       }
     }
-    .data{
-      span:first-child{
+    .data {
+      span:first-child {
         margin-right: 10px;
       }
-      span{
-        color:#424242;
+      span {
+        color: #424242;
       }
     }
   }
-  .loading_area{
-    .bar_wrap , .bar , .bar_state{
+  .loading_area {
+    .bar_wrap,
+    .bar,
+    .bar_state {
       height: 1.5rem;
       border-radius: 15px;
     }
-    .bar_state{
+    .bar_state {
       position: absolute;
-      top:0;
-      left:0;
+      top: 0;
+      left: 0;
       width: 100%;
       text-align: center;
       font-size: 14px;
       line-height: 1.5rem;
       z-index: 5;
       color: rgb(255, 255, 255);
-      text-shadow: 1px 1px 4px #1616168f;
+      text-shadow: 1px 1px 4px #161616e0;
     }
-    .bar_wrap{
+    .bar_wrap {
       width: 100%;
       position: relative;
       overflow: hidden;
       border: 2px solid #424242;
     }
-    .bar{
+    .bar {
       position: absolute;
-      top:0;
-      left:0;
+      top: 0;
+      left: 0;
       width: 100%;
-      transition: transform 1s  ;
+      transition: transform 1s;
       background-color: #b5b5b5;
     }
-    .progress_0 , .progress_25 , .progress_50{
-      .bar_state{
-        color:rgb(14, 14, 14);
+    .progress_0,
+    .progress_25,
+    .progress_50 {
+      .bar_state {
+        color: rgb(14, 14, 14);
         text-shadow: none;
       }
     }
     @keyframes progress25 {
-      0%{
+      0% {
         transform: translateX(-100%);
       }
-      100%{
+      100% {
         transform: translateX(-75%);
       }
-    };
+    }
     @keyframes progress50 {
-      0%{
+      0% {
         transform: translateX(-100%);
       }
-      100%{
+      100% {
         transform: translateX(-50%);
       }
-    };
+    }
     @keyframes progress75 {
-      0%{
+      0% {
         transform: translateX(-100%);
       }
-      100%{
+      100% {
         transform: translateX(-25%);
       }
-    };
+    }
     @keyframes progress100 {
-      0%{
+      0% {
         transform: translateX(-100%);
       }
-      100%{
+      100% {
         transform: translate(-0%);
       }
     }
     .progress_0 {
-      .bar{
-      transform: translateX(-100%);
-    }
+      .bar {
+        transform: translateX(-100%);
+      }
     }
     .progress_25 {
       .bar {
         animation: progress25 infinite ease-out 6s;
       }
     }
-    .progress_50   {
-      .bar{
+    .progress_50 {
+      .bar {
         animation: progress50 infinite ease-out 6s;
+      }
     }
-    }
-    .progress_75  {
-      .bar{
+    .progress_75 {
+      .bar {
         animation: progress75 infinite ease-out 6s;
+      }
     }
-    } 
     .progress_100 {
       .bar {
         animation: progress1050 3s ease-in 3s;
       }
-    } 
+    }
   }
 }
