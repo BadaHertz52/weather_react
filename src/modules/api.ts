@@ -217,7 +217,7 @@ const getUSSkyCode = async (
     baseTime,
     numOfRows
   );
-  const items = await getAPIItems(url, "sky", userAreaCode);
+  const items =  await getAPIItems(url, "sky", userAreaCode);
   if (items instanceof Error) {
     return items;
   } else {
@@ -1379,7 +1379,6 @@ export const getWeatherData = async (
   longitude: string,
   latitude: string
 ): Promise<string | WeatherState> => {
-  let errorSentence = "[Error]";
   const userAreaCode = sfGrid.areaCode;
   const { nX, nY } = changeNType(sfGrid);
   const stationName: string[] =
@@ -1514,8 +1513,6 @@ export const getWeatherData = async (
     !(sVFcst instanceof Error) &&
     !(uSNcst instanceof Error) &&
     !(midFcst instanceof Error) &&
-    !(nowApGrade instanceof Error) &&
-    !(tomorrowApGrade instanceof Error) &&
     !sunInformHasError
   ) {
     const targetSVFcst = sVFcst.map((i: SVFDay) => {
@@ -1547,12 +1544,14 @@ export const getWeatherData = async (
           vec: getWsd(uSNcst.wsd, uSNcst.vec),
           wsd: uSNcst.wsd,
         },
-        pm10Grade: nowApGrade.pm10Grade,
-        pm25Grade: nowApGrade.pm25Grade,
+        pm10Grade: nowApGrade instanceof Error ? null : nowApGrade.pm10Grade,
+        pm25Grade: nowApGrade instanceof Error ? null : nowApGrade.pm25Grade,
       },
       tomorrowWeather: {
-        pm10Grade: tomorrowApGrade.pm10Grade,
-        pm25Grade: tomorrowApGrade.pm25Grade,
+        pm10Grade:
+          tomorrowApGrade instanceof Error ? null : tomorrowApGrade.pm10Grade,
+        pm25Grade:
+          tomorrowApGrade instanceof Error ? null : tomorrowApGrade.pm25Grade,
         am: svfDay[1].am,
         pm: svfDay[1].pm,
         tmn: svfDay[1].tmn,
@@ -1565,18 +1564,16 @@ export const getWeatherData = async (
     };
     return weather;
   } else {
-    skyCode instanceof Error &&
-      errorSentence.concat(`skyCode error: ${skyCode}`);
-    sVFcst instanceof Error && errorSentence.concat(`svFcst error: ${sVFcst}`);
-    uSNcst instanceof Error && errorSentence.concat(`uSNcst error: ${uSNcst}`);
-    midFcst instanceof Error &&
-      errorSentence.concat(`midFcst error: ${midFcst}`);
-    nowApGrade instanceof Error &&
-      errorSentence.concat(`nowApGrade error: ${nowApGrade}`);
-    tomorrowApGrade instanceof Error &&
-      errorSentence.concat(`tomorrowApGrade error: ${tomorrowApGrade}`);
-    sunInformHasError && errorSentence.concat(`sunInform error: ${sunInform}`);
-
-    return errorSentence;
+    const error = {
+      skyCode: skyCode instanceof Error,
+      sVFcst: sVFcst instanceof Error,
+      uSNcst: uSNcst instanceof Error,
+      midFcst: midFcst instanceof Error,
+      nowApGrade: nowApGrade instanceof Error,
+      tomorrowApGrade: tomorrowApGrade instanceof Error,
+      sunInform: sunInformHasError,
+    };
+    console.error(error);
+    return JSON.stringify(error);
   }
 };
