@@ -1285,28 +1285,8 @@ const getNationData = async (
   sessionStorage.setItem(sessionItemKey, JSON.stringify(newNationData));
   return newNationData;
 };
-/**
- * 현 위치에 대한  현재 날씨, 앞으로의 기상 전망, 일몰,전국 날씨를 반환하거나 error 메시지가 담긴 글을 반환
- * @param sfGrid
- * @param longitude
- * @param latitude
- * @returns
- */
-export const getWeatherData = async (
-  sfGrid: SFGridItem,
-  longitude: string,
-  latitude: string
-): Promise<string | WeatherState> => {
-  let errorSentence = "[Error]";
-  const { nX, nY } = changeNType(sfGrid);
-  const stationName: string[] =
-    sfGrid.arePt3 !== null && sfGrid.arePt2 !== null
-      ? [sfGrid.arePt1, sfGrid.arePt2, sfGrid.arePt3]
-      : sfGrid.arePt2 !== null
-      ? [sfGrid.arePt1, sfGrid.arePt2]
-      : [sfGrid.arePt1];
-  const { landRegId, taRegId } = findLandTaCode(sfGrid);
-  const sidoName: ApiAreaCode = getApAreaCode(sfGrid);
+
+export const getTimeData = () => {
   const today = new Date();
   const hours = today.getHours();
   const minutes = today.getMinutes();
@@ -1367,13 +1347,73 @@ export const getWeatherData = async (
 
   const baseTimeIndex = timeArray.indexOf(fcstTime);
   const todayTimeArray = timeArray.slice(baseTimeIndex + 1);
+
+  return {
+    today: today,
+    hours: hours,
+    minutes: minutes,
+    date: date,
+    threeDays: threeDays,
+    baseDate_today: baseDate_today,
+    baseDate_yesterday: baseDate_yesterday,
+    baseDate_skyCode: baseDate_skyCode,
+    baseDate_svf: baseDate_svf,
+    baseTime_svf: baseTime_svf,
+    preFcstTime: preFcstTime,
+    fcstTime: fcstTime,
+    baseTime_skyCode: baseTime_skyCode,
+    timeArray: timeArray,
+    baseTimeIndex: baseTimeIndex,
+    todayTimeArray: todayTimeArray,
+  };
+};
+/**
+ * 현 위치에 대한  현재 날씨, 앞으로의 기상 전망, 일몰,전국 날씨를 반환하거나 error 메시지가 담긴 글을 반환
+ * @param sfGrid
+ * @param longitude
+ * @param latitude
+ * @returns
+ */
+export const getWeatherData = async (
+  sfGrid: SFGridItem,
+  longitude: string,
+  latitude: string
+): Promise<string | WeatherState> => {
+  let errorSentence = "[Error]";
+  const userAreaCode = sfGrid.areaCode;
+  const { nX, nY } = changeNType(sfGrid);
+  const stationName: string[] =
+    sfGrid.arePt3 !== null && sfGrid.arePt2 !== null
+      ? [sfGrid.arePt1, sfGrid.arePt2, sfGrid.arePt3]
+      : sfGrid.arePt2 !== null
+      ? [sfGrid.arePt1, sfGrid.arePt2]
+      : [sfGrid.arePt1];
+  const { landRegId, taRegId } = findLandTaCode(sfGrid);
+  const sidoName: ApiAreaCode = getApAreaCode(sfGrid);
+  const {
+    today,
+    hours,
+    minutes,
+    threeDays,
+    baseDate_today,
+    baseDate_yesterday,
+    baseDate_skyCode,
+    baseDate_svf,
+    baseTime_svf,
+    preFcstTime,
+    fcstTime,
+    baseTime_skyCode,
+    timeArray,
+    todayTimeArray,
+  } = getTimeData();
   //get api data
   const skyCode = await getUSSkyCode(
     nX,
     nY,
     baseDate_skyCode,
     baseTime_skyCode,
-    fcstTime
+    fcstTime,
+    userAreaCode
   );
   const uSNcst = await getUSNcast(
     nX,
