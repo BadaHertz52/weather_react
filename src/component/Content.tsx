@@ -62,13 +62,11 @@ const Content = ({ weather }: ContentProps) => {
           )}
         </div>
         <div className="section_right">
-          {weather.nation !== null && weather.sunRiseAndSet !== null ? (
+          {weather.nation !== null && weather.sunRiseAndSet !== null && (
             <Nation
               nation={weather.nation}
               todaySunInform={weather.sunRiseAndSet[0]}
             />
-          ) : (
-            <None target={"전국 날씨 예보"} />
           )}
           {weather.sunRiseAndSet !== null &&
           checkSunInfoType(weather.sunRiseAndSet) ? (

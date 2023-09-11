@@ -1,27 +1,40 @@
-$backgroundColor:#fab411;
-$sunInnerColor:rgb(250, 240, 182);
-$sunOuterColor:rgb(253, 228, 148);
-$sun_chart_width_small: 264px;
-$sun_chart_width_large: 230px;
-$bar_percent_bg:rgb(246, 230, 142);
-$bar_bg:#f1a10b;
+$backgroundColor: #ffae00;
+$sunInnerColor: rgb(250, 240, 182);
+$sunOuterColor: rgb(253, 228, 148);
+$maxWidth: 1160px;
+$innerPaddingSide: 15px;
+$sunSize: 36px;
+$sun_chart_width_small: calc(
+  100vw * 0.9 - $innerPaddingSide * 2 - $sunSize * 1 / 2
+);
+$sun_chart_width_large: calc(
+  100vw * 0.3 * 0.9 - $innerPaddingSide * 2 - $sunSize * 1 / 2
+);
+$sun_chart_width_max: calc(
+  $maxWidth * 0.3 * 0.9 - $innerPaddingSide * 2 - $sunSize * 1 / 2
+);
+$bar_percent_bg: rgb(246, 230, 142);
+$bar_bg: #f1a10b;
 $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
 
 @mixin sunImg {
   border-radius: 50%;
   background-color: $sunInnerColor;
-  -webkit-box-shadow: 0px -2px 8px 2px $sunOuterColor; 
-  box-shadow: 0px -2px 8px 2px  $sunOuterColor;
+  -webkit-box-shadow: 0px -2px 8px 2px $sunOuterColor;
+  box-shadow: 0px -2px 8px 2px $sunOuterColor;
 }
-.sun{
+.sun {
   margin-top: 32px;
-  .inner{
+  width: 90%;
+  margin: 0 auto;
+  .inner {
     background-color: $backgroundColor;
-    padding:15px 24px 30px;
+    padding: $innerPaddingSide 24px 30px;
     position: relative;
   }
-  .title{
-    color:#ffff;
+
+  .title {
+    color: #ffff;
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.196);
     font-size: 17px;
     line-height: 23px;
@@ -29,143 +42,145 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
     font-weight: bold;
     padding-bottom: 36px;
   }
-  .btn_wrap{
+  .btn_wrap {
     position: absolute;
-    top:15px;
+    top: 15px;
     right: 20px;
   }
-  .btn_sun{
+  .btn_sun {
     width: 42px;
     height: 32px;
-    background-color:#ffff;
-    border:none ;
-    &:first-child{
+    background-color: #ffff;
+    border: none;
+    &:first-child {
       border-top-left-radius: 5px;
       border-bottom-left-radius: 5px;
     }
-    &:last-child{
+    &:last-child {
       border-top-right-radius: 5px;
       border-bottom-right-radius: 5px;
     }
-    &.on{
+    &.on {
       background-color: #ed8b02;
-      color:#fff;
+      color: #fff;
       font-weight: 600;
       text-shadow: 0 0 2px rgba(90, 90, 90, 0.196);
     }
   }
 
-  span{
+  span {
     display: inline-block;
   }
-  .icon_area{
+  .icon_area {
     position: relative;
     width: 6rem;
-    height:calc(6rem * 0.5);
+    height: calc(6rem * 0.5);
     overflow: hidden;
   }
-  .sunIcon_arrow{
+  .sunIcon_arrow {
     display: block;
     position: absolute;
-    top:0;
-    left:calc( (100% - 1rem) /2);
+    top: 0;
+    left: calc((100% - 1rem) / 2);
     font-size: 1rem;
     width: 1rem;
     height: 1rem;
-    color: rgb(250, 240, 182) ;
-    .up{
-      animation: moveArrow 2s ease-in infinite  ;
+    color: rgb(250, 240, 182);
+    .up {
+      animation: moveArrow 2s ease-in infinite;
     }
-    .down{
+    .down {
       animation: moveArrow 2s ease-out infinite reverse;
     }
-    
   }
   @keyframes moveArrow {
-    from{
+    from {
       transform: translateY(5px);
     }
-    to{
+    to {
       transform: translateY(0px);
     }
   }
 
-  .sunIcon{
+  .sunIcon {
     width: calc(6rem * 0.5);
     height: calc(6rem * 0.5);
     position: absolute;
-    top:calc(6rem * 0.25);
-    left:calc(6rem * 0.25);
+    top: calc(6rem * 0.25);
+    left: calc(6rem * 0.25);
     @include sunImg;
   }
   //today
-  .sun_chart  , .current_bar{
-    width: $sun_chart_width_small;
+
+  .sun_chart,
+  .current_bar {
+    width: $sun_chart_width_max;
   }
-  
-  .move_sun, .current_bar .bar{
-    width: $sun_chart_width_small;
-    height: $sun_chart_width_small;
+  .move_sun,
+  .current_bar .bar {
+    width: $sun_chart_width_max;
+    height: $sun_chart_width_max;
   }
-  .sun_chart{
+  .sun_chart {
     position: relative;
     height: 136px;
     margin: 0 auto;
-    transform-origin: 50% 100% ;
+    transform-origin: 50% 100%;
   }
-  
-  .move_sun{
+
+  .move_sun {
     position: absolute;
     z-index: 10;
-    &::after{
-      width: 36px;
-      height: 36px;
-      content: '';
+    &::after {
+      width: $sunSize;
+      height: $sunSize;
+      content: "";
       position: absolute;
-      top:51%;
+      top: 51%;
       left: -15px;
       @include sunImg;
     }
   }
-  .progress_bar{
+  .progress_bar {
     width: inherit;
-    height:inherit;
-    &::before , &::after{
+    height: inherit;
+    &::before,
+    &::after {
       position: absolute;
       bottom: 0px;
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      content: '';
+      content: "";
       z-index: 5;
     }
-    &::before{
+    &::before {
       left: 0;
       background-color: $bar_percent_bg;
     }
-    &::after{
+    &::after {
       background-color: $bar_bg;
       right: 0;
     }
   }
-  .current_bar{
+  .current_bar {
     height: inherit;
     position: absolute;
     overflow: hidden;
-    .bar{
+    .bar {
       position: absolute;
-      top:0;
+      top: 0;
       left: 0;
       border-radius: 50%;
-      border-style:solid;
+      border-style: solid;
       border-width: 7px;
       border-color: $bar_bg $bar_percent_bg $bar_percent_bg $bar_bg;
       box-sizing: border-box;
     }
   }
-  .sun_info{
+  .sun_info {
     position: absolute;
-    bottom:0;
+    bottom: 0;
     left: 16px;
     width: calc(100% - 14px - 18px);
     height: 70%;
@@ -173,130 +188,164 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
     display: flex;
     flex-direction: column;
     align-items: center;
-    .icon_area{
+    .icon_area {
       display: block;
     }
   }
-  .time_list{
+  .time_list {
     display: inline-block;
     line-height: 24px;
     margin-top: 10px;
-    color:#ffff;
-    text-shadow:$textShadow;
+    color: #ffff;
+    text-shadow: $textShadow;
+    font-weight: bolder;
   }
-  .time_title, .time_sun{
+  .time_title,
+  .time_sun {
     display: inline-block;
   }
   .time_title {
     font-size: 1rem;
     margin-right: 5px;
-    &.set{
+    &.set {
       margin-left: 18px;
     }
   }
-  .time_sun{
+  .time_sun {
     font-size: 18px;
     font-weight: 600;
   }
-  // tomorrow 
-  .sun_table, thead, tbody, tr{
+  // tomorrow
+  .sun_table,
+  thead,
+  tbody,
+  tr {
     width: 100%;
   }
-  .sun_table{
-    color:#ffff;
+  .sun_table {
+    color: #ffff;
     font-size: 14px;
     font-weight: 500;
-    text-shadow:$textShadow;
-    tr{
+    text-shadow: $textShadow;
+    tr {
       position: relative;
     }
-    th, td{
+    th,
+    td {
       width: 33%;
     }
-    td{
+    td {
       text-align: center;
     }
-    thead .blind{
+    thead .blind {
       display: inline-block;
       position: absolute;
       top: -100%;
       left: -100%;
     }
-    .sun_tr{
+    .sun_tr {
       line-height: 20px;
       position: relative;
-      &::after{
+      &::after {
         width: 100%;
         height: 0.5px;
         display: inline-block;
         background-color: rgba(255, 255, 255, 0.61);
-        content: '';
+        content: "";
         position: absolute;
-        bottom:0;
-        left:0
+        bottom: 0;
+        left: 0;
       }
     }
-    .sun_th, .sun_tr td {
+    .sun_tr:last-child {
+      &::after {
+        display: none;
+      }
+    }
+    .sun_th,
+    .sun_tr td {
       padding: 10px 0 17px 0;
     }
-    .sun_th{
+    .sun_th {
       font-weight: initial;
     }
-    .sun_day , strong{
+    .sun_day,
+    strong {
       margin-left: 5px;
     }
   }
 }
-@media screen and (max-width:375px) {
-
-  .sun{
-    .inner{
-      padding-left: 10px;
-      padding-right: 18px;
-    }
-    .btn_wrap{
-      right: 30px;
-    }
-    .sun_chart,  .current_bar{
-      width:240px;
-    }
-    .sun_chart{
-      height: 123px;
-    }
-    .move_sun, .current_bar .bar{
-      width:240px;
-      height:240px;
-    }
-    .move_sun::after{
-      width: 24px;
-      height: 24px;
-      left:-8px;
-    }
-  }
+.sun_contents {
+  display: flex;
+  flex-direction: column;
 }
-
-@media screen and (min-width:1025px) {
-  .sun{
-    margin-top:  40px ;
-    .inner{
+.sun_panel:nth-child(2) {
+  margin-top: 24px;
+}
+@media screen and (max-width: 1025px) {
+  .sun {
+    margin-top: 40px;
+    .inner {
       border-radius: 10px;
-      padding:15px 5%;
+      padding: 15px 5%;
       box-sizing: border-box;
     }
-    .sun_chart , .current_bar{
+    .sun_chart,
+    .current_bar {
       width: $sun_chart_width_large;
     }
     .sun_chart {
       height: 115px;
     }
-    .move_sun, .current_bar .bar{
+    .move_sun,
+    .current_bar .bar {
       width: $sun_chart_width_large;
       height: $sun_chart_width_large;
     }
-    .move_sun::after{
-      width: 30px;
-      height: 30px;
-      left:-12px;
+    // .move_sun::after {
+    //   width: 30px;
+    //   height: 30px;
+    //   left: -12px;
+    // }
+  }
+}
+@media screen and (max-width: 768px) {
+  .sun_chart,
+  .current_bar {
+    width: $sun_chart_width_small;
+  }
+
+  .move_sun,
+  .current_bar .bar {
+    width: $sun_chart_width_small;
+    height: $sun_chart_width_small;
+  }
+}
+@media screen and (max-width: 375px) {
+  .sun {
+    .inner {
+      padding-left: 10px;
+      padding-right: 18px;
+    }
+    .btn_wrap {
+      right: 30px;
+    }
+    .sun_chart,
+    .current_bar {
+      width: 240px;
+    }
+    .sun_chart {
+      height: 123px;
+    }
+    .move_sun,
+    .current_bar .bar {
+      width: 240px;
+      height: 240px;
+    }
+    .move_sun::after {
+      width: 24px;
+      height: 24px;
+      left: -8px;
     }
   }
 }

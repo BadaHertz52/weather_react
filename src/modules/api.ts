@@ -1478,6 +1478,17 @@ export const getWeatherData = async (
     threeDays,
     userAreaCode
   );
+  // const nationData: NationType = await getNationData(
+  //   baseDate_skyCode,
+  //   baseDate_today,
+  //   baseDate_yesterday,
+  //   baseTime_skyCode,
+  //   fcstTime,
+  //   preFcstTime,
+  //   minutes,
+  //   hours,
+  //   userAreaCode
+  // );
   //state로 변경
   const changeHourItem = (t: SVFTime): HourWeather => ({
     date: t.fcstDate,
@@ -1507,65 +1518,6 @@ export const getWeatherData = async (
     !(tomorrowApGrade instanceof Error) &&
     !sunInformHasError
   ) {
-    const nationDataItem = sessionStorage.getItem("nation_data");
-
-    let areaData: Error | Area[] | undefined = undefined;
-    const operateGetNationArea = async (
-      searchSvf: boolean,
-      searchOther: boolean,
-      nationData: NationType | null
-    ) => {
-      return await getNationArea(
-        baseDate_skyCode,
-        baseDate_svf,
-        baseDate_today,
-        baseDate_yesterday,
-        baseTime_skyCode,
-        fcstTime,
-        preFcstTime,
-        minutes,
-        hours,
-        baseTime_svf,
-        timeArray,
-        todayTimeArray,
-        threeDays,
-        searchSvf,
-        searchOther,
-        nationData
-      );
-    };
-
-    if (nationDataItem !== null) {
-      const item: NationType = JSON.parse(nationDataItem);
-      const searchTime = item.searchTime;
-      const searchSvf = searchTime.baseTime_svf !== baseDate_svf;
-      const searchOther = searchTime.hours !== hours;
-      if (!searchSvf && !searchOther) {
-        areaData = {
-          ...item.areas,
-        };
-      } else {
-        areaData = await operateGetNationArea(searchSvf, searchOther, item);
-      }
-    } else {
-      areaData = await operateGetNationArea(true, true, null);
-    }
-
-    const nationData: NationType | null =
-      areaData instanceof Error
-        ? null
-        : {
-            searchTime: {
-              hours: hours,
-              baseTime_svf: baseTime_svf,
-            },
-            areas: areaData,
-          };
-    if (areaData instanceof Error) {
-      errorSentence.concat(`nation_areaData error: ${areaData}`);
-    } else {
-      sessionStorage.setItem("nation_data", JSON.stringify(nationData));
-    }
     const targetSVFcst = sVFcst.map((i: SVFDay) => {
       if (sVFcst.indexOf(i) === 0) {
         return sVFcst[0].filter((t: SVFTime) =>
@@ -1608,7 +1560,7 @@ export const getWeatherData = async (
       },
       threeDay: threeDay,
       week: [...svfDay, ...midDay],
-      nation: nationData,
+      nation: null,
       sunRiseAndSet: [...sunInform],
     };
     return weather;

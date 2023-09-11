@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { SunRiseAndSet } from "../modules/weather";
 import { HiArrowSmDown, HiArrowSmUp } from "react-icons/hi";
 import { changeTwoDigit } from "../modules/api";
@@ -77,19 +77,22 @@ const Sun = ({ sunRiseAndSet }: SunProperty) => {
    */
   const bar_ra = (270 - 45) / 16;
 
-  const changeRotate = (part: number) => {
-    setMoveSunStyle({
-      transform:
-        part === 16
-          ? "rotate(181deg)"
-          : part === 0
-          ? "rotate(10deg)"
-          : `rotate(${ms_ra * part}deg)`,
-    });
-    setBarStyle({
-      transform: part !== 0 ? `rotate(${bar_ra * part}deg)` : "rotate(45deg)",
-    });
-  };
+  const changeRotate = useCallback(
+    (part: number) => {
+      setMoveSunStyle({
+        transform:
+          part === 16
+            ? "rotate(181deg)"
+            : part === 0
+            ? "rotate(10deg)"
+            : `rotate(${ms_ra * part}deg)`,
+      });
+      setBarStyle({
+        transform: part !== 0 ? `rotate(${bar_ra * part}deg)` : "rotate(45deg)",
+      });
+    },
+    [ms_ra, bar_ra]
+  );
   useEffect(() => {
     if (
       todaySunInfo.sunRise !== null &&
@@ -114,27 +117,13 @@ const Sun = ({ sunRiseAndSet }: SunProperty) => {
         changeRotate(quotient);
       }
     }
-  }, [todaySunInfo]);
+  }, [todaySunInfo, time, changeRotate]);
 
   return (
     <div className="sun">
       <div className="inner">
         <h2 className="title">일출일몰</h2>
-        <div className="btn_wrap">
-          <button
-            className={`btn_sun ${targetDay === today ? "on" : ""}`}
-            onClick={() => setTargetDay(today)}
-          >
-            오늘
-          </button>
-          <button
-            className={`btn_sun ${targetDay === tomorrow ? "on" : ""}`}
-            onClick={() => setTargetDay(tomorrow)}
-          >
-            내일
-          </button>
-        </div>
-        {targetDay === today ? (
+        <div className="sun_contents">
           <div className="sun_panel">
             <div className="sun_chart">
               <div className="move_sun" style={moveSunStyle}></div>
@@ -154,7 +143,6 @@ const Sun = ({ sunRiseAndSet }: SunProperty) => {
               </div>
             </div>
           </div>
-        ) : (
           <div className="sun_panel">
             <table className="sun_table">
               <caption className="blind">
@@ -179,7 +167,7 @@ const Sun = ({ sunRiseAndSet }: SunProperty) => {
               </tbody>
             </table>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
