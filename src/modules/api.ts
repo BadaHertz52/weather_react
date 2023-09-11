@@ -139,7 +139,7 @@ const getApiItems = async (
   };
   try {
     const result = await (
-      await fetch(`/weather_react/public`, {
+      await fetch(`/weather_react/${fetchUrl}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -339,8 +339,8 @@ const getSVFcast = async (
     baseTime,
     "10000"
   );
-  const items1 = await getApiItems(url1, "svfcast1");
-  const items2 = await getApiItems(url2, "svfcast2");
+  const items1 = await getApiItems(url1, "svfcast");
+  const items2 = await getApiItems(url2, "svfcast");
   if (!(items1 instanceof Error) && !(items2 instanceof Error)) {
     /**
      * timeArray에서 todayTimeArray를 제한 것으로,예보 발표시각 이전의 예보를 선별하는데 사용함
