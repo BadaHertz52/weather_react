@@ -14,7 +14,7 @@ export const noneState_weather: WeatherState = {
   nation: null,
   sunRiseAndSet: null,
 };
-const initialState = testWeatherState;
+const initialState = noneState_weather;
 export const weatherSlice = createSlice({
   name: "weather",
   initialState,
