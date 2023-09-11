@@ -3,15 +3,13 @@ $sunInnerColor: rgb(250, 240, 182);
 $sunOuterColor: rgb(253, 228, 148);
 $maxWidth: 1160px;
 $innerPaddingSide: 15px;
-$sunSize: 36px;
-$sun_chart_width_small: calc(
-  100vw * 0.9 - $innerPaddingSide * 2 - $sunSize * 1 / 2
-);
-$sun_chart_width_large: calc(
-  100vw * 0.3 * 0.9 - $innerPaddingSide * 2 - $sunSize * 1 / 2
-);
+$sunSize_max: 36px;
+$sunSize_large: 30px;
+$sunSize_small: 24px;
+$sun_chart_width_small: 240px;
+$sun_chart_width_large: 220px;
 $sun_chart_width_max: calc(
-  $maxWidth * 0.3 * 0.9 - $innerPaddingSide * 2 - $sunSize * 1 / 2
+  $maxWidth * 0.3 * 0.9 - $innerPaddingSide * 2 - $sunSize_max * 1 / 2
 );
 $bar_percent_bg: rgb(246, 230, 142);
 $bar_bg: #f1a10b;
@@ -132,8 +130,8 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
     position: absolute;
     z-index: 10;
     &::after {
-      width: $sunSize;
-      height: $sunSize;
+      width: $sunSize_max;
+      height: $sunSize_max;
       content: "";
       position: absolute;
       top: 51%;
@@ -302,26 +300,14 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
       width: $sun_chart_width_large;
       height: $sun_chart_width_large;
     }
-    // .move_sun::after {
-    //   width: 30px;
-    //   height: 30px;
-    //   left: -12px;
-    // }
+    .move_sun::after {
+      width: $sunSize_large;
+      height: $sunSize_large;
+      left: -12px;
+    }
   }
 }
 @media screen and (max-width: 768px) {
-  .sun_chart,
-  .current_bar {
-    width: $sun_chart_width_small;
-  }
-
-  .move_sun,
-  .current_bar .bar {
-    width: $sun_chart_width_small;
-    height: $sun_chart_width_small;
-  }
-}
-@media screen and (max-width: 375px) {
   .sun {
     .inner {
       padding-left: 10px;
@@ -332,19 +318,19 @@ $textShadow: 0 0 2px rgba(87, 87, 87, 0.196);
     }
     .sun_chart,
     .current_bar {
-      width: 240px;
+      width: $sun_chart_width_small;
     }
     .sun_chart {
       height: 123px;
     }
     .move_sun,
     .current_bar .bar {
-      width: 240px;
-      height: 240px;
+      width: $sun_chart_width_small;
+      height: $sun_chart_width_small;
     }
     .move_sun::after {
-      width: 24px;
-      height: 24px;
+      width: $sunSize_small;
+      height: $sunSize_small;
       left: -8px;
     }
   }
