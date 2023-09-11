@@ -137,6 +137,10 @@ const getApiItems = async (
   const fetchBody = {
     url: apiUrl,
   };
+  const sessionStorageItem = sessionStorage.getItem(fetchUrl);
+  if (sessionStorageItem) {
+    return JSON.parse(sessionStorageItem);
+  }
   try {
     const result = await (
       await fetch(`/weather_react/${fetchUrl}`, {
@@ -147,6 +151,7 @@ const getApiItems = async (
         body: JSON.stringify(fetchBody),
       })
     ).json();
+    sessionStorage.setItem(fetchUrl, JSON.stringify(result));
     if (result.message === undefined) {
       return result;
     } else {
