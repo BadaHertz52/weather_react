@@ -1155,7 +1155,7 @@ const findLandTaCode = (sfGrid: SFGridItem) => {
  * @param threeDays
  * @returns  Promise<Error | Area[]>
  */
-const getNationArea = async (
+const getNationData = async (
   baseDate_skyCode: string,
   baseDate_svf: string,
   baseDate_today: string,
@@ -1169,66 +1169,59 @@ const getNationArea = async (
   timeArray: string[],
   todayTimeArray: string[],
   threeDays: string[],
-  searchSvf: boolean,
-  searchOther: boolean,
-  nationData: NationType | null
-): Promise<Area[]> => {
+  userAreaCode: string | number
+): Promise<NationType> => {
+  const sessionItemKey = "nation_data";
+  const sessionStorageItem = sessionStorage.getItem(sessionItemKey);
+  if (sessionStorageItem) {
+    const item = JSON.parse(sessionStorageItem) as NationType;
+    if (item.searchTime === fcstTime) return item;
+  }
   const getData = async (item: AreaInform) => {
     const { nX, nY } = changeNType(item.sfGrid);
     const { landRegId, taRegId } = item;
-    const index = areaArray.indexOf(item);
-    const targetArea = nationData !== null ? nationData.areas[index] : null;
-    const nation_day = targetArea !== null ? (targetArea?.day as Day[]) : null;
-    const nation_now = targetArea !== null ? targetArea.now : null;
-    const skyCode =
-      !searchOther && nation_now !== null
-        ? nation_now.sky
-        : await getUSSkyCode(
-            nX,
-            nY,
-            baseDate_skyCode,
-            baseTime_skyCode,
-            fcstTime
-          );
+    const skyCode = await getUSSkyCode(
+      nX,
+      nY,
+      baseDate_skyCode,
+      baseTime_skyCode,
+      fcstTime,
+      userAreaCode
+    );
 
-    const nowWeather =
-      !searchOther && nation_now !== null
-        ? { t1h: nation_now.temp }
-        : await getUSNcast(
-            nX,
-            nY,
-            baseDate_yesterday,
-            baseDate_today,
-            fcstTime,
-            preFcstTime,
-            minutes,
-            hours
-          );
+    const nowWeather = await getUSNcast(
+      nX,
+      nY,
+      baseDate_yesterday,
+      baseDate_today,
+      fcstTime,
+      preFcstTime,
+      minutes,
+      hours,
+      userAreaCode
+    );
 
-    const sVFcst =
-      !searchSvf && nation_day !== null
-        ? nation_day.slice(0, 3)
-        : await getSVFcast(
-            nX,
-            nY,
-            baseDate_svf,
-            baseTime_svf,
-            baseDate_yesterday,
-            timeArray,
-            todayTimeArray,
-            threeDays
-          );
+    const sVFcst = await getSVFcast(
+      nX,
+      nY,
+      baseDate_svf,
+      baseTime_svf,
+      baseDate_yesterday,
+      timeArray,
+      todayTimeArray,
+      threeDays,
+      userAreaCode
+    );
 
     const midFcst =
-      !searchOther && nation_day !== null
-        ? nation_day.slice(3)
-        : landRegId !== undefined && taRegId !== undefined
+      landRegId && taRegId
         ? await getMidFcast(
             landRegId,
             taRegId,
             baseDate_today,
             baseDate_yesterday,
-            hours
+            hours,
+            userAreaCode
           )
         : landRegId === undefined
         ? taRegId === undefined
@@ -1242,12 +1235,8 @@ const getNationArea = async (
       !(skyCode instanceof Error) &&
       !(nowWeather instanceof Error)
     ) {
-      const svfDay: Day[] = searchSvf
-        ? changeSvfToDay(sVFcst as SVFcst)
-        : (sVFcst as Day[]);
-      const midDay: Day[] = searchOther
-        ? changeMidToDay(midFcst as MidFcst)
-        : (midFcst as Day[]);
+      const svfDay: Day[] = changeSvfToDay(sVFcst as SVFcst);
+      const midDay: Day[] = changeMidToDay(midFcst as MidFcst);
 
       const area: Area = {
         areaInform: {
@@ -1289,7 +1278,12 @@ const getNationArea = async (
       areaData.push(data);
     }
   }
-  return areaData;
+  const newNationData: NationType = {
+    searchTime: fcstTime,
+    areas: areaData,
+  };
+  sessionStorage.setItem(sessionItemKey, JSON.stringify(newNationData));
+  return newNationData;
 };
 /**
  * 현 위치에 대한  현재 날씨, 앞으로의 기상 전망, 일몰,전국 날씨를 반환하거나 error 메시지가 담긴 글을 반환
