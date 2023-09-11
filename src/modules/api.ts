@@ -130,16 +130,19 @@ const sunApi: Api = {
  * @param fetchUrl 백엔드 서버에 요청 시 주소로 '/weather_react' 뒷 부분
  * @returns Promise<any>
  */
-const getApiItems = async (
+const getAPIItems = async (
   apiUrl: string,
-  fetchUrl: string
+  fetchUrl: string,
+  userAreaCode: string | number
 ): Promise<any | Error> => {
   const fetchBody = {
     url: apiUrl,
   };
-  const sessionStorageItem = sessionStorage.getItem(fetchUrl);
+  const sessionItemKey = `user_${fetchUrl}`;
+  const sessionStorageItem = sessionStorage.getItem(sessionItemKey);
   if (sessionStorageItem) {
-    return JSON.parse(sessionStorageItem);
+    const item = JSON.parse(sessionStorageItem);
+    if (item.apiUrl === apiUrl && item.areaCode === userAreaCode) return item;
   }
   try {
     const result = await (
@@ -151,8 +154,15 @@ const getApiItems = async (
         body: JSON.stringify(fetchBody),
       })
     ).json();
-    sessionStorage.setItem(fetchUrl, JSON.stringify(result));
     if (result.message === undefined) {
+      sessionStorage.setItem(
+        sessionItemKey,
+        JSON.stringify({
+          ...result,
+          apiUrl: apiUrl,
+          areaCode: userAreaCode,
+        })
+      );
       return result;
     } else {
       const error = new Error(result.message);
@@ -195,7 +205,8 @@ const getUSSkyCode = async (
   ny: string,
   baseDate: string,
   baseTime: string,
-  fcstTime: string
+  fcstTime: string,
+  userAreaCode: string | number
 ): Promise<SkyCodeType | Error> => {
   const numOfRows = JSON.stringify(10000);
   const url = getSFApiUrl(
@@ -206,7 +217,7 @@ const getUSSkyCode = async (
     baseTime,
     numOfRows
   );
-  const items = await getApiItems(url, "sky");
+  const items = await getAPIItems(url, "sky", userAreaCode);
   if (items instanceof Error) {
     return items;
   } else {
@@ -238,14 +249,15 @@ const getUSNcast = async (
   fcstTime: string,
   preFcstTime: string,
   minutes: number,
-  hours: number
+  hours: number,
+  userAreaCode: string | number
 ) => {
   const baseDate =
     minutes < 40 && hours === 0 ? baseDate_yesterday : baseDate_today;
   const baseTime =
     minutes < 40 ? (hours === 0 ? "2300" : preFcstTime) : fcstTime;
   const url = getSFApiUrl("getUltraSrtNcst", nx, ny, baseDate, baseTime, "16");
-  const items = await getApiItems(url, "usncst");
+  const items = await getAPIItems(url, "usncst", userAreaCode);
   if (items instanceof Error) {
     return items;
   } else {
@@ -318,7 +330,7 @@ const getDaySvf = (
  * @param threeDays  오늘 부터 2일 이후의 날짜들을 담은 배열
  * @returns  Promise<SVFcst|string>
  */
-const getSVFcast = async (
+export const getSVFcast = async (
   nx: string,
   ny: string,
   baseDate: string,
@@ -326,7 +338,8 @@ const getSVFcast = async (
   yesterday: string,
   timeArray: string[],
   todayTimeArray: string[],
-  threeDays: string[]
+  threeDays: string[],
+  userAreaCode: string | number
 ): Promise<SVFcst | Error> => {
   const url1 = getSFApiUrl(
     inqury_short_vilageFcst,
@@ -344,8 +357,8 @@ const getSVFcast = async (
     baseTime,
     "10000"
   );
-  const items1 = await getApiItems(url1, "svfcast");
-  const items2 = await getApiItems(url2, "svfcast");
+  const items1 = await getAPIItems(url1, "svfcast", userAreaCode);
+  const items2 = await getAPIItems(url2, "svfcast", userAreaCode);
   if (!(items1 instanceof Error) && !(items2 instanceof Error)) {
     /**
      * timeArray에서 todayTimeArray를 제한 것으로,예보 발표시각 이전의 예보를 선별하는데 사용함
@@ -404,6 +417,7 @@ const getSVFcast = async (
     }
   }
 };
+
 /**
  *
  * @param landRegId 중기 육상 예보 요청 메세지에 필요한 지역코드
@@ -413,12 +427,13 @@ const getSVFcast = async (
  * @param hours 현재 시각
  * @returns Promise<MidFcst|string>
  */
-const getMidFcast = async (
+export const getMidFcast = async (
   landRegId: MidLandAreaCode,
   taRegId: MidTaAreaCode,
   today: string,
   yesterday: string,
-  hours: number
+  hours: number,
+  userAreaCode: string | number
 ): Promise<MidFcst | Error> => {
   const tmFcTime: string = hours < 6 || hours > 18 ? "1800" : "0600";
   const tmFcDate = hours < 6 ? yesterday : today;
@@ -433,16 +448,32 @@ const getMidFcast = async (
     )}`;
   const taUrl = (tmFc: string) =>
     `${midFcstApi.url}/${inqury_mid_midTa}?regId=${taRegId}&${common(tmFc)}`;
-  let landItems = await getApiItems(landUrl(tmFc), "midFcast_landItems");
-  let taItems = await getApiItems(taUrl(tmFc), "midFcast_taItems");
+  let landItems = await getAPIItems(
+    landUrl(tmFc),
+    "midFcast_landItems",
+    userAreaCode
+  );
+  let taItems = await getAPIItems(
+    taUrl(tmFc),
+    "midFcast_taItems",
+    userAreaCode
+  );
 
   if (!(landItems instanceof Error) && !(taItems instanceof Error)) {
     if (tmFcTime === "1800") {
       const newTmFc = `${tmFcDate}0600`;
       const newLandUrl = landUrl(newTmFc);
       const newTaUrl = taUrl(newTmFc);
-      const newLandItems = await getApiItems(newLandUrl, "midFcast_landItems");
-      const newTaItems = await getApiItems(newTaUrl, "midFcast_taItems");
+      const newLandItems = await getAPIItems(
+        newLandUrl,
+        "midFcast_landItems",
+        userAreaCode
+      );
+      const newTaItems = await getAPIItems(
+        newTaUrl,
+        "midFcast_taItems",
+        userAreaCode
+      );
       if (!(newLandItems instanceof Error) && !(newTaItems instanceof Error)) {
         landItems = {
           ...landItems,
@@ -520,11 +551,12 @@ const getMidFcast = async (
  */
 const getApNow = async (
   sidoName: ApiAreaCode,
-  stationName: string[]
+  stationName: string[],
+  userAreaCode: string | number
 ): Promise<PmGrade | Error> => {
   const url = `${apInformApi.url}/${inqury_air_ctprvnRltmMesureDnsty}?sidoName=${sidoName}&returnType=JSON&numOfRows=100000&ver=1.3`;
   try {
-    const result = await getApiItems(url, "apNow");
+    const result = await getAPIItems(url, "apNow", userAreaCode);
     if (result instanceof Error) {
       return result;
     } else {
@@ -627,14 +659,15 @@ const getApFcst = async (
   baseDate: string,
   tBaseDate: string,
   sidoName: ApiAreaCode,
-  sfGrid: SFGridItem
+  sfGrid: SFGridItem,
+  userAreaCode: string | number
 ): Promise<PmGrade | Error> => {
   const searchDate = changeSearchDate(baseDate);
   const tSearchDate = changeSearchDate(tBaseDate);
   const apFcstArea = findApFcstArea(sidoName, sfGrid);
   const url = `${apInformApi.url}/${inqury_air_minuDustFrcstDspth}?returnType=JSON&numOfRows=100000&searchDate=${searchDate}`;
   try {
-    const result = await getApiItems(url, "apfcst");
+    const result = await getAPIItems(url, "apfcst", userAreaCode);
     if (result instanceof Error) {
       return result;
     } else {
@@ -685,7 +718,8 @@ const getApFcst = async (
 const getSunInform = async (
   longitude: string,
   latitude: string,
-  threeDays: string[]
+  threeDays: string[],
+  userAreaCode: string | number
 ): Promise<(Error | SunRiseAndSet)[]> => {
   type Item = {
     url: string;
@@ -698,6 +732,15 @@ const getSunInform = async (
     date: d,
   }));
   const fetchSunApi = async (url: string, date: string) => {
+    const informDate = date.slice(4);
+    const sessionItemKey = `sunInfo_date_${informDate}`;
+    const sessionStorageItem = sessionStorage.getItem(sessionItemKey);
+    if (sessionStorageItem) {
+      const item = JSON.parse(sessionStorageItem);
+      if (item.apiUrl === url && item.areaCode === userAreaCode) {
+        return item;
+      }
+    }
     try {
       const body = {
         url: url,
@@ -721,10 +764,18 @@ const getSunInform = async (
           return `${time}:${min}`;
         };
         const inform: SunRiseAndSet = {
-          date: date.slice(4),
+          date: informDate,
           sunRise: changeTimeString(result.sunrise),
           sunSet: changeTimeString(result.sunset),
         };
+        sessionStorage.setItem(
+          sessionItemKey,
+          JSON.stringify({
+            apiUrl: url,
+            areaCode: userAreaCode,
+            ...inform,
+          })
+        );
         return inform;
       }
     } catch (error) {
@@ -1338,7 +1389,8 @@ export const getWeatherData = async (
     fcstTime,
     preFcstTime,
     minutes,
-    hours
+    hours,
+    userAreaCode
   );
   const sVFcst = await getSVFcast(
     nX,
@@ -1348,7 +1400,8 @@ export const getWeatherData = async (
     baseDate_yesterday,
     timeArray,
     todayTimeArray,
-    threeDays
+    threeDays,
+    userAreaCode
   );
   const midFcst =
     landRegId !== undefined && taRegId !== undefined
@@ -1357,18 +1410,29 @@ export const getWeatherData = async (
           taRegId,
           baseDate_today,
           baseDate_yesterday,
-          hours
+          hours,
+          userAreaCode
         )
       : landRegId === undefined
       ? taRegId === undefined
         ? new Error("[Error] landRegId and taRegId are undefined")
         : new Error("[Error] landRegId is undefined")
       : new Error("[Error] taRegId is undefined");
-  const nowApGrade: PmGrade | Error = await getApNow(sidoName, stationName);
+  const nowApGrade: PmGrade | Error = await getApNow(
+    sidoName,
+    stationName,
+    userAreaCode
+  );
 
   const tomorrowApGrade: PmGrade | Error =
     hours > 5 || (hours === 5 && minutes > 10)
-      ? await getApFcst(baseDate_today, threeDays[1], sidoName, sfGrid)
+      ? await getApFcst(
+          baseDate_today,
+          threeDays[1],
+          sidoName,
+          sfGrid,
+          userAreaCode
+        )
       : {
           pm10Grade: null,
           pm25Grade: null,
@@ -1377,7 +1441,8 @@ export const getWeatherData = async (
   const sunInform: (Error | SunRiseAndSet)[] = await getSunInform(
     longitude,
     latitude,
-    threeDays
+    threeDays,
+    userAreaCode
   );
   //state로 변경
   const changeHourItem = (t: SVFTime): HourWeather => ({
