@@ -1,5 +1,5 @@
 import "./assets/reset.css";
-import "./assets/main.css";
+import "./assets/main.scss";
 import { AnyAction } from "@reduxjs/toolkit";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -76,10 +76,10 @@ function App() {
   useEffect(() => {
     if (
       position.state === "success" &&
-      weather.state !== "success" &&
-      position.longitude !== null &&
-      position.latitude !== null &&
-      position.sfGrid !== null
+      weather.state === "none" &&
+      position.longitude &&
+      position.latitude &&
+      position.sfGrid
     ) {
       const positionSuccessDate: PositionSuccessData = {
         longitude: position.longitude,
@@ -97,7 +97,17 @@ function App() {
         toolkitDispatch(toolkitWeather(positionSuccessDate));
       }
     }
-  }, [position.state]);
+  }, [
+    position.state,
+    dispatch,
+    position.latitude,
+    position.longitude,
+    position.sfGrid,
+    toolkitDispatch,
+    weather.state,
+    weatherActions,
+    weatherThunkDispatch,
+  ]);
   return (
     <div className="App">
       <header id="topBar">
