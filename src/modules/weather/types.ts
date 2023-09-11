@@ -486,10 +486,7 @@ export type Area = {
   now: AreaNow | null;
 };
 export type NationType = {
-  searchTime: {
-    hours: number;
-    baseTime_svf: string;
-  };
+  searchTime: string;
   areas: Area[];
 };
 export type SunRiseAndSet = {
