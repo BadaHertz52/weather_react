@@ -33,6 +33,7 @@ app.post("/weather_react/area", async (req, res) => {
     });
     res.send(result.data.documents);
   } catch (error) {
+    console.error("area", error);
     res.json({ message: "[Error] Fail get area data" });
   }
 });
@@ -47,11 +48,10 @@ const getPublicAPIdata = async (req, res) => {
       res.send(items);
     } else {
       const error = " response.body is undefined";
-
       res.json({ message: error });
     }
   } catch (error) {
-    console.error("server error", error);
+    console.error("server error", error, apiUrl);
     res.json({ message: "Fail fetch" });
   }
 };
@@ -85,6 +85,7 @@ app.post("/weather_react/sunInfo", async (req, res) => {
     res.send(item);
   } catch (error) {
     const e = `[Error]: fail fetch`;
+    console.error("sunInfo error", error);
     res.json({ message: e });
   }
 });
