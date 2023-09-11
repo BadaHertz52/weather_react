@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useCallback, useMemo } from "react";
 import { GiWaterDrop } from "react-icons/gi";
 import styled, { CSSProperties } from "styled-components";
 import { checkDayOrNight } from "../App";
@@ -115,12 +115,18 @@ const Now = ({ nowWeather, tomorrowWeather, todaySunInform }: NowProperty) => {
   const sunInformError = todaySunInform instanceof Error;
   const daytime = checkDayOrNight(hours, todaySunInform);
   const wrapRef = useRef<HTMLDivElement>(null);
-  const currentWrapStyle: CSSProperties = {
-    transform: "translateX(0%)",
-  };
-  const tomorrowWrapStyle: CSSProperties = {
-    transform: `translateX(-100%)`,
-  };
+  const currentWrapStyle: CSSProperties = useMemo(
+    () => ({
+      transform: "translateX(0%)",
+    }),
+    []
+  );
+  const tomorrowWrapStyle: CSSProperties = useMemo(
+    () => ({
+      transform: `translateX(-100%)`,
+    }),
+    []
+  );
   const [wrapStyle, setWrapStyle] = useState<CSSProperties>(currentWrapStyle);
   const scrollEvent = useRef<boolean>(false);
   const startX = useRef<number>(0);
@@ -139,33 +145,39 @@ const Now = ({ nowWeather, tomorrowWeather, todaySunInform }: NowProperty) => {
     initialSummary.current = tomorrow;
     setWrapStyle(tomorrowWrapStyle);
   };
-  const startScroll = (clientX: number) => {
-    if (wrapStyle !== undefined) {
-      startX.current = clientX;
-      scrollEvent.current = true;
-    }
-  };
-  const moveScroll = (clientX: number) => {
-    if (scrollEvent.current && wrapRef.current !== null) {
-      moveX.current = clientX;
-      const gap = clientX - startX.current;
-      const conditionMoveCurrent =
-        initialSummary.current === "current" && gap < 0;
-      const conditionTommorowCurrent =
-        initialSummary.current === "tomorrow" && gap > 0;
-      const wrapWidth = wrapRef.current.clientWidth;
-      const percent = (gap / wrapWidth) * 100;
-      if (conditionMoveCurrent || conditionTommorowCurrent) {
-        setWrapStyle({
-          ...wrapStyle,
-          transform: conditionMoveCurrent
-            ? `translateX(${percent}%)`
-            : `translateX(${-100 + percent}%)`,
-        });
+  const startScroll = useCallback(
+    (clientX: number) => {
+      if (wrapStyle !== undefined) {
+        startX.current = clientX;
+        scrollEvent.current = true;
       }
-    }
-  };
-  const endScroll = () => {
+    },
+    [wrapStyle]
+  );
+  const moveScroll = useCallback(
+    (clientX: number) => {
+      if (scrollEvent.current && wrapRef.current !== null) {
+        moveX.current = clientX;
+        const gap = clientX - startX.current;
+        const conditionMoveCurrent =
+          initialSummary.current === "current" && gap < 0;
+        const conditionTommorowCurrent =
+          initialSummary.current === "tomorrow" && gap > 0;
+        const wrapWidth = wrapRef.current.clientWidth;
+        const percent = (gap / wrapWidth) * 100;
+        if (conditionMoveCurrent || conditionTommorowCurrent) {
+          setWrapStyle({
+            ...wrapStyle,
+            transform: conditionMoveCurrent
+              ? `translateX(${percent}%)`
+              : `translateX(${-100 + percent}%)`,
+          });
+        }
+      }
+    },
+    [wrapStyle]
+  );
+  const endScroll = useCallback(() => {
     if (scrollEvent.current && wrapRef.current !== null) {
       const transform = wrapRef.current.style.transform;
       const startIndex = transform.indexOf("(");
@@ -185,7 +197,7 @@ const Now = ({ nowWeather, tomorrowWeather, todaySunInform }: NowProperty) => {
     scrollEvent.current = false;
     startX.current = 0;
     moveX.current = 0;
-  };
+  }, [currentWrapStyle, tomorrowWrapStyle]);
 
   return (
     <div className="now" aria-details="현재 날씨">
