@@ -82,7 +82,7 @@ npm i
 
 #### web browser
 
-<img src="./readmeImg/weather.gif"   width="300px"
+<img src="./readmeImg/weather.gif"   width="500px"
 height="auto">
 
 #### mobile browser
@@ -96,7 +96,7 @@ height="auto">
 
 <img 
   src="./readmeImg/failure.jpg"
-  width="300px"
+  width="500px"
   height="auto"
   alt="show how weather site work"
 />
