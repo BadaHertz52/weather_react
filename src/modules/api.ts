@@ -1378,7 +1378,7 @@ export const getWeatherData = async (
   sfGrid: SFGridItem,
   longitude: string,
   latitude: string
-): Promise<string | WeatherState> => {
+): Promise<Error | WeatherState> => {
   const userAreaCode = sfGrid.areaCode;
   const { nX, nY } = changeNType(sfGrid);
   const stationName: string[] =
@@ -1564,7 +1564,7 @@ export const getWeatherData = async (
     };
     return weather;
   } else {
-    const error = {
+    const errorData = {
       skyCode: skyCode instanceof Error,
       sVFcst: sVFcst instanceof Error,
       uSNcst: uSNcst instanceof Error,
@@ -1573,7 +1573,8 @@ export const getWeatherData = async (
       tomorrowApGrade: tomorrowApGrade instanceof Error,
       sunInform: sunInformHasError,
     };
+    const error = new Error(`[Error : weather data]:${errorData}`);
     console.error(error);
-    return JSON.stringify(error);
+    return error;
   }
 };
