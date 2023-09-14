@@ -25,7 +25,7 @@ export const toolkitPosition = createAsyncThunk(
       };
       return position;
     } catch (err) {
-      const error = err as Error;
+      const error = new Error("Fail to get area data");
       return thunkAPI.rejectWithValue(error.message);
     }
   }
