@@ -3,7 +3,6 @@ import { GiWaterDrop } from "react-icons/gi";
 import styled, { CSSProperties } from "styled-components";
 import { checkDayOrNight } from "../App";
 import {
-  gradeArray,
   NowWeather,
   PmType,
   SunRiseAndSet,
@@ -12,17 +11,12 @@ import {
 import ScrollBtn from "./ScrollBtn";
 import SkyIcon from "./SkyIcon";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
+import { PM_STATE, SKY, WIND_DIRECTION } from "../constants";
 const Dd = styled.dd`
   color: ${(props) =>
-    props.className === gradeArray[0]
-      ? "#42a5f5"
-      : props.className === gradeArray[1]
-      ? "#15921b"
-      : props.className === gradeArray[2]
-      ? "#ff7b00"
-      : props.className === gradeArray[3]
-      ? "#ef5350"
-      : "#6d6d6d"};
+    props.className !== "notYet"
+      ? PM_STATE[props.className as keyof typeof PM_STATE].color
+      : PM_STATE.undefined.color};
 `;
 type PmDdProperty = {
   grade: PmType;
@@ -30,7 +24,7 @@ type PmDdProperty = {
 const PmDd = ({ grade }: PmDdProperty) => {
   return (
     <Dd className={grade === null ? "notYet" : grade}>
-      {grade === null ? <BiDotsHorizontalRounded /> : grade}
+      {grade === null ? <BiDotsHorizontalRounded /> : PM_STATE[grade].name}
     </Dd>
   );
 };
@@ -211,7 +205,7 @@ const Now = ({ nowWeather, tomorrowWeather, todaySunInform }: NowProperty) => {
             {nowWeather.tmp}
             <span className="degree">°</span>
           </div>
-          <div className="sky">{nowWeather.sky}</div>
+          <div className="sky">{SKY[nowWeather.sky]}</div>
         </div>
       </div>
       <div className="now_quickArea">
@@ -240,7 +234,7 @@ const Now = ({ nowWeather, tomorrowWeather, todaySunInform }: NowProperty) => {
                     </li>
                     <li>
                       <dl>
-                        <dt>{nowWeather.wind.vec}</dt>
+                        <dt>{WIND_DIRECTION[nowWeather.wind.vec]}</dt>
                         <dd>
                           {nowWeather.wind.wsd}
                           <span className="unit">m/s</span>
@@ -308,7 +302,7 @@ const Now = ({ nowWeather, tomorrowWeather, todaySunInform }: NowProperty) => {
               name="현재 날씨"
               type="button"
             >
-              <span className="scrn-only">현재 날씨</span>
+              <span className="screen-only">현재 날씨</span>
             </button>
             <button
               className={
@@ -318,7 +312,7 @@ const Now = ({ nowWeather, tomorrowWeather, todaySunInform }: NowProperty) => {
               name="내일 날씨"
               type="button"
             >
-              <span className="scrn-only">내일 날씨</span>
+              <span className="screen-only">내일 날씨</span>
             </button>
           </div>
         </div>

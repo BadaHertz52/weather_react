@@ -129,50 +129,50 @@ export const SunnyNightIcon = () => {
 const SkyIcon = ({ skyType, daytime }: SkyIconProperty) => {
   return (
     <div className="skyIcon">
-      {skyType === "구름많고 눈" && (
+      {skyType === "cldSnow" && (
         <div className="overlapping">
           <CloudyIcon className="behind" rain={false} shower={false} />
           <SnowIcon className="front" />
         </div>
       )}
-      {skyType === "구름많고 비" && (
+      {skyType === "cldRain" && (
         <CloudyIcon className="behind" rain={true} shower={false} />
       )}
-      {skyType === "구름많고 비/눈" && (
+      {skyType === "cldRainSnow" && (
         <div className="overlapping">
           <CloudyIcon className="behind" rain={true} shower={false} />
           <SnowIcon className="front" />
         </div>
       )}
-      {(skyType === "소나기" ||
-        skyType === "한때 비" ||
-        skyType === "구름많고 소나기") && (
+      {(skyType === "shower" ||
+        skyType === "spellRain" ||
+        skyType === "cldShower") && (
         <CloudyIcon className="" rain={false} shower={true} />
       )}
-      {skyType === "구름많음" && (
+      {skyType === "cloudy" && (
         <CloudyIcon className="" rain={false} shower={false} />
       )}
-      {skyType === "눈" && <SnowIcon className="" />}
-      {skyType === "맑음" && (daytime ? <SunnyDayIcon /> : <SunnyNightIcon />)}
-      {skyType === "흐리고 눈" && (
+      {skyType === "snow" && <SnowIcon className="" />}
+      {skyType === "sunny" && (daytime ? <SunnyDayIcon /> : <SunnyNightIcon />)}
+      {skyType === "vrCldSnow" && (
         <div className="overlapping">
           <VeryCloudyIcon className={"behind"} rain={false} shower={false} />
           <SnowIcon className="front" />
         </div>
       )}
-      {(skyType === "비" || skyType === "흐리고 비") && (
+      {(skyType === "rainy" || skyType === "vrCldRain") && (
         <VeryCloudyIcon className={undefined} rain={true} shower={false} />
       )}
-      {(skyType === "비 또는 눈" || skyType === "흐리고 비/눈") && (
+      {(skyType === "snowRain" || skyType === "vrCldRainSnow") && (
         <div className="overlapping">
           <VeryCloudyIcon className={"behind"} rain={true} shower={false} />
           <SnowIcon className="front" />
         </div>
       )}
-      {skyType === "흐리고 소나기" && (
+      {skyType === "vrCldShower" && (
         <VeryCloudyIcon className={undefined} rain={false} shower={true} />
       )}
-      {skyType === "흐림" && (
+      {skyType === "veryCloudy" && (
         <VeryCloudyIcon className={undefined} rain={false} shower={false} />
       )}
     </div>

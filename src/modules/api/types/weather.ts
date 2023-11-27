@@ -1,5 +1,22 @@
-import { PmType, SkyType } from "./weather/types";
+import {
+  INQURY_AIR,
+  INQURY_MID,
+  INQURY_SHORT,
+  INQURY_SUN,
+  SVF_BASE_TIME,
+} from "../../../constants";
+import { PmType, SkyType } from "../../weather/types";
 
+export type SFInqury = keyof typeof INQURY_SHORT;
+
+export type Api = {
+  url: string;
+  inqury:
+    | typeof INQURY_SUN
+    | typeof INQURY_SHORT
+    | typeof INQURY_MID
+    | typeof INQURY_AIR;
+};
 /**
  * 초단기 실황,초단기 예보 ,단기 예보 api data 속 item 의 공통 properties
  */
@@ -52,24 +69,8 @@ export type USNcst = {
 /**
  * 단기 예보 data
  */
-const am2 = "0200";
-const am5 = "0500";
-const am8 = "0800";
-const am11 = "1100";
-const pm2 = "1400";
-const pm5 = "1700";
-const pm8 = "2000";
-const pm11 = "2300";
 
-export type SVFBaseTime =
-  | typeof am2
-  | typeof am5
-  | typeof am8
-  | typeof am11
-  | typeof pm2
-  | typeof pm5
-  | typeof pm8
-  | typeof pm11;
+export type SVFBaseTime = keyof typeof SVF_BASE_TIME;
 
 export type SVFTime = {
   //예보 날짜
@@ -240,37 +241,4 @@ export type ApFcstInformGrade = {
 export type PmGrade = {
   pm10Grade: PmType;
   pm25Grade: PmType;
-};
-
-export type KakaoDocumentType = {
-  /** H(행정동) 또는 B(법정동) */
-  region_type: string;
-  /** 전체 지역 명칭 */
-  address_name: string;
-  /**
-   * 시도 단위
-   */
-  region_1depth_name: string;
-  /**
-   * 구 단위
-   */
-  region_2depth_name: string;
-  /**
-   * 동 단위
-   */
-  region_3depth_name: string;
-  /**
-   * region_type이 법정동이며, 리 영역인 경우만 존재
-   */
-  region_4depth_name: string;
-  /**
-   * region 코드
-   */
-  code: string;
-  /**
-   * longitude
-   */
-  x: number;
-  /**latitude */
-  y: number;
 };

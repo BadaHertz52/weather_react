@@ -1,6 +1,6 @@
-import {SFGridItem} from './position/types';
+import {SFGridItem} from '../modules/position/types';
 
-export const sfGrid :SFGridItem[] =[
+export const SF_GRID :SFGridItem[] =[
  {
   areaCode: "1100000000",
   arePt1: "서울특별시",

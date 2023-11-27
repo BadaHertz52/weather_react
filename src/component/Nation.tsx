@@ -11,6 +11,7 @@ import { weekArray } from "./Week";
 import mapImg from "../assets/map.jpg";
 import SkyIcon from "./SkyIcon";
 import { checkDayOrNight } from "../App";
+import { AREA } from "../constants";
 const now = "now";
 const am = "am";
 const pm = "pm";
@@ -56,10 +57,7 @@ const Zone = ({ daytime, area, targetTime, targetDaylater }: ZoneProperty) => {
   })();
 
   return (
-    <div
-      id={`zone_${areaName === "울릉/독도" ? "울릉독도" : areaName}`}
-      className="zone"
-    >
+    <div id={`zone_${areaName}`} className="zone">
       <SkyIcon skyType={zoneWeatherData.sky} daytime={daytime} />
       <div className="text">
         <span className="areaName">{areaName}</span>

@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { checkDayOrNight } from "../App";
 import {
   DailyWeather,
-  directionArray,
   HourWeather,
   SunRiseAndSet,
   WindType,
 } from "../modules/weather";
+import { WIND_DIRECTION, WIND_DIRECTION_ARRAY } from "../constants";
 import SkyIcon from "./SkyIcon";
 import { TiLocationArrow } from "react-icons/ti";
 import { CSSProperties } from "styled-components";
@@ -130,7 +130,10 @@ type TdWindyProperty = {
 };
 const TdWindy = ({ date, hours, wind }: TdWindyProperty) => {
   const ymdt = `${date}${hours.slice(0, 2)}`;
-  const index = wind.vec === "북풍" ? 0 : directionArray.indexOf(wind.vec);
+  const index =
+    WIND_DIRECTION[wind.vec] === "북풍"
+      ? 0
+      : WIND_DIRECTION_ARRAY.indexOf(wind.vec);
   const angle: number = (360 / 16) * index;
   const deg = -15 + angle;
   const arrowStyle: CSSProperties = {
