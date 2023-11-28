@@ -1,5 +1,7 @@
 export * from "./thunk";
 export * from "./saga";
+export * from "./stateSample";
 export * from "./types";
 export * from "./toolkit";
-export { default } from "./reducer";
+export * from "./reducer";
+export { default as weatherReducer } from "./reducer";

@@ -1,25 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import rootReducer, { rootSaga } from './modules/index';
-import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
-import createSagaMiddleware from '@redux-saga/core';
-import { configureStore } from '@reduxjs/toolkit';
-const sagaMiddleware =createSagaMiddleware();
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { rootSaga, rootReducer } from "./modules";
+import { Provider } from "react-redux";
+import thunk from "redux-thunk";
+import createSagaMiddleware from "@redux-saga/core";
+import { configureStore } from "@reduxjs/toolkit";
+
+const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
-  reducer:rootReducer,
-  middleware: [thunk ,sagaMiddleware]
+  reducer: rootReducer,
+  middleware: [thunk, sagaMiddleware],
 });
 sagaMiddleware.run(rootSaga);
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
 root.render(
   <Provider store={store}>
     <App />
   </Provider>
-    
 );
 
 // If you want to start measuring performance in your app, pass a function

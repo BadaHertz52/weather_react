@@ -8,7 +8,9 @@ import {
   WIND_DIRECTION,
 } from "../../constants";
 import { SFGridItem } from "../position";
-import { reset, request, success, failure } from "./reducer";
+import { weatherActions } from "./reducer";
+
+const { request, success, reset, failure } = weatherActions;
 
 export type SkyCodeType = keyof typeof SKY_CODE;
 

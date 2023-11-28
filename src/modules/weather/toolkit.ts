@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getWeatherData } from "../api";
 import { PositionSuccessData } from "../position";
-import { noneState_weather } from "./reducer";
 import { WeatherState } from "./types";
+import { noneState_weather } from "./reducer";
 
 export const toolkitWeather = createAsyncThunk(
   "weather/toolkitWeather",

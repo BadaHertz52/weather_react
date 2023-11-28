@@ -1,8 +1,10 @@
 import { ThunkAction } from "redux-thunk";
 import { getWeatherData } from "../api";
-import { PositionSuccessData } from "../position/types";
+import { PositionSuccessData } from "../position/";
 import { WeatherAction, WeatherState } from "./types";
-import { request, success, failure } from "./reducer";
+import { weatherActions } from "./reducer";
+
+const { request, success, failure } = weatherActions;
 
 export const getWeatherThunk =
   (

@@ -1,8 +1,10 @@
 import { ThunkAction } from "redux-thunk";
 import { getAreaData } from "../api";
-import { request, success, failure } from "./reducer";
 import { CurrentPosition } from "./toolkit";
 import { PositionAction, PositionState } from "./types";
+import { positionActions } from "./reducer";
+
+const { request, success, failure } = positionActions;
 
 export const getPositionThunk =
   (

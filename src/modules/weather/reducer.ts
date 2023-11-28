@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PositionSuccessData } from "../position";
-import { toolkitWeather } from "./toolkit";
 import { WeatherState } from "./types";
 import { testWeatherState } from "./stateSample";
+import { toolkitWeather } from "./toolkit";
 
 export const noneState_weather: WeatherState = {
   state: "none",
@@ -59,5 +59,6 @@ export const weatherSlice = createSlice({
   },
 });
 
-export const { reset, request, success, failure } = weatherSlice.actions;
+export const weatherActions = weatherSlice.actions;
+
 export default weatherSlice.reducer;

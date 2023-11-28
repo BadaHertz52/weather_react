@@ -7,20 +7,19 @@ import { ThunkDispatch } from "redux-thunk";
 import Location from "./component/Location";
 import { RootState } from "./modules";
 import {
+  CurrentPosition,
+  getWeatherThunk,
   PositionAction,
   PositionState,
   PositionSuccessData,
-  CurrentPosition,
-} from "./modules/position";
-import {
+  RootState,
   SunRiseAndSet,
+  toolkitWeather,
   WeatherAction,
   WeatherState,
-  toolkitWeather,
-} from "./modules/weather";
-import { weatherSlice } from "./modules/weather/reducer";
-import { getWeatherThunk } from "./modules/weather/thunk";
-import Loading from "./component/Loading";
+  weatherSlice,
+} from "./modules";
+
 import Content from "./component/Content";
 import Footer from "./component/Footer";
 import NoneWeather from "./component/NoneWeather";

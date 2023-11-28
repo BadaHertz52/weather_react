@@ -1,7 +1,8 @@
 import { getAreaData } from "../api";
-import { PositionState, SFGridItem } from "./types";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { request, success, failure } from "./reducer";
+import { PositionState, SFGridItem } from "./types";
+import { positionActions } from "./reducer";
+const { request, success, failure } = positionActions;
 
 function* getPositionSaga(action: ReturnType<typeof request>) {
   const { longitude, latitude } = action.payload;

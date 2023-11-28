@@ -1,7 +1,9 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { getWeatherData } from "../api";
 import { WeatherState } from "./types";
-import { request, success, failure } from "./reducer";
+import { weatherActions } from "./reducer";
+
+const { request, success, failure } = weatherActions;
 
 function* getWeatherSaga(action: ReturnType<typeof request>) {
   const { longitude, latitude, sfGrid } = action.payload;
