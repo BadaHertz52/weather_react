@@ -1,6 +1,7 @@
 import React from "react";
 import { AmPmType, Day } from "../../../modules/weather";
 import SkyIcon from "../SkyIcon";
+import { WEEK } from "../../../constants";
 type AmPmProperty = {
   data: AmPmType;
   am: boolean;
@@ -21,14 +22,14 @@ const AmPm = ({ data, am }: AmPmProperty) => {
 type ItemProperty = {
   item: Day;
 };
-export const weekArray = ["일", "월", "화", "수", "목", "금", "토", "일"];
+
 const Item = ({ item }: ItemProperty) => {
   const today = new Date();
   const month = today.getMonth() + 1;
   const date: string = `${month}.${today.getDate()}`;
   const todayDay = today.getDay();
   const itemDay = todayDay + item.daysLater;
-  const item_day = itemDay > 6 ? weekArray[itemDay - 6] : weekArray[itemDay];
+  const item_day = itemDay > 6 ? WEEK[itemDay - 6] : WEEK[itemDay];
   const day: string =
     item.daysLater === 0 ? "오늘" : item.daysLater === 1 ? "내일" : item_day;
   return (
