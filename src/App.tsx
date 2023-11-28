@@ -4,8 +4,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
-import Location from "./component/Location";
-import { RootState } from "./modules";
+import { Location, Loading } from "./component";
 import {
   CurrentPosition,
   getWeatherThunk,
@@ -13,7 +12,6 @@ import {
   PositionState,
   PositionSuccessData,
   RootState,
-  SunRiseAndSet,
   toolkitWeather,
   WeatherAction,
   WeatherState,

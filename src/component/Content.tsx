@@ -1,12 +1,7 @@
 import React from "react";
-import Now from "./Now";
-import Hourly from "./Hourly";
-import Week from "./Week";
-import Nation from "./Nation";
-import Sun from "./Sun";
 import { SunRiseAndSet, WeatherState } from "../modules/weather";
 import None from "./None";
-
+import { Hourly, Nation, Now, Sun, Week } from "./weatherContents";
 type ContentProps = {
   weather: WeatherState;
 };
