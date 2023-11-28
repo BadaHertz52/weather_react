@@ -6,12 +6,12 @@ import {
   NationType,
   SkyType,
   SunRiseAndSet,
-} from "../modules/weather";
-import { weekArray } from "./Week";
-import mapImg from "../assets/map.jpg";
-import SkyIcon from "./SkyIcon";
-import { checkDayOrNight } from "../App";
-import { AREA } from "../constants";
+} from "../../../modules";
+import { weekArray } from "../Week/Week";
+import mapImg from "../../../assets/map.jpg";
+import SkyIcon from "../SkyIcon";
+import { checkDayOrNight } from "../../../utils";
+
 const now = "now";
 const am = "am";
 const pm = "pm";
@@ -108,6 +108,7 @@ type NationProperty = {
   nation: NationType;
   todaySunInform: Error | SunRiseAndSet;
 };
+
 const Nation = ({ nation, todaySunInform }: NationProperty) => {
   const today = new Date();
   const hours = today.getHours();

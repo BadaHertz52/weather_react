@@ -1,5 +1,5 @@
 import React from "react";
-import { SkyType } from "../modules/weather";
+import { SkyType } from "../../modules/weather";
 import {
   BsCloudyFill,
   BsFillCloudRainFill,

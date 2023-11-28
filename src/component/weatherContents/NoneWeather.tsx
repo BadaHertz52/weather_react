@@ -1,6 +1,6 @@
 import React from "react";
 import { RiEmotionSadLine } from "react-icons/ri";
-import None from "./None";
+import None from "../None";
 
 const NoneWeather = () => {
   return (

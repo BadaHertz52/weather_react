@@ -1,17 +1,17 @@
 import React, { useRef, useState, useCallback, useMemo } from "react";
 import { GiWaterDrop } from "react-icons/gi";
 import styled, { CSSProperties } from "styled-components";
-import { checkDayOrNight } from "../App";
+import { checkDayOrNight } from "../../../utils";
 import {
   NowWeather,
   PmType,
   SunRiseAndSet,
   TomorrowWeather,
-} from "../modules/weather";
-import ScrollBtn from "./ScrollBtn";
-import SkyIcon from "./SkyIcon";
+} from "../../../modules/weather";
+import ScrollBtn from "../../ScrollBtn";
+import SkyIcon from "../SkyIcon";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
-import { PM_STATE, SKY, WIND_DIRECTION } from "../constants";
+import { PM_STATE, SKY, WIND_DIRECTION } from "../../../constants";
 const Dd = styled.dd`
   color: ${(props) =>
     props.className !== "notYet"

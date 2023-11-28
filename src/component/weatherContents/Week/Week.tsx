@@ -1,6 +1,6 @@
 import React from "react";
-import { AmPmType, Day } from "../modules/weather";
-import SkyIcon from "./SkyIcon";
+import { AmPmType, Day } from "../../../modules/weather";
+import SkyIcon from "../SkyIcon";
 type AmPmProperty = {
   data: AmPmType;
   am: boolean;

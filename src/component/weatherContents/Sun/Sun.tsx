@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { SunRiseAndSet } from "../modules/weather";
+import { SunRiseAndSet } from "../../../modules/weather";
 import { HiArrowSmDown, HiArrowSmUp } from "react-icons/hi";
 import { CSSProperties } from "styled-components";
-import { changeTwoDigit } from "../modules/api/forecast/time";
+import { changeTwoDigit } from "../../../modules/api/forecast/time";
 type SunIconAreaProperty = {
   sunrise: boolean;
 };
