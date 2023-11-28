@@ -1,5 +1,5 @@
 import Hourly from "./Hourly";
-import Nation from "./Nation/Nation";
+import Nation from "./Nation";
 import Now from "./Now/Now";
 import NoneWeather from "./NoneWeather";
 import Sun from "./Sun/Sun";
