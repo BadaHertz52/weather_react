@@ -15,10 +15,10 @@ const Content = ({ weather }: ContentProps) => {
   ) => {
     if (sunRiseAndSet !== null) {
       // 요소들의 값은 weather.sunRiseAndSet의 각 요소들의 타입이 Error type 여부
-      const srray = sunRiseAndSet.map(
+      const array = sunRiseAndSet.map(
         (e: Error | SunRiseAndSet) => e instanceof Error
       );
-      if (srray.includes(true)) {
+      if (array.includes(true)) {
         return false;
       } else {
         return true;
