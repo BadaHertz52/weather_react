@@ -1,8 +1,8 @@
 import React from "react";
 import { TiLocationArrow } from "react-icons/ti";
 import { CSSProperties } from "styled-components";
-import { WIND_DIRECTION, WIND_DIRECTION_ARRAY } from "../../../constants";
-import { WindType } from "../../../modules";
+import { WIND_DIRECTION, WIND_DIRECTION_ARRAY } from "../../../../constants";
+import { WindType } from "../../../../modules";
 
 type TdWindyProperty = {
   date: string;

@@ -41,12 +41,15 @@ const Hourly = ({ todaySunInform, threeDay }: HourlyProperty) => {
     return Number(value);
   }, [tableStyle.transform]);
 
-  const startScroll = useCallback((clientX: number) => {
-    scrollChart.current = true;
-    startX.current = clientX;
-    const value = getTranslateXValue();
-    translateX.current = Number(value);
-  }, []);
+  const startScroll = useCallback(
+    (clientX: number) => {
+      scrollChart.current = true;
+      startX.current = clientX;
+      const value = getTranslateXValue();
+      translateX.current = Number(value);
+    },
+    [getTranslateXValue]
+  );
 
   const moveScroll = useCallback((clientX: number) => {
     if (scrollChart.current) {
@@ -66,21 +69,24 @@ const Hourly = ({ todaySunInform, threeDay }: HourlyProperty) => {
     translateX.current = 0;
   }, []);
 
-  const clickScrollBtn = (pre: boolean) => {
-    const value = getTranslateXValue();
-    const scrollWidth = scrollAreaWidth.current - 40;
-    const x = pre ? value + scrollWidth : value - scrollWidth;
-    scrollAfterOn.current = x > -min.current;
-    scrollBeforeOn.current = x < 0;
-    setTableStyle({
-      transform:
-        x <= -min.current
-          ? `translateX(${-min.current}px)`
-          : x >= 0
-          ? "translateX(0px)"
-          : `translateX(${x}px)`,
-    });
-  };
+  const clickScrollBtn = useCallback(
+    (pre: boolean) => {
+      const value = getTranslateXValue();
+      const scrollWidth = scrollAreaWidth.current - 40;
+      const x = pre ? value + scrollWidth : value - scrollWidth;
+      scrollAfterOn.current = x > -min.current;
+      scrollBeforeOn.current = x < 0;
+      setTableStyle({
+        transform:
+          x <= -min.current
+            ? `translateX(${-min.current}px)`
+            : x >= 0
+            ? "translateX(0px)"
+            : `translateX(${x}px)`,
+      });
+    },
+    [getTranslateXValue]
+  );
 
   useEffect(() => {
     if (tableRef.current !== null) {

@@ -13,6 +13,7 @@ const BtnStyled = styled.button`
   -webkit-box-shadow: 0px 0px 10x 1px rgba(112, 112, 112, 0.28);
   box-shadow: 0px 0px 10px 1px rgba(112, 112, 112, 0.28);
 `;
+
 type BtnProperty = {
   clickEvent: () => void;
   className: string;

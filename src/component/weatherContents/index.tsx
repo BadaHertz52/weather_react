@@ -1,4 +1,4 @@
-import Hourly from "./Hourly/Hourly";
+import Hourly from "./Hourly";
 import Nation from "./Nation/Nation";
 import Now from "./Now/Now";
 import NoneWeather from "./NoneWeather";

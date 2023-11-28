@@ -1,8 +1,8 @@
 import React from "react";
-import TdDay from "../TdDay";
-import Th from "../Th";
+import TdDay from "./TdDay";
+import Th from "./Th";
 import { DailyWeather, HourWeather } from "../../../../modules";
-import TdWindy from "../TdWindy";
+import TdWindy from "./TdWindy";
 
 type TrTarget = "pop" | "pcp" | "sno" | "reh" | "windy";
 type GraphTrProperty = {
