@@ -1,9 +1,5 @@
 //미세먼지 관련 예보 수집
-import {
-  AP_INFORMATION_API,
-  GRADE_ARRAY,
-  INQURY_AIR,
-} from "../../../constants";
+import { AP_INFORMATION_API, INQURY_AIR, PM_STATE } from "../../../constants";
 import { WEST_AREA } from "../../../constants/areaCode";
 import { SFGridItem } from "../../position";
 import {
@@ -17,6 +13,20 @@ import { getAPIItems } from "../index";
 import { PmType } from "../../weather";
 import { changeSearchDate } from "./time";
 
+const getApNowPmType = (pm: string): PmType => {
+  switch (Number(pm)) {
+    case 1:
+      return "good";
+    case 2:
+      return "common";
+    case 3:
+      return "bad";
+    case 4:
+      return "veryBad";
+    default:
+      return "common";
+  }
+};
 /**
  * 실시간 미세먼지, 초미세먼지 등급을 반환하는 함수
  * @param sidoName
@@ -39,8 +49,8 @@ export const getApNow = async (
         stationName.includes(i.stationName)
       )[0];
       const pm: PmGrade = {
-        pm10Grade: GRADE_ARRAY[Number(targetItem.pm10Grade) - 1],
-        pm25Grade: GRADE_ARRAY[Number(targetItem.pm25Grade) - 1],
+        pm10Grade: getApNowPmType(targetItem.pm10Grade),
+        pm25Grade: getApNowPmType(targetItem.pm25Grade),
       };
 
       return pm;
@@ -63,11 +73,9 @@ export const findApFcstArea = (
       case "강원":
         if (pt2 == null || !WEST_AREA.includes(pt2)) {
           // 강원도영동
-
           return "영동";
         } else {
           //강원도영서
-
           return "영서";
         }
       case "경기":
@@ -115,7 +123,7 @@ export const findApFcstArea = (
   }
 };
 
-const getPmGrade = (
+const getApFcstPmType = (
   pmData: string,
   apFcstArea: ApFcstAreaCode,
   sidoName: ApiAreaCode
@@ -124,13 +132,16 @@ const getPmGrade = (
   const sliced1 = pmData.slice(indexOfSido + sidoName.length + 1);
   const indexOfComma = sliced1.indexOf(",");
   const sliced2 = sliced1.slice(0, indexOfComma);
-  const grade = GRADE_ARRAY.map((g: PmType) => {
-    if (g !== null && sliced2.includes(g)) {
-      return g;
-    } else {
-      return null;
-    }
-  }).filter((i: PmType) => i !== null)[0];
+  const grade = Object.entries(PM_STATE)
+    .map((g) => {
+      const [key, value] = g;
+      if (sliced2.includes(value.name)) {
+        return key as PmType;
+      } else {
+        return null;
+      }
+    })
+    .filter((i: PmType) => i !== null)[0];
   return grade;
 };
 
@@ -168,8 +179,8 @@ export const getApFcst = async (
         (i: ApFcstItem) => i.informCode === "PM25"
       )[0].informGrade;
 
-      const pm10Grade = getPmGrade(pm10Fcst, apFcstArea, sidoName);
-      const pm25Grade = getPmGrade(pm25Fcst, apFcstArea, sidoName);
+      const pm10Grade = getApFcstPmType(pm10Fcst, apFcstArea, sidoName);
+      const pm25Grade = getApFcstPmType(pm25Fcst, apFcstArea, sidoName);
       const pmData: PmGrade = {
         pm10Grade: pm10Grade,
         pm25Grade: pm25Grade,

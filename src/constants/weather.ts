@@ -58,5 +58,3 @@ export const PM_STATE = {
   veryBad: { name: "매우 나쁨", color: "#ef5350" },
   undefined: { name: "정보없음", color: "#6d6d6d" },
 };
-
-export const GRADE_ARRAY = Object.keys(PM_STATE) as PmType[];
