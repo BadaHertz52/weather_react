@@ -1,9 +1,5 @@
-import { PmType } from "../modules";
 import { TableHeadDataValueType, TableHeadTitleType } from "../types";
 import { getTableHeadDataValue } from "../utils";
-import { PM_STATE } from "./weather";
-
-export const GRADE_ARRAY: PmType[] = Object.keys(PM_STATE) as PmType[];
 
 export const GRAPH_TABLE_HEAD_MAP: Map<
   TableHeadTitleType,
