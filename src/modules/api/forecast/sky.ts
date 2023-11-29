@@ -1,6 +1,7 @@
 import { SFcstItem } from "../types/weather";
 import { PtyCodeType, SkyCodeType, SkyType } from "../../weather";
 import { getAPIItems, getSFApiUrl } from "../index";
+import { SKY } from "../../../constants";
 
 // state로 변경 시 필요한 함수
 export const getSkyCode = (code: number): SkyCodeType => {
@@ -71,7 +72,7 @@ const getSkyTypeOfOther = (ptyCode: PtyCodeType): SkyType => {
   }
 };
 
-export const getSkyType = (skyAvg: number, ptyAvg: number): SkyType => {
+export const getSvfSkyType = (skyAvg: number, ptyAvg: number): SkyType => {
   let skyType: SkyType = "cldRain";
   const skyCode = getSkyCode(skyAvg);
   const ptyCode = getPtyCode(ptyAvg);
@@ -123,4 +124,12 @@ export const getUSSkyCode = async (
     const skyCode = getSkyCode(Number(targetItem.fcstValue));
     return skyCode;
   }
+};
+
+export const getMidSkyType = (wf: string) => {
+  let type: SkyType = "cldRain";
+  for (const [key, value] of Object.entries(SKY)) {
+    if (wf === value) type = key as SkyType;
+  }
+  return type;
 };

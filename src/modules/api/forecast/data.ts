@@ -218,7 +218,6 @@ export const getWeatherData = async (
       nation: null,
       sunRiseAndSet: [...sunInform],
     };
-
     return weather;
   } else {
     const errorData = {

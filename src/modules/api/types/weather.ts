@@ -137,11 +137,11 @@ export type MidFcstDay = {
   /**
    * 오전 날씨
    */
-  wfAm: SkyType;
+  wfAm: string;
   /**
    * 오후 날씨
    */
-  wfPm: SkyType;
+  wfPm: string;
   /**
    * 오전 강수 확률
    */

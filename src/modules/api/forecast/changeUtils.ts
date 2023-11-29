@@ -1,7 +1,7 @@
 import { SFGridItem } from "../../position";
 import { Day } from "../../weather";
 import { MidFcst, MidFcstDay, SVFDay, SVFTime, SVFcst } from "../types";
-import { getSkyType } from "./index";
+import { getMidSkyType, getSvfSkyType } from "./index";
 
 /**
  * sVFcst를 Day[]으로 변환
@@ -33,11 +33,11 @@ export const changeSvfToDay = (sVFcst: SVFcst) => {
       daysLater: sVFcst.indexOf(d), //0-5 (today=0)
       am: {
         pop: amData.pop,
-        sky: getSkyType(amData.sky, amData.pty),
+        sky: getSvfSkyType(amData.sky, amData.pty),
       },
       pm: {
         pop: pmData.pop,
-        sky: getSkyType(pmData.sky, pmData.pty),
+        sky: getSvfSkyType(pmData.sky, pmData.pty),
       },
       tmn: Number(d[0].tmn),
       tmx: Number(d[0].tmx),
@@ -56,11 +56,11 @@ export const changeMidToDay = (midFcst: MidFcst) => {
       daysLater: midFcst.indexOf(d) + 3,
       am: {
         pop: Number(d.rnStAm),
-        sky: d.wfAm,
+        sky: getMidSkyType(d.wfAm),
       },
       pm: {
         pop: Number(d.rnStPm),
-        sky: d.wfPm,
+        sky: getMidSkyType(d.wfPm),
       },
       tmn: d.taMin,
       tmx: d.taMax,
