@@ -1,24 +1,8 @@
 import React from "react";
-import { AmPmType, Day } from "../../../modules/weather";
-import SkyIcon from "../SkyIcon";
+import { Day } from "../../../modules";
 import { WEEK } from "../../../constants";
-type AmPmProperty = {
-  data: AmPmType;
-  am: boolean;
-};
-const AmPm = ({ data, am }: AmPmProperty) => {
-  return (
-    <div className={`weather_inner ${am ? "am" : "pm"}`}>
-      <strong className="inner_text left">
-        <span className="time-part">{am ? "오전" : "오후"}</span>
-        <span className={`rainfall ${data.pop === 0 ? "none" : ""}`}>
-          {Math.round(data.pop)}%
-        </span>
-      </strong>
-      <SkyIcon skyType={data.sky} daytime={true} />
-    </div>
-  );
-};
+import AmPm from "./AmPm";
+
 type ItemProperty = {
   item: Day;
 };
@@ -32,6 +16,7 @@ const Item = ({ item }: ItemProperty) => {
   const item_day = itemDay > 6 ? WEEK[itemDay - 6] : WEEK[itemDay];
   const day: string =
     item.daysLater === 0 ? "오늘" : item.daysLater === 1 ? "내일" : item_day;
+
   return (
     <li className={`item day${item.daysLater}`}>
       <div className="day_data">
@@ -56,28 +41,5 @@ const Item = ({ item }: ItemProperty) => {
     </li>
   );
 };
-type WeekProperty = {
-  week: Day[];
-};
-const Week = ({ week }: WeekProperty) => {
-  const twoDays = week.slice(0, 2);
-  return (
-    <div className="week" aria-details="주간 예보">
-      <h2 className="title">주간 예보</h2>
-      <ul className="box">
-        {twoDays.map((d: Day) => (
-          <Item item={d} />
-        ))}
-      </ul>
-      <div className="scrollControl">
-        <ul className="scrollArea">
-          {week.map((d: Day) => (
-            <Item item={d} />
-          ))}
-        </ul>
-      </div>
-    </div>
-  );
-};
 
-export default React.memo(Week);
+export default React.memo(Item);
