@@ -69,11 +69,11 @@ const getThreeDays = (dayLater: number[], date: number) => {
     return changeBaseDate(later);
   });
 };
-const getBaseTimeSvf = (hours: number) => {
+export const getBaseTimeSvf = (hours: number) => {
   let time: SVFBaseTime = "am2";
   const TIMES = Object.entries(SVF_BASE_TIME).map((v) => {
     const [key, value] = v;
-    const number = Number(value.replaceAll("0", ""));
+    const number = Number(value.slice(0, 2));
 
     return {
       key: key as SVFBaseTime,
