@@ -1,4 +1,5 @@
 import { SunRiseAndSet } from "../modules";
+import { TableHeadDataValueType } from "../types";
 
 /**
  * hours 가 일몰,일출 시간을 기준을 낮 시간인지 밤 시간인지 확인하는 함수
@@ -25,4 +26,14 @@ export const checkDayOrNight = (
    */
   const daytime: boolean = dayCondition ? true : false;
   return daytime;
+};
+//Hourly_Graph
+export const getTableHeadDataValue = (
+  title: string,
+  unit: string
+): TableHeadDataValueType => {
+  return {
+    title: title,
+    unit: unit,
+  };
 };

@@ -1,5 +1,5 @@
-import { WindDirectionType, PmType } from "../modules/weather";
-
+import { WindDirectionType } from "../modules/weather";
+//sky
 export const SKY_CODE = {
   sunny: "맑음", // sky code :1
   cloudy: "구름많음", // sky code :3
@@ -27,7 +27,7 @@ export const SKY = {
   vrCldRainSnow: "흐리고 비/눈",
   vrCldShower: "흐리고 소나기",
 };
-
+//wind
 export const WIND_DIRECTION = {
   north: "북풍",
   nne: "북북동풍",
@@ -50,7 +50,7 @@ export const WIND_DIRECTION = {
 export const WIND_DIRECTION_ARRAY: WindDirectionType[] = Object.keys(
   WIND_DIRECTION
 ) as WindDirectionType[];
-
+//dusty
 export const PM_STATE = {
   common: { name: "보통", color: "#42a5f5" },
   good: { name: "좋음", color: "#15921b" },
@@ -58,5 +58,3 @@ export const PM_STATE = {
   veryBad: { name: "매우 나쁨", color: "#ef5350" },
   undefined: { name: "정보없음", color: "#6d6d6d" },
 };
-
-export const GRADE_ARRAY: PmType[] = Object.keys(PM_STATE) as PmType[];

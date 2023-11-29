@@ -9,6 +9,7 @@ type TdWindyProperty = {
   hours: string;
   wind: WindType;
 };
+
 const TdWindy = ({ date, hours, wind }: TdWindyProperty) => {
   const ymdt = `${date}${hours.slice(0, 2)}`;
   const index =

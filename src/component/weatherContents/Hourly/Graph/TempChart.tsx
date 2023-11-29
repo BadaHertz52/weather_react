@@ -28,7 +28,7 @@ ChartJS.register(
   Legend
 );
 
-export type TempChartProperty = {
+type TempChartProperty = {
   threeDay: DailyWeather[];
 };
 

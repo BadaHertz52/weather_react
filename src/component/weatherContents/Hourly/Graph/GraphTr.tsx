@@ -3,32 +3,17 @@ import TdDay from "./TdDay";
 import Th from "./Th";
 import { DailyWeather, HourWeather } from "../../../../modules";
 import TdWindy from "./TdWindy";
+import { GRAPH_TABLE_HEAD_MAP } from "../../../../constants";
+import { TableHeadDataValueType, TableHeadTitleType } from "../../../../types";
 
-type TrTarget = "pop" | "pcp" | "sno" | "reh" | "windy";
 type GraphTrProperty = {
   threeDay: DailyWeather[];
-  trTarget: TrTarget;
+  trTarget: TableHeadTitleType;
 };
 const GraphTr = ({ threeDay, trTarget }: GraphTrProperty) => {
-  type DataItemValue = {
-    title: string;
-    unit: string;
-  };
-  const DATA_MAP: Map<TrTarget, DataItemValue> = new Map([
-    ["pop", getDataItemValue("강수확률", "%")],
-    ["pcp", getDataItemValue("강수", "mm")],
-    ["sno", getDataItemValue("적설", "cm")],
-    ["windy", getDataItemValue("바람", "m/s")],
-    ["reh", getDataItemValue("습도", "%")],
-  ]);
-  const { title, unit } = DATA_MAP.get(trTarget) as DataItemValue;
-
-  function getDataItemValue(title: string, unit: string): DataItemValue {
-    return {
-      title: title,
-      unit: unit,
-    };
-  }
+  const { title, unit } = GRAPH_TABLE_HEAD_MAP.get(
+    trTarget
+  ) as TableHeadDataValueType;
 
   return (
     <tr aria-details={trTarget}>

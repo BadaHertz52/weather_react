@@ -9,6 +9,7 @@ type TdDayProperty = {
    */
   none: boolean;
 };
+
 /**
  * pop, pcp,sno, reh
  */
