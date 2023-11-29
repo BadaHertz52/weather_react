@@ -44,6 +44,7 @@ function App() {
   const startThunk = useRef<boolean>(false);
   const startSaga = useRef<boolean>(false);
   const startToolkit = useRef<boolean>(false);
+
   useEffect(() => {
     if (
       position.state === "success" &&
@@ -79,6 +80,7 @@ function App() {
     weatherActions,
     weatherThunkDispatch,
   ]);
+
   return (
     <div className="App">
       <header id="topBar">

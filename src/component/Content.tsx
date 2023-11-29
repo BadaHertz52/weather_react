@@ -1,10 +1,12 @@
 import React from "react";
-import { SunRiseAndSet, WeatherState } from "../modules/weather";
+import { SunRiseAndSet, WeatherState } from "../modules";
 import None from "./None";
 import { Hourly, Nation, Now, Sun, Week } from "./weatherContents";
+
 type ContentProps = {
   weather: WeatherState;
 };
+
 const Content = ({ weather }: ContentProps) => {
   /**
    * weather.sunRiseAndSet이 Error type 의 요소를 가지고 있으면 false, 그렇지 않으면(요소들이 모두 SunSetAndRise type)true를 반환하는 함수
@@ -27,6 +29,7 @@ const Content = ({ weather }: ContentProps) => {
       return false;
     }
   };
+
   return (
     <div id="content">
       <div className="section_wrap">

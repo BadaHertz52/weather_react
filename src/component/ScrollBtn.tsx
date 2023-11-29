@@ -20,6 +20,7 @@ type BtnProperty = {
   name: string;
   pre: boolean;
 };
+
 const ScrollBtn = ({ clickEvent, className, name, pre }: BtnProperty) => {
   return (
     <BtnStyled
