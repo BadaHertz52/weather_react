@@ -5,3 +5,5 @@ export type TableHeadDataValueType = {
   title: string;
   unit: string;
 };
+
+export type SummaryType = "current" | "tomorrow";

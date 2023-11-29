@@ -1,4 +1,4 @@
-.now{
+.now {
   width: 100%;
   display: flex;
   align-items: center;
@@ -6,47 +6,47 @@
   user-select: none;
   box-sizing: border-box;
 }
-.now_now , .now_quickArea{
+.now_current,
+.now_quickArea {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.now_now{
+.now_current {
   justify-content: center;
-  height: 75px ;
+  height: 75px;
   width: fit-content;
-  .summaryImg{
+  .summaryImg {
     position: relative;
-    .skyIcon{
+    .skyIcon {
       width: 75px;
       height: 75px;
     }
   }
   .summary {
     display: flex;
-    flex-direction:  column;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     font-weight: bolder;
-    .temp{
+    .temp {
       height: 70%;
       font-size: 2.5rem;
-
     }
-    .sky{
+    .sky {
       height: 30%;
       text-align: center;
       font-size: 1rem;
     }
   }
 }
-.now_quickArea{
+.now_quickArea {
   width: 100%;
   margin-top: 14px;
   position: relative;
 }
-.now{
-  .scrollControl{
+.now {
+  .scrollControl {
     width: 100%;
     position: relative;
   }
@@ -62,7 +62,8 @@
     left: 0;
     height: 100%;
   }
-  .summary.current , .summary.tomorrow {
+  .summary.current,
+  .summary.tomorrow {
     position: absolute;
     display: flex;
     align-items: center;
@@ -70,229 +71,244 @@
     height: 65px;
     width: 100%;
   }
-  .summary.current{
+  .summary.current {
     left: 0;
     li {
       float: left;
     }
-    dl{
+    dl {
       display: flex;
     }
     dt {
-      color:rgba(110, 110, 110, 0.991);
+      color: rgba(110, 110, 110, 0.991);
     }
-    dd{
-      margin : 0 10px;
+    dd {
+      margin: 0 10px;
       font-weight: bolder;
     }
-    .summary_table:first-child{
+    .summary_table:first-child {
       margin-bottom: 10px;
     }
   }
-  
-  .summary.tomorrow{
+
+  .summary.tomorrow {
     left: 100%;
-    .summary_inner{
+    .summary_inner {
       width: 90%;
     }
-    tbody{
+    tbody {
       box-sizing: border-box;
     }
-    td , dl{
+    td,
+    dl {
       display: flex;
     }
-    tr{
+    tr {
       display: flex;
       align-items: center;
       &:first-child {
         margin-bottom: 5px;
       }
     }
-    tr, th , td ,.term ,.skyIcon .weatherIcon{
-      height: calc(14px * 1.5)
+    tr,
+    th,
+    td,
+    .term,
+    .skyIcon .weatherIcon {
+      height: calc(14px * 1.5);
     }
-    
-    .skyIcon , .weatherIcon ,.dl_number {
-      width:calc(14px * 1.5)
+
+    .skyIcon,
+    .weatherIcon,
+    .dl_number {
+      width: calc(14px * 1.5);
     }
-    th, td{
-      padding:0
+    th,
+    td {
+      padding: 0;
     }
     td dl {
       margin-left: 8px;
       text-align: center;
     }
-    dd{
+    dd {
       font-weight: bolder;
       text-align: center;
     }
-    th span{
+    th span {
       display: inline-block;
     }
-    .term{
-      span{
+    .term {
+      span {
         height: 48%;
         text-align: center;
       }
     }
-    .dl_number{
+    .dl_number {
       display: inline-flex;
       align-items: center;
     }
-    .dl_grade{
+    .dl_grade {
       display: inline-flex;
       align-items: center;
-      dt , dd{
+      dt,
+      dd {
         display: inline-block;
       }
-      dt{
-        min-width: calc(14px * 3 );
+      dt {
+        min-width: calc(14px * 3);
       }
-      dd{
-        margin-left: 8px; 
+      dd {
+        margin-left: 8px;
       }
     }
-    .notYet{
+    .notYet {
       width: 100%;
       height: 100%;
     }
   }
-  
-  .summary_table  {
+
+  .summary_table {
     width: 100%;
-    padding:0;
+    padding: 0;
     display: flex;
     font-size: 14px;
-    tbody, tr{
+    tbody,
+    tr {
       width: 100%;
     }
-    tr{
-      justify-content:space-between;
+    tr {
+      justify-content: space-between;
     }
-    .unit{
+    .unit {
       font-size: 12px;
     }
   }
-  
-  .summary_table .iconWrap svg{
+
+  .summary_table .iconWrap svg {
     font-size: 100%;
   }
-  .tabList{
+  .tabList {
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     position: absolute;
-    top:calc(100% + 14px);
-    left:0;
+    top: calc(100% + 14px);
+    left: 0;
   }
-  .tabBtn{
+  .tabBtn {
     width: 8px;
     height: 8px;
-    padding:0;
+    padding: 0;
     margin-right: 10px;
     border-radius: 50%;
     background-color: rgb(218, 218, 218);
     border: none;
-    &.on{
+    &.on {
       background-color: rgb(88, 88, 88);
     }
   }
 }
-@media screen and (max-width:370px) {
-  .now{
-    .summary.tomorrow{
-      .summary_inner{
+@media screen and (max-width: 370px) {
+  .now {
+    .summary.tomorrow {
+      .summary_inner {
         width: 90%;
         margin-left: 10px;
-        margin-right:calc(10% - 6px);
+        margin-right: calc(10% - 6px);
       }
-      .summary_table{
+      .summary_table {
         font-size: 12px;
       }
-      .skyIcon , .weatherIcon , .dl_number{
+      .skyIcon,
+      .weatherIcon,
+      .dl_number {
         width: 1rem;
       }
-      td dl, .dl_grade dd{
+      td dl,
+      .dl_grade dd {
         margin-left: 4px;
       }
-      .dl_grade{
-        dt{
+      .dl_grade {
+        dt {
           min-width: calc(12px * 3);
         }
       }
     }
   }
 }
-@media  screen and (max-width:435px) {
-  .now{
-    .now_now{
+@media screen and (max-width: 435px) {
+  .now {
+    .now_current {
       height: 50px;
       .summaryImg {
-        .skyIcon{
+        .skyIcon {
           height: 50px;
           width: 50px;
         }
       }
-      .summary{
-        .temp{
+      .summary {
+        .temp {
           font-size: 2rem;
         }
       }
     }
-    .summary.tomorrow{
-      .term{
+    .summary.tomorrow {
+      .term {
         font-size: 12px;
       }
     }
   }
 }
-@media screen and (min-width:500px) {
-  .now{
-    .scrollControl{
-      width: calc(100% - (36px)*2  - 20px);
+@media screen and (min-width: 500px) {
+  .now {
+    .scrollControl {
+      width: calc(100% - (36px) * 2 - 20px);
     }
-    .summary.tomorrow { 
-      dd{
+    .summary.tomorrow {
+      dd {
         width: 3rem;
       }
-      .skyIcon ,.weatherIcon , .dl_number{
+      .skyIcon,
+      .weatherIcon,
+      .dl_number {
         width: 32.5px;
       }
-      .notYet{
+      .notYet {
         font-size: 1rem;
         width: 1.5rem;
       }
     }
   }
 }
-@media screen and (min-width:768px) {
-  .now{
-    .summary_table{
+@media screen and (min-width: 768px) {
+  .now {
+    .summary_table {
       font-size: 1rem;
     }
     .summary.tomorrow {
-      .summary_inner{
+      .summary_inner {
         width: 500px;
       }
     }
   }
 }
-@media screen and (min-width:1025px) {
-  .now{
+@media screen and (min-width: 1025px) {
+  .now {
     margin-top: 10px;
-    width: calc(100% - 50px );
+    width: calc(100% - 50px);
     flex-direction: row;
     justify-content: space-between;
   }
-  .now_now{
+  .now_now {
     margin-left: 32px;
   }
-  .now_quickArea{
-    width:450px;
+  .now_quickArea {
+    width: 450px;
   }
-  .now .scrollControl{
+  .now .scrollControl {
     display: flex;
     flex-direction: column;
     align-items: center;
