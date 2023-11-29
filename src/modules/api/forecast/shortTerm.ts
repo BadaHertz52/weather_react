@@ -141,13 +141,13 @@ export const getSVFcast = async (
     const previousTime = timeArray.slice(0, 24 - todayTimeArray.length);
     const tmn = items2.item.filter((i: SFcstItem) => i.category === "TMN")[0];
     const tmx = items2.item.filter((i: SFcstItem) => i.category === "TMX")[0];
-    const fiteredItem1: SFcstItem[] = items1.item.filter(
+    const filteredItem1: SFcstItem[] = items1.item.filter(
       (i: SFcstItem) =>
         i.fcstDate === baseDate && previousTime.includes(i.fcstTime)
     );
     const preSVDay: SVFDay | undefined =
-      fiteredItem1[0] !== undefined
-        ? getDaySvf(previousTime, fiteredItem1, baseDate, tmn, tmx)
+      filteredItem1[0] !== undefined
+        ? getDaySvf(previousTime, filteredItem1, baseDate, tmn, tmx)
         : undefined;
     const sVFcst: SVFcst = threeDays.map((d: string) => {
       /**
