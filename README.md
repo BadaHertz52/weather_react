@@ -1,6 +1,6 @@
 # Weather
 
-[⛅ weather 사이트 바로가기](https://port-0-weather-react-3a9t2ble8fxyoi.sel3.cloudtype.app/weather_react/)
+[⛅ weather 사이트 바로가기](https://port-0-weather-react-m6vxmwjsf00f25d1.sel4.cloudtype.app/weather_react/)
 
 ---
 
@@ -24,7 +24,7 @@
 
 ## 1) weather 소개
 
-weather 는 kakao local REST API와 공공 데이터 포털에서 제공받은 데이터를 통해 사용자에게 사용자의 현재 위치에 따른 국내의 날씨 정보를 알려주는 날씨 정보 사이트입니다.
+weather는 kakao local REST API와 공공 데이터 포털에서 제공받은 데이터를 통해 사용자에게 사용자의 현재 위치에 따른 국내의 날씨 정보를 알려주는 날씨 정보 사이트입니다.
 사용자는 현재의 자신의 위치에 따른 현 시점의 날씨, 앞으로 3일 이내의 시간별 날씨, 일출 일몰 시각을 제공받을 수 있습니다.
 웹프론트, 웹디자인으로 [네이버 날씨](https://weather.naver.com)를 참고해 만들었습니다.
 
