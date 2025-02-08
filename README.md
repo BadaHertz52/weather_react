@@ -70,7 +70,7 @@ npm i
 
 - 개발 환경에서 실행 방법
   ```
-  npm run dev // 서버 실행
+  npm run start-node // 서버 실행
   ```
   http://localhost:5000/weather_react/ 이동
 
