@@ -5,7 +5,7 @@ import {
   INQURY_SUN,
   SVF_BASE_TIME,
 } from "../../../constants";
-import { PmType, SkyType } from "../../weather/types";
+import { PmType } from "../../weather/types";
 
 export type SFInqury = keyof typeof INQURY_SHORT;
 

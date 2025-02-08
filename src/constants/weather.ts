@@ -1,4 +1,4 @@
-import { PmType, WindDirectionType } from "../modules/weather";
+import { WindDirectionType } from "../modules/weather";
 //sky
 export const SKY_CODE = {
   sunny: "맑음", // sky code :1
