@@ -41,7 +41,7 @@ export const getMidFcast = async (
   let taItems = await getAPIItems(taUrl(tmFc), "midFcastTaItems", userAreaCode);
 
   if (!(landItems instanceof Error) && !(taItems instanceof Error)) {
-    /*if (tmFcTime === "1800") {
+    if (tmFcTime === "1800") {
       const newTmFc = `${tmFcDate}0600`;
       const newLandUrl = landUrl(newTmFc);
       const newTaUrl = taUrl(newTmFc);
@@ -57,19 +57,27 @@ export const getMidFcast = async (
       );
       if (!(newLandItems instanceof Error) && !(newTaItems instanceof Error)) {
         landItems = {
-          ...landItems,
-          wf3Am: newLandItems.item[0].wf3Am,
-          wf3Pm: newLandItems.item[0].wf3Pm,
-          rnSt3Am: newLandItems.item[0].rnSt3Am,
-          rnSt3Pm: newLandItems.item[0].rnSt3Pm,
+          item: [
+            {
+              ...landItems.item[0],
+              wf4Am: newLandItems.item[0].wf4Am,
+              wf4Pm: newLandItems.item[0].wf4Pm,
+              rnSt4Am: newLandItems.item[0].rnSt4Am,
+              rnSt4Pm: newLandItems.item[0].rnSt4Pm,
+            },
+          ],
         };
         taItems = {
-          ...taItems,
-          taMax3: newTaItems.item[0].taMax3,
-          taMin3: newTaItems.item[0].taMin3,
+          item: [
+            {
+              ...taItems.item[0],
+              taMax4: newTaItems.item[0].taMax4,
+              taMin4: newTaItems.item[0].taMin4,
+            },
+          ],
         };
       }
-    }*/
+    }
     const midFcst: MidFcst = [
       {
         dayLater: 4,
