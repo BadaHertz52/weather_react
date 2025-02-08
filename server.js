@@ -79,7 +79,9 @@ app.post("/weather_react/apfcst", async (req, res) => {
 app.post("/weather_react/sunInfo", async (req, res) => {
   const url = req.body.url;
   try {
-    const result = await axios.get(`${url}&ServiceKey=${publicApiKey}`);
+    const result = await axios.get(
+      `${url}&ServiceKey=${publicApiKey}&dataType=JSON`
+    );
     const response = result.data.response;
     const item = response.body.items.item;
     res.send(item);
