@@ -178,8 +178,6 @@ export const getSVFcast = async (
       }
     });
 
-    console.log("svfcst", sVFcst);
-
     return sVFcst;
   } else {
     if (items1 instanceof Error) {
