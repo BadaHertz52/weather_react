@@ -7,7 +7,7 @@ type LocationAreaProperty = {
 };
 const LocationArea = ({ position }: LocationAreaProperty) => {
   return (
-    <div className="Location_area">
+    <div className="location_area">
       {(position.state === "failure" || position.state === "none") && (
         <None target="현재 위치" />
       )}

@@ -16,9 +16,7 @@ type NoneProperty = {
 const None = ({ target }: NoneProperty) => {
   return (
     <div className="none">
-      <div className="inner">
-        <span>{target}에 대한 정보를 찾을 수 없습니다.</span>
-      </div>
+      <p>{target}에 대한 정보를 찾을 수 없습니다.</p>
     </div>
   );
 };
