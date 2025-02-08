@@ -9,7 +9,7 @@ function* getWeatherSaga(action: ReturnType<typeof request>) {
   const { longitude, latitude, sfGrid } = action.payload;
   try {
     const data: Error | WeatherState = yield call(() =>
-      getWeatherData(sfGrid, longitude, latitude)
+      getWeatherData({ sfGrid, longitude, latitude })
     );
     if (data instanceof Error) {
       yield put(failure(data));

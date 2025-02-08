@@ -9,7 +9,7 @@ export const toolkitWeather = createAsyncThunk(
   async (positionSuccessData: PositionSuccessData, thunkAPI) => {
     const { longitude, latitude, sfGrid } = positionSuccessData;
     try {
-      const data = await getWeatherData(sfGrid, longitude, latitude);
+      const data = await getWeatherData({ sfGrid, longitude, latitude });
       const weatherState: WeatherState =
         data instanceof Error
           ? {

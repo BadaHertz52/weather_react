@@ -35,7 +35,7 @@ const getApNowPmType = (pm: string): PmType => {
  */
 export const getApNow = async (
   sidoName: ApiAreaCode,
-  stationName: string[],
+  stationName: (string | null)[],
   userAreaCode: string | number
 ): Promise<PmGrade | Error> => {
   const url = `${AP_INFORMATION_API.url}/${INQURY_AIR.ctprvnRltmMesureDnsty}?sidoName=${sidoName}&returnType=JSON&numOfRows=100000&ver=1.3`;
@@ -133,7 +133,7 @@ const getApFcstPmType = (
   const indexOfComma = sliced1.indexOf(",");
   const sliced2 = sliced1.slice(0, indexOfComma);
   const grade = Object.entries(PM_STATE)
-    .map((g) => {
+    .map(g => {
       const [key, value] = g;
       if (sliced2.includes(value.name)) {
         return key as PmType;
@@ -145,19 +145,26 @@ const getApFcstPmType = (
   return grade;
 };
 
+interface GetApFcstParams {
+  baseDate: string;
+  tBaseDate: string;
+  sidoName: ApiAreaCode;
+  sfGrid: SFGridItem;
+  userAreaCode: number;
+}
 /**
  *  대기질 예보(오늘,내일,모레) 통보 조회
  * @param baseDate 오늘 날짜 (형식:yyyymmdd)
  * @param tBaseDate 내일 날짜 (형식:yyyymmdd)
  * @param sidoName 시도 이름
  */
-export const getApFcst = async (
-  baseDate: string,
-  tBaseDate: string,
-  sidoName: ApiAreaCode,
-  sfGrid: SFGridItem,
-  userAreaCode: string | number
-): Promise<PmGrade | Error> => {
+export const getApFcst = async ({
+  baseDate,
+  tBaseDate,
+  sidoName,
+  sfGrid,
+  userAreaCode,
+}: GetApFcstParams): Promise<PmGrade | Error> => {
   const searchDate = changeSearchDate(baseDate);
   const tSearchDate = changeSearchDate(tBaseDate);
   const apFcstArea = findApFcstArea(sidoName, sfGrid);

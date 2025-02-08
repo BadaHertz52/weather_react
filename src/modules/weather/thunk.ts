@@ -10,12 +10,12 @@ export const getWeatherThunk =
   (
     positionSuccessData: PositionSuccessData
   ): ThunkAction<void, WeatherState, unknown, WeatherAction> =>
-  async (dispatch) => {
+  async dispatch => {
     const { longitude, latitude, sfGrid } = positionSuccessData;
     dispatch(request(positionSuccessData));
     try {
       // weatherState 이거나 error message 를 담은 string
-      const data = await getWeatherData(sfGrid, longitude, latitude);
+      const data = await getWeatherData({ sfGrid, longitude, latitude });
       if (data instanceof Error) {
         dispatch(failure(data));
       } else {

@@ -1,11 +1,5 @@
-import {
-  DailyWeather,
-  Day,
-  HourWeather,
-  SunRiseAndSet,
-  WeatherState,
-} from "../../weather";
-import { PmGrade, SVFDay, SVFTime } from "../types";
+import { Day, HourWeather, SunRiseAndSet, WeatherState } from "../../weather";
+import { PmGrade, SVFcst, SVFTime } from "../types";
 import { getWsd } from "../wind";
 import { SFGridItem } from "../../position";
 import { findLandTaCode, getApAreaCode } from "../area";
@@ -13,9 +7,8 @@ import { ApiAreaCode } from "../types";
 import {
   getSkyCode,
   getUSSkyCode,
-  getTimeData,
-  getSVFcast,
   getUSNcast,
+  getSVFcast,
   getMidFcast,
   getApFcst,
   getApNow,
@@ -23,214 +16,301 @@ import {
   changeMidToDay,
   changeNType,
   changeSvfToDay,
+  getTimeData,
 } from "./index";
+
+interface GetMidForecastParams {
+  landRegId: string | undefined;
+  taRegId: string | undefined;
+  baseDate_today: string;
+  baseDate_yesterday: string;
+  hours: number;
+  userAreaCode: number;
+}
 /**
- * 현 위치에 대한  현재 날씨, 앞으로의 기상 전망, 일몰,전국 날씨를 반환하거나 error 메시지가 담긴 글을 반환
- * @param sfGrid
- * @param longitude
- * @param latitude
- * @returns
+ * 지역별 기상 데이터를 가져오는 함수
  */
-export const getWeatherData = async (
-  sfGrid: SFGridItem,
-  longitude: string,
-  latitude: string
-): Promise<Error | WeatherState> => {
-  const userAreaCode = sfGrid.areaCode;
+const getMidForecast = async ({
+  landRegId,
+  taRegId,
+  baseDate_today,
+  baseDate_yesterday,
+  hours,
+  userAreaCode,
+}: GetMidForecastParams) => {
+  if (landRegId && taRegId) {
+    return getMidFcast(
+      landRegId,
+      taRegId,
+      baseDate_today,
+      baseDate_yesterday,
+      hours,
+      userAreaCode
+    );
+  }
+
+  throw new Error(
+    landRegId === undefined && taRegId === undefined
+      ? "[Error] landRegId and taRegId are undefined"
+      : landRegId === undefined
+      ? "[Error] landRegId is undefined"
+      : "[Error] taRegId is undefined"
+  );
+};
+
+interface GetTomorrowApGradeParams {
+  hours: number;
+  minutes: number;
+  baseDate_today: string;
+  svfDays: string[];
+  sidoName: ApiAreaCode;
+  sfGrid: SFGridItem;
+  userAreaCode: number;
+}
+/**
+ * 내일의 미세먼지 예보를 가져오는 함수
+ */
+const getTomorrowApGrade = async ({
+  hours,
+  minutes,
+  baseDate_today,
+  sidoName,
+  sfGrid,
+  userAreaCode,
+  svfDays,
+}: GetTomorrowApGradeParams) => {
+  return hours > 5 || (hours === 5 && minutes > 10)
+    ? getApFcst({
+        baseDate: baseDate_today,
+        tBaseDate: svfDays[1],
+        sidoName,
+        sfGrid,
+        userAreaCode,
+      })
+    : { pm10Grade: null, pm25Grade: null };
+};
+
+const changeHourItem = (t: SVFTime): HourWeather => ({
+  date: t.fcstDate,
+  hour: t.fcstTime,
+  sky: getSkyCode(t.sky),
+  temp: t.tmp,
+  pop: t.pop,
+  pcp: t.pcp,
+  sno: t.sno,
+  wind: {
+    vec: getWsd(t.wsd, t.vec),
+    wsd: t.wsd,
+  },
+  reh: t.reh,
+});
+
+interface GetWeatherStateParams {
+  skyCode: any;
+  uSNcst: any;
+  sVFcst: SVFcst;
+  midFcst: any;
+  nowApGrade: PmGrade | Error;
+  tomorrowApGrade: PmGrade | Error;
+  sunInformation: SunRiseAndSet[];
+  todayTimeArray: string[];
+  svfDays: string[];
+}
+/**
+ * 날씨 데이터를 가져와 `WeatherState` 형태로 변환하는 함수
+ */
+const getWeatherState = ({
+  skyCode,
+  uSNcst,
+  sVFcst,
+  midFcst,
+  nowApGrade,
+  tomorrowApGrade,
+  sunInformation,
+  todayTimeArray,
+  svfDays,
+}: GetWeatherStateParams): WeatherState => {
+  const targetSVFcst = sVFcst.map((i, index) =>
+    index === 0
+      ? i.filter((t: SVFTime) => todayTimeArray.includes(t.fcstTime))
+      : i
+  );
+
+  const svfDay: Day[] = changeSvfToDay(sVFcst);
+  const midDay: Day[] = changeMidToDay(midFcst);
+
+  const threeDay = targetSVFcst.slice(0, 3).map((d, index) => ({
+    date: svfDays[index],
+    hourly: d.map(changeHourItem),
+  }));
+
+  return {
+    state: "success",
+    error: null,
+    nowWeather: {
+      tmp: uSNcst.t1h,
+      sky: skyCode,
+      reh: uSNcst.reh,
+      wind: {
+        vec: getWsd(uSNcst.wsd, uSNcst.vec),
+        wsd: uSNcst.wsd,
+      },
+      pm10Grade: nowApGrade instanceof Error ? null : nowApGrade.pm10Grade,
+      pm25Grade: nowApGrade instanceof Error ? null : nowApGrade.pm25Grade,
+    },
+    tomorrowWeather: {
+      pm10Grade:
+        tomorrowApGrade instanceof Error ? null : tomorrowApGrade.pm10Grade,
+      pm25Grade:
+        tomorrowApGrade instanceof Error ? null : tomorrowApGrade.pm25Grade,
+      am: svfDay[1]?.am,
+      pm: svfDay[1]?.pm,
+      tmn: svfDay[1]?.tmn,
+      tmx: svfDay[1]?.tmx,
+    },
+    threeDay,
+    week: [...svfDay, ...midDay],
+    nation: null,
+    sunRiseAndSet: [...sunInformation],
+  };
+};
+
+interface FetchWeatherDataParams {
+  sfGrid: SFGridItem;
+  longitude: string;
+  latitude: string;
+}
+
+const fetchWeatherData = async ({
+  sfGrid,
+  longitude,
+  latitude,
+}: FetchWeatherDataParams) => {
+  const userAreaCode = Number(sfGrid.areaCode);
   const { nX, nY } = changeNType(sfGrid);
-  const stationName: string[] =
-    sfGrid.arePt3 !== null && sfGrid.arePt2 !== null
-      ? [sfGrid.arePt1, sfGrid.arePt2, sfGrid.arePt3]
-      : sfGrid.arePt2 !== null
-      ? [sfGrid.arePt1, sfGrid.arePt2]
-      : [sfGrid.arePt1];
+  const stationName = [sfGrid.arePt1, sfGrid.arePt2, sfGrid.arePt3].filter(
+    Boolean
+  );
   const { landRegId, taRegId } = findLandTaCode(sfGrid);
   const sidoName: ApiAreaCode = getApAreaCode(sfGrid);
-  const {
-    hours,
-    minutes,
-    svfDays,
-    baseDate_today,
-    baseDate_yesterday,
-    baseDate_skyCode,
-    baseDate_svf,
-    baseTime_svf,
-    preFcstTime,
-    fcstTime,
-    baseTime_skyCode,
-    timeArray,
-    todayTimeArray,
-  } = getTimeData();
-  //get api data
-  const skyCode = await getUSSkyCode(
-    nX,
-    nY,
-    baseDate_skyCode,
-    baseTime_skyCode,
-    fcstTime,
-    userAreaCode
-  );
-  const uSNcst = await getUSNcast(
-    nX,
-    nY,
-    baseDate_yesterday,
-    baseDate_today,
-    fcstTime,
-    preFcstTime,
-    minutes,
-    hours,
-    userAreaCode
-  );
-  const sVFcst = await getSVFcast(
-    nX,
-    nY,
-    baseDate_svf,
-    baseTime_svf,
-    baseDate_yesterday,
-    timeArray,
-    todayTimeArray,
-    svfDays,
-    userAreaCode
-  );
-  const midFcst =
-    landRegId !== undefined && taRegId !== undefined
-      ? await getMidFcast(
-          landRegId,
-          taRegId,
-          baseDate_today,
-          baseDate_yesterday,
-          hours,
-          userAreaCode
-        )
-      : landRegId === undefined
-      ? taRegId === undefined
-        ? new Error("[Error] landRegId and taRegId are undefined")
-        : new Error("[Error] landRegId is undefined")
-      : new Error("[Error] taRegId is undefined");
-  const nowApGrade: PmGrade | Error = await getApNow(
-    sidoName,
-    stationName,
-    userAreaCode
-  );
+  const timeData = getTimeData();
 
-  const tomorrowApGrade: PmGrade | Error =
-    hours > 5 || (hours === 5 && minutes > 10)
-      ? await getApFcst(
-          baseDate_today,
-          svfDays[1],
-          sidoName,
-          sfGrid,
-          userAreaCode
-        )
-      : {
-          pm10Grade: null,
-          pm25Grade: null,
-        };
+  try {
+    const [
+      skyCode,
+      uSNcst,
+      sVFcst,
+      midFcst,
+      nowApGrade,
+      tomorrowApGrade,
+      sunInformation,
+    ] = await Promise.all([
+      getUSSkyCode(
+        nX,
+        nY,
+        timeData.baseDate_skyCode,
+        timeData.baseTime_skyCode,
+        timeData.fcstTime,
+        userAreaCode
+      ),
+      getUSNcast(
+        nX,
+        nY,
+        timeData.baseDate_yesterday,
+        timeData.baseDate_today,
+        timeData.fcstTime,
+        timeData.preFcstTime,
+        timeData.minutes,
+        timeData.hours,
+        userAreaCode
+      ),
+      getSVFcast(
+        nX,
+        nY,
+        timeData.baseDate_svf,
+        timeData.baseTime_svf,
+        timeData.baseDate_yesterday,
+        timeData.timeArray,
+        timeData.todayTimeArray,
+        timeData.svfDays,
+        userAreaCode
+      ),
+      getMidForecast({
+        landRegId,
+        taRegId,
+        baseDate_today: timeData.baseDate_today,
+        baseDate_yesterday: timeData.baseDate_yesterday,
+        hours: timeData.hours,
+        userAreaCode,
+      }),
+      getApNow(sidoName, stationName, userAreaCode),
+      getTomorrowApGrade({
+        hours: timeData.hours,
+        minutes: timeData.minutes,
+        baseDate_today: timeData.baseDate_today,
+        svfDays: timeData.svfDays,
+        sidoName,
+        sfGrid,
+        userAreaCode,
+      }),
+      getSunInform(longitude, latitude, timeData.svfDays, userAreaCode),
+    ]);
 
-  const sunInform: (Error | SunRiseAndSet)[] = await getSunInform(
-    longitude,
-    latitude,
-    svfDays,
-    userAreaCode
-  );
-  // const nationData: NationType = await getNationData(
-  //   baseDate_skyCode,
-  //   baseDate_today,
-  //   baseDate_yesterday,
-  //   baseTime_skyCode,
-  //   fcstTime,
-  //   preFcstTime,
-  //   minutes,
-  //   hours,
-  //   userAreaCode
-  // );
-  //state로 변경
-  const changeHourItem = (t: SVFTime): HourWeather => ({
-    date: t.fcstDate,
-    hour: t.fcstTime,
-    sky: getSkyCode(t.sky),
-    temp: t.tmp,
-    //강수확률(%)
-    pop: t.pop,
-    //강수량(mm)
-    pcp: t.pcp,
-    sno: t.sno,
-    wind: {
-      vec: getWsd(t.wsd, t.vec),
-      wsd: t.wsd,
-    },
-    reh: t.reh,
-  });
-  const sunInformHasError = sunInform
-    .map(i => i instanceof Error)
-    .includes(true);
-  if (
-    !(skyCode instanceof Error) &&
-    !(sVFcst instanceof Error) &&
-    !(uSNcst instanceof Error) &&
-    !(midFcst instanceof Error) &&
-    !sunInformHasError
-  ) {
-    const targetSVFcst = sVFcst.map((i: SVFDay) => {
-      if (sVFcst.indexOf(i) === 0) {
-        return sVFcst[0].filter((t: SVFTime) =>
-          todayTimeArray.includes(t.fcstTime)
-        );
-      } else {
-        return i;
-      }
-    });
-    const svfDay: Day[] = changeSvfToDay(sVFcst);
-    const midDay: Day[] = changeMidToDay(midFcst);
-    const threeDay = [...targetSVFcst].slice(0, 3).map((d: SVFDay) => {
-      const daily: DailyWeather = {
-        date: svfDays[targetSVFcst.indexOf(d)],
-        hourly: d.map((t: SVFTime) => changeHourItem(t)),
-      };
-      return daily;
-    });
-    const weather: WeatherState = {
-      state: "success",
-      error: null,
-      nowWeather: {
-        tmp: uSNcst.t1h,
-        sky: skyCode,
-        reh: uSNcst.reh,
-        wind: {
-          vec: getWsd(uSNcst.wsd, uSNcst.vec),
-          wsd: uSNcst.wsd,
-        },
-        pm10Grade: nowApGrade instanceof Error ? null : nowApGrade.pm10Grade,
-        pm25Grade: nowApGrade instanceof Error ? null : nowApGrade.pm25Grade,
-      },
-      tomorrowWeather: {
-        pm10Grade:
-          tomorrowApGrade instanceof Error ? null : tomorrowApGrade.pm10Grade,
-        pm25Grade:
-          tomorrowApGrade instanceof Error ? null : tomorrowApGrade.pm25Grade,
-        am: svfDay[1].am,
-        pm: svfDay[1].pm,
-        tmn: svfDay[1].tmn,
-        tmx: svfDay[1].tmx,
-      },
-      threeDay: threeDay,
-      week: [...svfDay, ...midDay],
-      nation: null,
-      sunRiseAndSet: [...sunInform],
+    return {
+      skyCode,
+      uSNcst,
+      sVFcst,
+      midFcst,
+      nowApGrade,
+      tomorrowApGrade,
+      sunInformation,
+      timeData,
     };
-    return weather;
-  } else {
-    const errorData = {
-      skyCode: skyCode instanceof Error,
-      sVFcst: sVFcst instanceof Error,
-      uSNcst: uSNcst instanceof Error,
-      midFcst: midFcst instanceof Error,
-      nowApGrade: nowApGrade instanceof Error,
-      tomorrowApGrade: tomorrowApGrade instanceof Error,
-      sunInform: sunInformHasError,
-    };
-    const error = new Error(`[Error : weather data]:${errorData}`);
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    throw error;
+  }
+};
+
+/**
+ * 날씨 데이터를 가져오는 메인 함수
+ */
+export const getWeatherData = async (
+  params: FetchWeatherDataParams
+): Promise<Error | WeatherState> => {
+  try {
+    const {
+      skyCode,
+      uSNcst,
+      sVFcst,
+      midFcst,
+      nowApGrade,
+      tomorrowApGrade,
+      sunInformation,
+      timeData,
+    } = await fetchWeatherData(params);
+
+    if (sVFcst instanceof Error) return sVFcst;
+
+    if (sunInformation.some(i => i instanceof Error)) {
+      return new Error("[Error] Sun Information API failed.");
+    }
+
+    return getWeatherState({
+      skyCode,
+      uSNcst,
+      sVFcst,
+      midFcst,
+      nowApGrade,
+      tomorrowApGrade,
+      sunInformation: sunInformation as SunRiseAndSet[],
+      todayTimeArray: timeData.todayTimeArray,
+      svfDays: timeData.svfDays,
+    });
+  } catch (error) {
     console.error(error);
-    return error;
+    return error instanceof Error
+      ? error
+      : new Error("Unknown error occurred.");
   }
 };
