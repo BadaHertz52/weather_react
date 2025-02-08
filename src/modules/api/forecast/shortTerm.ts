@@ -109,7 +109,7 @@ export const getDaySvf = (
  * @param yesterday 어제 일자
  * @param timArray  00:00 23:00 까지 string type의 시간을 담은 배열
  * @param todayTimeArray  현재 시각으로 부터 남은 시간 배열
- * @param threeDays  오늘 부터 2일 이후의 날짜들을 담은 배열
+ * @param svfDays  오늘 부터 2일 이후의 날짜들을 담은 배열
  * @returns  Promise<SVFcst|string>
  */
 export const getSVFcast = async (
@@ -120,7 +120,7 @@ export const getSVFcast = async (
   yesterday: string,
   timeArray: string[],
   todayTimeArray: string[],
-  threeDays: string[],
+  svfDays: string[],
   userAreaCode: string | number
 ): Promise<SVFcst | Error> => {
   const url1 = getSFApiUrl("vilageFcst", nx, ny, yesterday, "2300", "10000");
@@ -149,7 +149,7 @@ export const getSVFcast = async (
       filteredItem1[0] !== undefined
         ? getDaySvf(previousTime, filteredItem1, baseDate, tmn, tmx)
         : undefined;
-    const sVFcst: SVFcst = threeDays.map((d: string) => {
+    const sVFcst: SVFcst = svfDays.map((d: string) => {
       /**
        * items2 중에 오늘, 1일 후,2일 후 ,3일 후 중 타켓이 되는 날에 대한 단기 예보
        */
@@ -177,6 +177,8 @@ export const getSVFcast = async (
         return daySVFcst;
       }
     });
+
+    console.log("svfcst", sVFcst);
 
     return sVFcst;
   } else {

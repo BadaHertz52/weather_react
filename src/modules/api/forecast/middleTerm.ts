@@ -41,7 +41,7 @@ export const getMidFcast = async (
   let taItems = await getAPIItems(taUrl(tmFc), "midFcastTaItems", userAreaCode);
 
   if (!(landItems instanceof Error) && !(taItems instanceof Error)) {
-    if (tmFcTime === "1800") {
+    /*if (tmFcTime === "1800") {
       const newTmFc = `${tmFcDate}0600`;
       const newLandUrl = landUrl(newTmFc);
       const newTaUrl = taUrl(newTmFc);
@@ -69,17 +69,8 @@ export const getMidFcast = async (
           taMin3: newTaItems.item[0].taMin3,
         };
       }
-    }
+    }*/
     const midFcst: MidFcst = [
-      {
-        dayLater: 3,
-        wfAm: landItems.item[0].wf3Am,
-        wfPm: landItems.item[0].wf3Pm,
-        rnStAm: landItems.item[0].rnSt3Am,
-        rnStPm: landItems.item[0].rnSt3Pm,
-        taMax: taItems.item[0].taMax3,
-        taMin: taItems.item[0].taMin3,
-      },
       {
         dayLater: 4,
         wfAm: landItems.item[0].wf4Am,

@@ -9,7 +9,7 @@ import { SunRiseAndSet } from "../../weather";
 export const getSunInform = async (
   longitude: string,
   latitude: string,
-  threeDays: string[],
+  svfDays: string[],
   userAreaCode: string | number
 ): Promise<(Error | SunRiseAndSet)[]> => {
   type Item = {
@@ -18,7 +18,7 @@ export const getSunInform = async (
   };
   const getUrl = (date: string) =>
     `${SUN_API.url}/${SUN_API.inqury}?longitude=${longitude}&latitude=${latitude}&locdate=${date}&dnYn=Y`;
-  const array: Item[] = threeDays.map((d: string) => ({
+  const array: Item[] = svfDays.map((d: string) => ({
     url: getUrl(d),
     date: d,
   }));

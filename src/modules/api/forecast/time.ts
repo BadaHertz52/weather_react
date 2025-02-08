@@ -62,7 +62,7 @@ const getYesterDay = (date: number) => {
   // new Date() 말고 today를 쓰면 today 가 이전 날로 변경되는 오류 발생
   return changeBaseDate(yesterday);
 };
-const getThreeDays = (dayLater: number[], date: number) => {
+const getSvfDays = (dayLater: number[], date: number) => {
   return dayLater.map((d: number) => {
     const later = new Date(new Date().setDate(date + d));
 
@@ -71,7 +71,7 @@ const getThreeDays = (dayLater: number[], date: number) => {
 };
 export const getBaseTimeSvf = (hours: number) => {
   let time: SVFBaseTime = "am2";
-  const TIMES = Object.entries(SVF_BASE_TIME).map((v) => {
+  const TIMES = Object.entries(SVF_BASE_TIME).map(v => {
     const [key, value] = v;
     const number = Number(value.slice(0, 2));
 
@@ -100,8 +100,11 @@ export const getTimeData = () => {
   const minutes = today.getMinutes();
   const date = today.getDate();
   const preHours = hours - 1;
-  const dayLater = [0, 1, 2];
-  const threeDays = getThreeDays(dayLater, date);
+  const dayLater = [0, 1, 2, 3];
+  /**
+   * 오늘~ 오늘 부터 4일의 날짜로, 단기 예보를 가져오는데 사용
+   */
+  const svfDays = getSvfDays(dayLater, date);
   const baseDate_today = changeBaseDate(today);
   const baseDate_yesterday = getYesterDay(date);
   const baseDate_skyCode =
@@ -136,7 +139,7 @@ export const getTimeData = () => {
     hours: hours,
     minutes: minutes,
     date: date,
-    threeDays: threeDays,
+    svfDays: svfDays,
     baseDate_today: baseDate_today,
     baseDate_yesterday: baseDate_yesterday,
     baseDate_skyCode: baseDate_skyCode,

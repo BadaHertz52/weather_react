@@ -49,7 +49,7 @@ export const getWeatherData = async (
   const {
     hours,
     minutes,
-    threeDays,
+    svfDays,
     baseDate_today,
     baseDate_yesterday,
     baseDate_skyCode,
@@ -89,7 +89,7 @@ export const getWeatherData = async (
     baseDate_yesterday,
     timeArray,
     todayTimeArray,
-    threeDays,
+    svfDays,
     userAreaCode
   );
   const midFcst =
@@ -117,7 +117,7 @@ export const getWeatherData = async (
     hours > 5 || (hours === 5 && minutes > 10)
       ? await getApFcst(
           baseDate_today,
-          threeDays[1],
+          svfDays[1],
           sidoName,
           sfGrid,
           userAreaCode
@@ -130,7 +130,7 @@ export const getWeatherData = async (
   const sunInform: (Error | SunRiseAndSet)[] = await getSunInform(
     longitude,
     latitude,
-    threeDays,
+    svfDays,
     userAreaCode
   );
   // const nationData: NationType = await getNationData(
@@ -162,7 +162,7 @@ export const getWeatherData = async (
     reh: t.reh,
   });
   const sunInformHasError = sunInform
-    .map((i) => i instanceof Error)
+    .map(i => i instanceof Error)
     .includes(true);
   if (
     !(skyCode instanceof Error) &&
@@ -182,9 +182,9 @@ export const getWeatherData = async (
     });
     const svfDay: Day[] = changeSvfToDay(sVFcst);
     const midDay: Day[] = changeMidToDay(midFcst);
-    const threeDay = targetSVFcst.map((d: SVFDay) => {
+    const threeDay = [...targetSVFcst].slice(0, 3).map((d: SVFDay) => {
       const daily: DailyWeather = {
-        date: threeDays[targetSVFcst.indexOf(d)],
+        date: svfDays[targetSVFcst.indexOf(d)],
         hourly: d.map((t: SVFTime) => changeHourItem(t)),
       };
       return daily;

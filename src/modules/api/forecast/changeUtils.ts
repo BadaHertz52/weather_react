@@ -53,7 +53,7 @@ export const changeSvfToDay = (sVFcst: SVFcst) => {
 export const changeMidToDay = (midFcst: MidFcst) => {
   return midFcst.map((d: MidFcstDay) => {
     const day: Day = {
-      daysLater: midFcst.indexOf(d) + 3,
+      daysLater: midFcst.indexOf(d) + 4,
       am: {
         pop: Number(d.rnStAm),
         sky: getMidSkyType(d.wfAm),

@@ -21,7 +21,7 @@ import { getUSSkyCode } from "./sky";
  * @param baseTime_svf
  * @param timeArray
  * @param todayTimeArray
- * @param threeDays
+ * @param svfDays
  * @returns  Promise<Error | Area[]>
  */
 export const getNationData = async (
@@ -37,7 +37,7 @@ export const getNationData = async (
   baseTime_svf: SVFBaseTime,
   timeArray: string[],
   todayTimeArray: string[],
-  threeDays: string[],
+  svfDays: string[],
   userAreaCode: string | number
 ): Promise<NationType> => {
   const sessionItemKey = "nation_data";
@@ -78,7 +78,7 @@ export const getNationData = async (
       baseDate_yesterday,
       timeArray,
       todayTimeArray,
-      threeDays,
+      svfDays,
       userAreaCode
     );
 
