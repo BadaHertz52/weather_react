@@ -149,7 +149,7 @@ export const getSVFcast = async (
       filteredItem1[0] !== undefined
         ? getDaySvf(previousTime, filteredItem1, baseDate, tmn, tmx)
         : undefined;
-    const sVFcst: SVFcst = svfDays.map((d: string) => {
+    const sVFcst: SVFcst = svfDays.slice(0, 3).map((d: string) => {
       /**
        * items2 중에 오늘, 1일 후,2일 후 ,3일 후 중 타켓이 되는 날에 대한 단기 예보
        */
