@@ -44,8 +44,8 @@ const Location = ({
 
   const dispatchAction = useCallback(
     (middleware: "thunk" | "saga" | "toolkit") => {
-      position.state !== "none" && dispatch(positionActions.reset());
-      position.state !== "none" && dispatch(weatherActions.reset());
+      dispatch(positionActions.reset());
+      dispatch(weatherActions.reset());
 
       navigator.geolocation.getCurrentPosition(
         (pos: GeolocationPosition) => {
@@ -79,7 +79,7 @@ const Location = ({
             dispatch(positionActions.failure(e));
           }
         },
-        (error) => {
+        error => {
           const e = new Error(`can't find current position\n ${error}`);
 
           dispatch(positionActions.failure(e));
@@ -88,14 +88,12 @@ const Location = ({
     },
     [
       dispatch,
-      position.state,
       positionActions,
       positionThunkDispatch,
       startSaga,
       startThunk,
       startToolkit,
       toolkitDispatch,
-      weatherActions,
     ]
   );
 
